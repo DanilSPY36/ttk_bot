@@ -21,7 +21,7 @@ public partial class Item
     /// </summary>
     public string? Composition { get; set; }
 
-    public string? Weight { get; set; }
+    public int? Weight { get; set; }
 
     public float? Proteins { get; set; }
 
@@ -59,4 +59,6 @@ public partial class Item
     public string? ExpirationDate { get; set; }
 
     public string? Allergens { get; set; }
+
+    public int CategoryId { get; set; }
 }

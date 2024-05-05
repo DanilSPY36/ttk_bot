@@ -123,6 +123,7 @@ public partial class TgBotContext : DbContext
                 .HasColumnName("allergens");
             entity.Property(e => e.Calories).HasColumnName("calories");
             entity.Property(e => e.Carbohydrates).HasColumnName("carbohydrates");
+            entity.Property(e => e.CategoryId).HasColumnName("category_id");
             entity.Property(e => e.Composition)
                 .HasComment("Состав")
                 .HasColumnType("character varying")
@@ -155,9 +156,7 @@ public partial class TgBotContext : DbContext
                 .HasColumnName("storage_cond");
             entity.Property(e => e.SugarFree).HasColumnName("sugar_free");
             entity.Property(e => e.Vegan).HasColumnName("vegan");
-            entity.Property(e => e.Weight)
-                .HasColumnType("character varying")
-                .HasColumnName("weight");
+            entity.Property(e => e.Weight).HasColumnName("weight");
         });
 
         modelBuilder.Entity<Shipper>(entity =>

@@ -113,7 +113,7 @@ class Program
                         var choseShipperId = callbackQuery.Data.Split("||");
                         Console.WriteLine($"{choseShipperId[0]} || {choseShipperId[1]}");
                         //var matchedItem = _botMenu.[int.Parse(choseShipperId[1]) - 1];
-                        await botClient.SendTextMessageAsync(chat.Id, _botMenu.itemsRep.ToString(int.Parse(choseShipperId[1]) - 1));
+                        await botClient.SendTextMessageAsync(chat.Id, _botMenu.itemsRep.ToString(int.Parse(choseShipperId[1])));
                     }
                     if (callbackQuery.Data.Contains("drinkList"))
                     {

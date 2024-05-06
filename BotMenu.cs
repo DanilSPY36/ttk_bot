@@ -137,10 +137,26 @@ namespace ttk_bot
         {
             volumesDims = await volumesRep.Get();
             var buttonRows = new List<List<InlineKeyboardButton>>();
-
+            List<string> volumes = new List<string>() { "0.2", "0,3", "0,4", " " };
             var drinksRepit = new List<string>();
 
-            foreach (var drink in await TtkRep.Get())
+            foreach (var drink in drinksByOneVolume)
+            {
+                if (drink.CategoryId == drinkCategoryId && !drinksRepit.Contains(drink.Name))
+                {
+                    drinksRepit.Add(drink.Name);
+
+                    var button = new InlineKeyboardButton("list ttk menu")
+                    {
+                        Text = $"{drink.Name} {volumes[drink.VolumeId - 1]}",
+                        CallbackData = $"drinkByOneVolume||{drink.Id}"
+                    };
+                    buttonRows.Add(new List<InlineKeyboardButton> { button });
+                }
+            }
+
+
+            foreach (var drink in drinksByMultipleVolumes)
             {
                 if (drink.CategoryId == drinkCategoryId && !drinksRepit.Contains(drink.Name))
                 {
@@ -149,7 +165,7 @@ namespace ttk_bot
                     var button = new InlineKeyboardButton("list ttk menu")
                     {
                         Text = $"{drink.Name}",
-                        CallbackData = $"drinkList||{drink.Id}"
+                        CallbackData = $"drinkByMultipleVolumes||{drink.Name}"
                     };
                     buttonRows.Add(new List<InlineKeyboardButton> { button });
                 }
@@ -209,28 +225,25 @@ namespace ttk_bot
         }
 
 
-        public async Task<InlineKeyboardMarkup> VolumesDrinksMenuAsync(int drinkName)
+        public async Task<InlineKeyboardMarkup> VolumesDrinksMenuAsync(string drinkName)
         {
             var buttonRows = new List<List<InlineKeyboardButton>>();
 
-            var res = from drink in drinksByMultipleVolumes
-                      join volume in volumesDims on drink.VolumeId equals volume.Id
-                      select new
-                      {
-                          DrinkName = drink.Name,
-                          VolumeName = volume.Volume,
-                      };
+            List<string> volumes = new List<string>() {"0.2","0,3","0,4", " " };
 
-
-            foreach (var drink in await TtkRep.Get())
+            foreach (var drink in  drinksByMultipleVolumes)
             {
-                var button = new InlineKeyboardButton("list ttk menu")
+                if(drinkName == drink.Name)
                 {
-                    Text = $"{drink.Name}  ",
-                    CallbackData = $"drinkName||{drink.Name}"
-                };
+                    var button = new InlineKeyboardButton("list ttk menu")
+                    {
+                        Text = $"{drink.Name} {volumes[drink.VolumeId - 1]} ",
+                        CallbackData = $"drinkByOneVolume||{drink.Id}"
+                    };
+                    buttonRows.Add(new List<InlineKeyboardButton> { button });
+                }
             }
-            
+            volumeDrinkMenu = new InlineKeyboardMarkup(buttonRows);
 
             return volumeDrinkMenu;
         }

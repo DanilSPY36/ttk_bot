@@ -122,19 +122,20 @@ class Program
                         Console.WriteLine($"{choseCategoryId[0]} || {choseCategoryId[1]}");
                         await botClient.SendTextMessageAsync(chat.Id, _botMenu.TtkRep.ToString(int.Parse(choseCategoryId[1])));
                     }
-                    if (callbackQuery.Data.Contains("drinkName"))
+                    if (callbackQuery.Data.Contains("drinkByOneVolume"))
                     {
                         var choseCategoryId = callbackQuery.Data.Split("||");
                         await botClient.AnswerCallbackQueryAsync(callbackQuery.Id);
                         Console.WriteLine($"{choseCategoryId[0]} || {choseCategoryId[1]}");
                         await botClient.SendTextMessageAsync(chat.Id, _botMenu.TtkRep.ToString(int.Parse(choseCategoryId[1])));
                     }
-                    if (callbackQuery.Data.Contains("drink"))
+                    if (callbackQuery.Data.Contains("drinkByMultipleVolumes"))
                     {
-                        var choseCategoryId = callbackQuery.Data.Split("||");
+                        var choseDrinkName = callbackQuery.Data.Split("||");
                         await botClient.AnswerCallbackQueryAsync(callbackQuery.Id);
-                        Console.WriteLine($"{choseCategoryId[0]} || {choseCategoryId[1]}");
-                        await botClient.SendTextMessageAsync(chat.Id, _botMenu.TtkRep.ToString(int.Parse(choseCategoryId[1])));
+                        Console.WriteLine($"{choseDrinkName[0]} || {choseDrinkName[1]}");
+                        var DrinkName = await _botMenu.VolumesDrinksMenuAsync(choseDrinkName[1]);
+                        await botClient.SendTextMessageAsync(chat.Id, $"Выбери объем {choseDrinkName[1]}: ", replyMarkup: DrinkName) ;
                     }
 
                 }

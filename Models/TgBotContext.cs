@@ -17,6 +17,8 @@ public partial class TgBotContext : DbContext
 
     public virtual DbSet<CategoriesDim> CategoriesDims { get; set; }
 
+    public virtual DbSet<CategoriesDim1> CategoriesDims1 { get; set; }
+
     public virtual DbSet<ContainersDim> ContainersDims { get; set; }
 
     public virtual DbSet<DrinksTtk> DrinksTtks { get; set; }
@@ -28,6 +30,8 @@ public partial class TgBotContext : DbContext
     public virtual DbSet<SingleOrigin> SingleOrigins { get; set; }
 
     public virtual DbSet<SingleOriginType> SingleOriginTypes { get; set; }
+
+    public virtual DbSet<SpotsDim> SpotsDims { get; set; }
 
     public virtual DbSet<User> Users { get; set; }
 
@@ -50,6 +54,20 @@ public partial class TgBotContext : DbContext
                 .HasColumnName("id");
             entity.Property(e => e.Category)
                 .HasComment("Категория товара")
+                .HasColumnType("character varying")
+                .HasColumnName("category");
+        });
+
+        modelBuilder.Entity<CategoriesDim1>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("categories_dim_pk");
+
+            entity.ToTable("categories_dim", "shipper_prod", tb => tb.HasComment("Категории товаров"));
+
+            entity.Property(e => e.Id)
+                .ValueGeneratedNever()
+                .HasColumnName("id");
+            entity.Property(e => e.Category)
                 .HasColumnType("character varying")
                 .HasColumnName("category");
         });
@@ -257,6 +275,26 @@ public partial class TgBotContext : DbContext
             entity.Property(e => e.Type)
                 .HasColumnType("character varying")
                 .HasColumnName("type");
+        });
+
+        modelBuilder.Entity<SpotsDim>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("newtable_pk");
+
+            entity.ToTable("spots_dim", "user_prod");
+
+            entity.Property(e => e.Id)
+                .ValueGeneratedNever()
+                .HasColumnName("id");
+            entity.Property(e => e.City)
+                .HasColumnType("character varying")
+                .HasColumnName("city");
+            entity.Property(e => e.Region)
+                .HasColumnType("character varying")
+                .HasColumnName("region");
+            entity.Property(e => e.SpotName)
+                .HasColumnType("character varying")
+                .HasColumnName("spot_name");
         });
 
         modelBuilder.Entity<User>(entity =>

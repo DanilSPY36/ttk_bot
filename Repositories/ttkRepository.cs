@@ -42,5 +42,11 @@ namespace ttk_bot.Repositories
                 return "drink = null";
             }
         }
+        public async Task<string>  GetPhoto(int id)
+        {
+            var matchedItem = _context.DrinksTtks.FirstOrDefault(i => i.Id == id);
+
+            return $"{matchedItem.PhotoPath}";
+        }
     }
 }

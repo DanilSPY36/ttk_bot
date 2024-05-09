@@ -25,6 +25,8 @@ public partial class TgBotContext : DbContext
 
     public virtual DbSet<Item> Items { get; set; }
 
+    public virtual DbSet<KbjuTtk> KbjuTtks { get; set; }
+
     public virtual DbSet<Shipper> Shippers { get; set; }
 
     public virtual DbSet<SingleOrigin> SingleOrigins { get; set; }
@@ -39,7 +41,7 @@ public partial class TgBotContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseNpgsql("Host=172.25.208.1:5433;Database=tg_bot;Username=postgres;Password=postgres");
+        => optionsBuilder.UseNpgsql("Host=192.168.0.189:5433;Database=tg_bot;Username=postgres;Password=postgres");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -175,6 +177,29 @@ public partial class TgBotContext : DbContext
             entity.Property(e => e.SugarFree).HasColumnName("sugar_free");
             entity.Property(e => e.Vegan).HasColumnName("vegan");
             entity.Property(e => e.Weight).HasColumnName("weight");
+        });
+
+        modelBuilder.Entity<KbjuTtk>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("kbju_ttk_pk");
+
+            entity.ToTable("kbju_ttk", "ttk_prod", tb => tb.HasComment("КБЖУ ТТК"));
+
+            entity.Property(e => e.Id)
+                .ValueGeneratedNever()
+                .HasColumnName("id");
+            entity.Property(e => e.Caffeine).HasColumnName("caffeine");
+            entity.Property(e => e.Calories).HasColumnName("calories");
+            entity.Property(e => e.Carbohydrates).HasColumnName("carbohydrates");
+            entity.Property(e => e.Energy).HasColumnName("energy");
+            entity.Property(e => e.Fats).HasColumnName("fats");
+            entity.Property(e => e.Name)
+                .HasColumnType("character varying")
+                .HasColumnName("name");
+            entity.Property(e => e.Proteins).HasColumnName("proteins");
+            entity.Property(e => e.Variety)
+                .HasColumnType("character varying")
+                .HasColumnName("variety");
         });
 
         modelBuilder.Entity<Shipper>(entity =>

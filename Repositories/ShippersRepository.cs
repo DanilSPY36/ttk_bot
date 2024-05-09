@@ -19,5 +19,14 @@ namespace ttk_bot.Repositories
         {
             return _context.Shippers.AsNoTracking().ToList();
         }
+
+        public string ToString(int id)
+        {
+            var matchedItem = _context.Shippers.FirstOrDefault(i => i.Id == id);
+            return $"{matchedItem.Name}\n\n" +
+                   $"Телефон: {matchedItem.PhoneNumber}\n\n" +
+                   $"Email: {matchedItem.Email}\n\n" +
+                   $"ИНН: {matchedItem.Inn}";
+        }
     }
 }

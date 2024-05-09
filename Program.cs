@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using System.IO;
 using Telegram.Bot;
 using Telegram.Bot.Exceptions;
 using Telegram.Bot.Polling;
@@ -107,6 +108,14 @@ class Program
                         var itemsMenu = await _botMenu.ItemsShipperMenuAsync(int.Parse(choseShipperId[1]));
                         await botClient.SendTextMessageAsync(chat.Id, "список :", replyMarkup: itemsMenu);
                     }
+                    if (callbackQuery.Data.Contains("shipInfo"))
+                    {
+                        var choseShipperId = callbackQuery.Data.Split("||");
+                        await botClient.AnswerCallbackQueryAsync(callbackQuery.Id);
+                        Console.WriteLine($"{choseShipperId[0]} || {choseShipperId[1]}");
+                        var itemsMenu = await _botMenu.ItemsShipperMenuAsync(int.Parse(choseShipperId[1]));
+                        await botClient.SendTextMessageAsync(chat.Id, _botMenu.shippersRep.ToString(int.Parse(choseShipperId[1])));
+                    }
                     if (callbackQuery.Data.Contains("item"))
                     {
                         await botClient.AnswerCallbackQueryAsync(callbackQuery.Id);
@@ -127,7 +136,13 @@ class Program
                         var choseCategoryId = callbackQuery.Data.Split("||");
                         await botClient.AnswerCallbackQueryAsync(callbackQuery.Id);
                         Console.WriteLine($"{choseCategoryId[0]} || {choseCategoryId[1]}");
-                        await botClient.SendTextMessageAsync(chat.Id, _botMenu.TtkRep.ToString(int.Parse(choseCategoryId[1])));
+                        var photoPath = await _botMenu.TtkRep.GetPhoto(int.Parse(choseCategoryId[1]));
+                        //await botClient.SendTextMessageAsync(chat.Id, _botMenu.TtkRep.ToString(int.Parse(choseCategoryId[1])));
+                        using (var stram = System.IO.File.OpenRead(photoPath))
+                        {
+                            await botClient.SendPhotoAsync(chat.Id, new InputFileStream(stram),caption: _botMenu.TtkRep.ToString(int.Parse(choseCategoryId[1])));
+                        }
+
                     }
                     if (callbackQuery.Data.Contains("drinkByMultipleVolumes"))
                     {

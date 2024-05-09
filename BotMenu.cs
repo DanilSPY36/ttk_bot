@@ -75,15 +75,20 @@ namespace ttk_bot
         {
             List<List<InlineKeyboardButton>> buttonRows = new List<List<InlineKeyboardButton>>();
 
-
             foreach (var shipper in await shippersRep.Get())
             {
+                var buttonInfo = new InlineKeyboardButton("shippers menu Info")
+                {
+                    Text = $"ℹ",
+                    CallbackData = $"shipInfo||{shipper.Id}"
+                };
                 var button = new InlineKeyboardButton("shippers menu")
                 {
-                    Text = $"{shipper.Id} || {shipper.Name}",
+                    Text = $"{shipper.Name}",
                     CallbackData = $"shipper||{shipper.Id}"
                 };
-                buttonRows.Add(new List<InlineKeyboardButton> { button });
+                buttonRows.Add(new List<InlineKeyboardButton> { buttonInfo, button });
+
             }
 
             shippersMenu = new InlineKeyboardMarkup(buttonRows);

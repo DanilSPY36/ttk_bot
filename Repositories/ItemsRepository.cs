@@ -27,28 +27,18 @@ namespace ttk_bot.Repositories
             var matchedItem = _context.Items.FirstOrDefault(i => i.Id == id);
             if (matchedItem != null)
             {
-                return $"{matchedItem.Name}\n" +
-                                $"\n========================================\n" +
-                                $"Описание: {matchedItem.Description}" +
-                                $"\n========================================\n" +
-                                $"Состав: {matchedItem.Composition}" +
-                                $"\n========================================\n" +
-                                $"Вес 1 порции: {matchedItem.Weight}" +
-                                $"\n========================================\n" +
-                                $"Белки, гр: {matchedItem.Proteins}" +
-                                $"\n========================================\n" +
-                                $"Жиры, гр: {matchedItem.Fats}" +
-                                $"\n========================================\n" +
-                                $"Углеводы, гр: {matchedItem.Carbohydrates}" +
-                                $"\n========================================\n" +
-                                $"Калорийность, ккал: {matchedItem.Calories}" +
-                                $"\n========================================\n" +
-                                $"КлДж: {matchedItem.Energy}" +
-                                $"\n========================================\n" +
-                                $"Сроки хранения: {matchedItem.StorageCond}" +
-                                $"\n========================================\n" +
-                                $"Условия хранения: {matchedItem.ExpirationDate}" +
-                                $"\n========================================\n";
+                return $"{matchedItem.Name}\n\n" +
+                                $"Состав: " +
+                                $"{matchedItem.Composition}\n\n" +
+                                $"Вес 1 порции: {matchedItem.Weight} \n" +
+                                $"Белки, гр: {matchedItem.Proteins} \n" +
+                                $"Жиры, гр: {matchedItem.Fats} \n" +
+                                $"Углеводы, гр: {matchedItem.Carbohydrates}  \n" +
+                                $"Калорийность, ккал: {matchedItem.Calories}  \n" +
+                                $"КлДж: {matchedItem.Energy}\n\n" +
+                                $"Сроки хранения: {matchedItem.StorageCond}  \n" +
+                                $"Условия хранения: {matchedItem.ExpirationDate}  \n\n" +
+                                $"Описание: {matchedItem.Description}\n";
             }
             else
             {

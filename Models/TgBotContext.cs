@@ -17,7 +17,7 @@ public partial class TgBotContext : DbContext
 
     public virtual DbSet<CategoriesDim> CategoriesDims { get; set; }
 
-    public virtual DbSet<CategoriesDim1> CategoriesDims1 { get; set; }
+    public virtual DbSet<CategoriesItemsDim> CategoriesItemsDims { get; set; }
 
     public virtual DbSet<ContainersDim> ContainersDims { get; set; }
 
@@ -39,7 +39,7 @@ public partial class TgBotContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseNpgsql("Host=192.168.0.189:5433;Database=tg_bot;Username=postgres;Password=postgres");
+        => optionsBuilder.UseNpgsql("Host=172.25.208.1:5433;Database=tg_bot;Username=postgres;Password=postgres");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -58,11 +58,11 @@ public partial class TgBotContext : DbContext
                 .HasColumnName("category");
         });
 
-        modelBuilder.Entity<CategoriesDim1>(entity =>
+        modelBuilder.Entity<CategoriesItemsDim>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("categories_dim_pk");
 
-            entity.ToTable("categories_dim", "shipper_prod", tb => tb.HasComment("Категории товаров"));
+            entity.ToTable("categories_items_dim", "shipper_prod", tb => tb.HasComment("Категории товаров"));
 
             entity.Property(e => e.Id)
                 .ValueGeneratedNever()

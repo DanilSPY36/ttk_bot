@@ -26,15 +26,16 @@ namespace ttk_bot.Repositories
 
             if (matchedItem != null)
             {
-                return $"{matchedItem.Name}\n" +
-                       $"\n========================================\n" +
-                       $"Описание: {matchedItem.Description}" +
-                       $"\n========================================\n" +
-                       $"Ингридиенты: {matchedItem.Ingridients}" +
-                       $"\n========================================\n" +
-                       $"Вес 1 порции: {matchedItem.Weight}" +
-                       $"\n========================================\n" +
-                       $"Как готовить: {matchedItem.HowToCook}";
+                return $"{matchedItem.Name}\n\n" +
+                       $"Ингридиенты: \n" +
+                       $"{matchedItem.Ingridients}\n\n" +
+                       $"Как готовить: \n" +
+                       $"{matchedItem.HowToCook}\n\n" +
+                       $"Вес 1 порции: " +
+                       $"{matchedItem.Weight}\n\n" +
+                       $"Добавки: \n" +
+                       $"{matchedItem.Additives} \n\n" +
+                       $"Описание: \n{matchedItem.Description}";
             }
             else
             {

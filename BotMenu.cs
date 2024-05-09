@@ -229,7 +229,7 @@ namespace ttk_bot
         {
             var buttonRows = new List<List<InlineKeyboardButton>>();
 
-            List<string> volumes = new List<string>() {"0.2","0,3","0,4", " " };
+            List<string> volumes = new List<string>() {"0.2","0.3","0.4", " " };
 
             foreach (var drink in  drinksByMultipleVolumes)
             {

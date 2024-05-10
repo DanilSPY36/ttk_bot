@@ -165,6 +165,9 @@ public partial class TgBotContext : DbContext
             entity.Property(e => e.Natural100)
                 .HasComment("100% Натуральный!!! Эксперты в шоке!! Для мужского здоро...")
                 .HasColumnName("natural100");
+            entity.Property(e => e.PhotoPath)
+                .HasColumnType("character varying")
+                .HasColumnName("photo_path");
             entity.Property(e => e.Proteins).HasColumnName("proteins");
             entity.Property(e => e.ShipperId)
                 .HasColumnType("character varying")

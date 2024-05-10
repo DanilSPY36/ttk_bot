@@ -7,6 +7,7 @@ using Telegram.Bot.Exceptions;
 using Telegram.Bot.Polling;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
+using Telegram.Bot.Types.ReplyMarkups;
 using ttk_bot;
 using ttk_bot.Models;
 using ttk_bot.Repositories;
@@ -20,8 +21,17 @@ class Program
     private static TgBotContext? _context;
     private static BotMenu _botMenu = null!;
 
+    // тест логики меню
+    private static Dictionary<long, List<InlineKeyboardMarkup>> userStates;
+    private static List<UserStateController> userStateControllers;
+    private static UserStateController userStateController;
     static async Task Main()
     {
+        userStateControllers = new List<UserStateController> { new UserStateController() };
+        userStateController = new UserStateController();
+        userStates = new Dictionary<long, List<InlineKeyboardMarkup>>();
+
+
         _botClient = new TelegramBotClient("7190916687:AAG4L9eYwyj8bLJtXajo6uTP-k-MuIkRdIs");
         _botMenu = new BotMenu();
         var usersRep = new UsersRepository(_context = new TgBotContext());
@@ -49,6 +59,7 @@ class Program
     }
     private static async Task UpdateHandler(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
     {
+
         switch (update.Type)
         {
             case UpdateType.Message:
@@ -57,106 +68,139 @@ class Program
                     var user = message.From;
                     var chatInfo = message.Chat;
                     Console.WriteLine($"{user.Username} Пишет хуйню следующего характера: {message.Text}\n");
-
+                    userStates[chatInfo.Id] = new List<InlineKeyboardMarkup>();
                     switch (message.Text)
                     {
-                        
                         case "/start":
                             await botClient.SendTextMessageAsync(chatInfo.Id, "Твоя главная клавиатура.", replyMarkup: _botMenu.StartMenu());
-                            Console.WriteLine($"{user.Username} Send: {message.Text}");
-                            break;
-                        case "base products":
-                            //await botClient.SendTextMessageAsync(chatInfo.Id, "Тут все продукты батончики, бутылочные напитки и выпечка", replyMarkup: _botMenu.BaseListMenu());
-                            Console.WriteLine($"{user.Username} Send: {message.Text}");
-                            break;
-                        case "TTK":
-                            var drinkscategoryMenu = await _botMenu.CategoryDrinksMenuAsync();
-                            await botClient.SendTextMessageAsync(chatInfo.Id, "Тут все ттк, все то что ты должен знать, как Отче наш", replyMarkup: drinkscategoryMenu);
-                            Console.WriteLine($"{user.Username} Send: {message.Text}");
-                            break;
-                        case "shippers":
-                            var shippersMenu = await _botMenu.ShippersMenuAsync();
-                            await botClient.SendTextMessageAsync(chatInfo.Id, "Тут все твои поставщики", replyMarkup: shippersMenu);
                             Console.WriteLine($"{user.Username} Send: {message.Text}");
                             break;
                         default:
                             break;
                     }
+                    await BaseMenu(chatInfo.Id, message.Text, message);
                     return;
                 }
             case UpdateType.CallbackQuery:
                 {
-                    var message = update.Message;
-                    var callbackQuery = update.CallbackQuery;
-                    var chatInfo = callbackQuery.Message.Chat;
-                    var user = callbackQuery.From;
-                    Console.WriteLine($"{user.FirstName} ({user.Id}) нажал на кнопку: {callbackQuery.Data}");
-                    var chat = callbackQuery.Message.Chat;
-                    if (callbackQuery.Data.Contains("category"))
-                    {
-                        var choseCategoryId = callbackQuery.Data.Split("||");
-                        await botClient.AnswerCallbackQueryAsync(callbackQuery.Id);
-                        Console.WriteLine($"{choseCategoryId[0]} || {choseCategoryId[1]}");
-                        var choseCategory = await _botMenu.DrinksMenuAsync(int.Parse(choseCategoryId[1]));
-                        await botClient.SendTextMessageAsync(chat.Id, "список :", replyMarkup: choseCategory);
-                    }
-                    if (callbackQuery.Data.Contains("shipper"))
-                    {
-                        var choseShipperId = callbackQuery.Data.Split("||");
-                        await botClient.AnswerCallbackQueryAsync(callbackQuery.Id);
-                        Console.WriteLine($"{choseShipperId[0]} || {choseShipperId[1]}");
-                        var itemsMenu = await _botMenu.ItemsShipperMenuAsync(int.Parse(choseShipperId[1]));
-                        await botClient.SendTextMessageAsync(chat.Id, "список :", replyMarkup: itemsMenu);
-                    }
-                    if (callbackQuery.Data.Contains("shipInfo"))
-                    {
-                        var choseShipperId = callbackQuery.Data.Split("||");
-                        await botClient.AnswerCallbackQueryAsync(callbackQuery.Id);
-                        Console.WriteLine($"{choseShipperId[0]} || {choseShipperId[1]}");
-                        var itemsMenu = await _botMenu.ItemsShipperMenuAsync(int.Parse(choseShipperId[1]));
-                        await botClient.SendTextMessageAsync(chat.Id, _botMenu.shippersRep.ToString(int.Parse(choseShipperId[1])));
-                    }
-                    if (callbackQuery.Data.Contains("item"))
-                    {
-                        await botClient.AnswerCallbackQueryAsync(callbackQuery.Id);
-                        var choseShipperId = callbackQuery.Data.Split("||");
-                        Console.WriteLine($"{choseShipperId[0]} || {choseShipperId[1]}");
-                        //var matchedItem = _botMenu.[int.Parse(choseShipperId[1]) - 1];
-                        await botClient.SendTextMessageAsync(chat.Id, _botMenu.itemsRep.ToString(int.Parse(choseShipperId[1])));
-                    }
-                    if (callbackQuery.Data.Contains("drinkList"))
-                    {
-                        var choseCategoryId = callbackQuery.Data.Split("||");
-                        await botClient.AnswerCallbackQueryAsync(callbackQuery.Id);
-                        Console.WriteLine($"{choseCategoryId[0]} || {choseCategoryId[1]}");
-                        await botClient.SendTextMessageAsync(chat.Id, _botMenu.TtkRep.ToString(int.Parse(choseCategoryId[1])));
-                    }
-                    if (callbackQuery.Data.Contains("drinkByOneVolume"))
-                    {
-                        var choseCategoryId = callbackQuery.Data.Split("||");
-                        await botClient.AnswerCallbackQueryAsync(callbackQuery.Id);
-                        Console.WriteLine($"{choseCategoryId[0]} || {choseCategoryId[1]}");
-                        var photoPath = await _botMenu.TtkRep.GetPhoto(int.Parse(choseCategoryId[1]));
-                        //await botClient.SendTextMessageAsync(chat.Id, _botMenu.TtkRep.ToString(int.Parse(choseCategoryId[1])));
-                        using (var stram = System.IO.File.OpenRead(photoPath))
-                        {
-                            await botClient.SendPhotoAsync(chat.Id, new InputFileStream(stram),caption: _botMenu.TtkRep.ToString(int.Parse(choseCategoryId[1])));
-                        }
-
-                    }
-                    if (callbackQuery.Data.Contains("drinkByMultipleVolumes"))
-                    {
-                        var choseDrinkName = callbackQuery.Data.Split("||");
-                        await botClient.AnswerCallbackQueryAsync(callbackQuery.Id);
-                        Console.WriteLine($"{choseDrinkName[0]} || {choseDrinkName[1]}");
-                        var DrinkName = await _botMenu.VolumesDrinksMenuAsync(choseDrinkName[1]);
-                        await botClient.SendTextMessageAsync(chat.Id, $"Выбери объем {choseDrinkName[1]}: ", replyMarkup: DrinkName) ;
-                    }
-
+                    CallBackQueryMenu(botClient, update);
                 }
                 return;
         }
     }
+
+    private static async Task BaseMenu(long chatId, string menuName, Message message)
+    {
+        switch (menuName)
+        {
+            case "Поставщики":
+                {
+                    userStateController = new UserStateController(chatId, 0, message.MessageId, new InlineKeyboardMarkup(await _botMenu.ShippersMenuAsync()), "Список поставщиков:");
+                    await _botClient.SendTextMessageAsync(userStateController.userChatId, userStateController.TextMessage, replyMarkup: userStateController.menuInlineBtns);
+                    userStateControllers.Add(userStateController);
+                    break;
+                }
+            case "ТТК":
+                {
+                    userStateController = new UserStateController(chatId, 0, message.MessageId, new InlineKeyboardMarkup(await _botMenu.CategoryDrinksMenuAsync()), "ТТК на напитки:");
+                    await _botClient.SendTextMessageAsync(userStateController.userChatId, userStateController.TextMessage, replyMarkup: userStateController.menuInlineBtns);
+                    userStateControllers.Add(userStateController);
+                    break;
+                }
+            case "Зерно":
+                {
+                    if (userStateControllers.Count > 0)
+                    {
+                        userStateControllers.Clear();
+                    }
+                    //userStateControllers.Add(new UserStateController(chatId, new InlineKeyboardMarkup(await _botMenu.CategoryDrinksMenuAsync()), "Список зерна:"));
+                    //newMenu = new InlineKeyboardMarkup(await _botMenu.DrinksMenuAsync(1));
+                    //userStates[chatId].Add(newMenu);
+                    break;
+                }
+            default:
+                return;   
+        }
+        Console.WriteLine($"{userStateController.userChatId} || Вложенность меню = {userStateController.userMenuIndex}");
+    }
+    private static async Task CallBackQueryMenu(ITelegramBotClient botClient, Update update)
+    {
+        InlineKeyboardMarkup newMenu;
+
+        var message = update.Message;
+        var callbackQuery = update.CallbackQuery;
+        var chatInfo = callbackQuery.Message.Chat;
+        var user = callbackQuery.From;
+        Console.WriteLine($"{user.FirstName} ({user.Id}) нажал на кнопку: {callbackQuery.Data}");
+        var chat = callbackQuery.Message.Chat;
+
+
+        var choseMenuButton = callbackQuery.Data.Split("||");
+        int choseIdMenuButton = int.Parse(choseMenuButton[1]);
+
+        switch (choseMenuButton[0])
+        {
+            case "Back":
+                {
+                    userStateController = userStateControllers.FirstOrDefault(x => x.userChatId == chat.Id &&  x.messageIndex == callbackQuery.Message.MessageId);
+                    Console.WriteLine($"{userStateController.userChatId} || Вложенность меню = {userStateController.userMenuIndex}");
+
+                    await _botClient.EditMessageTextAsync(
+                                chatId: chat.Id,
+                                messageId: callbackQuery.Message.MessageId,
+                                text: $"{userStateControllers[choseIdMenuButton].TextMessage}",
+                                replyMarkup: userStateControllers[choseIdMenuButton].menuInlineBtns
+                            );
+                    userStateControllers.Remove(userStateController);
+                    break;
+                }
+            case "shipper":
+                {
+                    await botClient.AnswerCallbackQueryAsync(callbackQuery.Id);
+                    //newMenu = new InlineKeyboardMarkup(await _botMenu.ItemsShipperMenuAsync(choseIdMenuButton, userStates[chat.Id].Count-1));
+                    //userStates[chat.Id].Add(newMenu);
+                    userStateController = new UserStateController(chat.Id, 1, callbackQuery.Message.MessageId, new InlineKeyboardMarkup(await _botMenu.ItemsShipperMenuAsync(choseIdMenuButton, 1)), "Продукты поставщика");
+                    userStateControllers.Add(userStateController);
+                    await _botClient.EditMessageTextAsync(
+                                    chatId: chat.Id,
+                                    messageId: callbackQuery.Message.MessageId,
+                                    text: $"{userStateController.TextMessage}",
+                                    replyMarkup: userStateController.menuInlineBtns) ;
+                    Console.WriteLine($"{userStateController.userChatId} || Вложенность меню = {userStateController.userMenuIndex}");
+                    break;
+                }
+            case "item":
+                {
+                    userStateController = new UserStateController(chat.Id, 2, callbackQuery.Message.MessageId, 
+                        new InlineKeyboardMarkup(new[]
+                                            {
+                                                new InlineKeyboardButton("Back")
+                                                {
+                                                    Text = "Назад",
+                                                    CallbackData = $"Back||{2}"
+                                                }
+                                            }),
+                        "");
+                    userStateControllers.Add(userStateController);
+
+                    await botClient.AnswerCallbackQueryAsync(callbackQuery.Id);
+                    
+                    await _botClient.EditMessageTextAsync(
+                                        chatId: chat.Id,
+                                        messageId: callbackQuery.Message.MessageId,
+                                        text: $"{_botMenu.itemsRep.ToString(choseIdMenuButton)}",
+                                        replyMarkup: userStateController.menuInlineBtns);   
+                    Console.WriteLine($"{userStateController.userChatId} || Вложенность меню = {userStateController.userMenuIndex}");
+
+                    break;
+                }
+            default:
+                return;
+        }
+        
+               
+    }
+
     private static Task ErrorHandler(ITelegramBotClient botClient, Exception error, CancellationToken cancellationToken)
     {
         var ErrorMessage = error switch

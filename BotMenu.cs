@@ -57,9 +57,9 @@ namespace ttk_bot
     {
         new KeyboardButton[]
         {
-            new KeyboardButton("base products"),
-            new KeyboardButton("shippers"),
-            new KeyboardButton("TTK"),
+            new KeyboardButton("Зерно"),
+            new KeyboardButton("Поставщики"),
+            new KeyboardButton("ТТК"),
         }
     };
 
@@ -71,7 +71,7 @@ namespace ttk_bot
             return startMenu;
         }
 
-        public async Task<InlineKeyboardMarkup> ShippersMenuAsync()
+        public async Task<List<List<InlineKeyboardButton>>> ShippersMenuAsync()
         {
             List<List<InlineKeyboardButton>> buttonRows = new List<List<InlineKeyboardButton>>();
 
@@ -90,13 +90,10 @@ namespace ttk_bot
                 buttonRows.Add(new List<InlineKeyboardButton> { buttonInfo, button });
 
             }
-
-            shippersMenu = new InlineKeyboardMarkup(buttonRows);
-
-            return shippersMenu;
+            return buttonRows;
         }
 
-        public async Task<InlineKeyboardMarkup> ItemsShipperMenuAsync(int shipperId)
+        public async Task<List<List<InlineKeyboardButton>>> ItemsShipperMenuAsync(int shipperId, long indexMenu)
         {
             List<List<InlineKeyboardButton>> buttonRows = new List<List<InlineKeyboardButton>>();
 
@@ -113,13 +110,18 @@ namespace ttk_bot
                     buttonRows.Add(new List<InlineKeyboardButton> { button });
                 }
             }
+            buttonRows.Add(new List<InlineKeyboardButton> { 
+                new InlineKeyboardButton("Back")
+                    {
+                        Text = "Назад",
+                        CallbackData = $"Back||{indexMenu}"
+                    }});
 
-            itemsShipperMenu = new InlineKeyboardMarkup(buttonRows);
 
-            return itemsShipperMenu;
+            return buttonRows;
         }
 
-        public async Task<InlineKeyboardMarkup> CategoryDrinksMenuAsync()
+        public async Task<List<List<InlineKeyboardButton>>> CategoryDrinksMenuAsync()
         {
             var buttonRows = new List<List<InlineKeyboardButton>>();
 
@@ -135,10 +137,10 @@ namespace ttk_bot
 
             drinkCategoryMenu = new InlineKeyboardMarkup(buttonRows);
 
-            return drinkCategoryMenu;
+            return buttonRows;
         }
 
-        public async Task<InlineKeyboardMarkup> DrinksMenuAsync(int drinkCategoryId)
+        public async Task<List<List<InlineKeyboardButton>>> DrinksMenuAsync(int drinkCategoryId)
         {
             volumesDims = await volumesRep.Get();
             var buttonRows = new List<List<InlineKeyboardButton>>();
@@ -183,8 +185,8 @@ namespace ttk_bot
                     }
                 }
             );
-            ttkDrinkMenu = new InlineKeyboardMarkup(buttonRows);
-            return ttkDrinkMenu;
+
+            return buttonRows;
         }
 
         private async void DrinkVolumeChecker()
@@ -228,7 +230,6 @@ namespace ttk_bot
                 Console.WriteLine($"{item.Name} || {item.VolumeId}");
             }
         }
-
 
         public async Task<InlineKeyboardMarkup> VolumesDrinksMenuAsync(string drinkName)
         {

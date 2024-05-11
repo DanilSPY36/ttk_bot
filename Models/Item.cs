@@ -61,4 +61,6 @@ public partial class Item
     public string? Allergens { get; set; }
 
     public int CategoryId { get; set; }
+
+    public string? PhotoPath { get; set; }
 }

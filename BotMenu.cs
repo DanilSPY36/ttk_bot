@@ -93,7 +93,7 @@ namespace ttk_bot
             return buttonRows;
         }
 
-        public async Task<List<List<InlineKeyboardButton>>> ItemsShipperMenuAsync(int shipperId, long indexMenu)
+        public async Task<List<List<InlineKeyboardButton>>> ItemsShipperMenuAsync(int shipperId, int indexMenu)
         {
             List<List<InlineKeyboardButton>> buttonRows = new List<List<InlineKeyboardButton>>();
 

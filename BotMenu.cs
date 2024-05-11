@@ -130,17 +130,15 @@ namespace ttk_bot
                 var button = new InlineKeyboardButton($"{item.Category}")
                 {
                     Text = item.Category,
-                    CallbackData = $"category||{item.Id}"
+                    CallbackData = $"categoryDrinks||{item.Id}"
                 };
+                
                 buttonRows.Add(new List<InlineKeyboardButton> { button });
             }
-
-            drinkCategoryMenu = new InlineKeyboardMarkup(buttonRows);
-
             return buttonRows;
         }
 
-        public async Task<List<List<InlineKeyboardButton>>> DrinksMenuAsync(int drinkCategoryId)
+        public async Task<List<List<InlineKeyboardButton>>> DrinksMenuAsync(int drinkCategoryId, int indexMenu)
         {
             volumesDims = await volumesRep.Get();
             var buttonRows = new List<List<InlineKeyboardButton>>();
@@ -172,7 +170,7 @@ namespace ttk_bot
                     var button = new InlineKeyboardButton("list ttk menu")
                     {
                         Text = $"{drink.Name}",
-                        CallbackData = $"drinkByMultipleVolumes||{drink.Name}"
+                        CallbackData = $"drinkByMultipleVolumes||{drink.Id}"
                     };
                     buttonRows.Add(new List<InlineKeyboardButton> { button });
                 }
@@ -181,7 +179,7 @@ namespace ttk_bot
             new List<InlineKeyboardButton> { new InlineKeyboardButton("list ttk menu")
                     {
                         Text = $"Назад",
-                        CallbackData = $"drinkList||back"
+                        CallbackData = $"Back||{indexMenu}"
                     }
                 }
             );
@@ -231,10 +229,10 @@ namespace ttk_bot
             }
         }
 
-        public async Task<InlineKeyboardMarkup> VolumesDrinksMenuAsync(string drinkName)
+        public async Task<List<List<InlineKeyboardButton>>> VolumesDrinksMenuAsync(int drinkId, int indexMenu)
         {
             var buttonRows = new List<List<InlineKeyboardButton>>();
-
+            var drinkName = drinksByMultipleVolumes.First(x => x.Id ==drinkId).Name;
             List<string> volumes = new List<string>() {"0.2","0.3","0.4", " " };
 
             foreach (var drink in  drinksByMultipleVolumes)
@@ -249,9 +247,16 @@ namespace ttk_bot
                     buttonRows.Add(new List<InlineKeyboardButton> { button });
                 }
             }
+            buttonRows.Add(new List<InlineKeyboardButton> {
+                new InlineKeyboardButton("Back")
+                    {
+                        Text = "Назад",
+                        CallbackData = $"Back||{indexMenu}"
+                    }});
+
             volumeDrinkMenu = new InlineKeyboardMarkup(buttonRows);
 
-            return volumeDrinkMenu;
+            return buttonRows;
         }
     }
 }

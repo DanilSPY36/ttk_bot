@@ -20,5 +20,10 @@ namespace ttk_bot.Repositories
         {
             return _context.CategoriesDims.ToList();
         }
+        public async Task<string> Get(int id)
+        {
+            var categoryDimsList = await _context.CategoriesDims.ToListAsync();
+            return categoryDimsList[id - 1].Category;
+        }
     }
 }

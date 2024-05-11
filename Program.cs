@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.IO;
 using System.Linq;
 using Telegram.Bot;
@@ -107,7 +108,8 @@ class Program
                 }
             case "Зерно":
                 {
-                    
+                    userStateController = new UserStateController(chatId, 0, message.MessageId + 1, new InlineKeyboardMarkup(await _botMenu.SingleOriginType()), "Выбери тип зерНННЫЫЫААА: ");
+                    await _botClient.SendTextMessageAsync(userStateController.userChatId, userStateController.TextMessage, replyMarkup: userStateController.menuInlineBtns);
                     break;
                 }
             default:
@@ -232,18 +234,13 @@ class Program
                                                 }
                                             }),
                          $"{_botMenu.TtkRep.ToString(choseIdMenuButton)}");
+                        await _botClient.EditMessageTextAsync(
+                                    chatId: chat.Id,
+                                    messageId: callbackQuery.Message.MessageId,
+                                    text: $"{userStateController.TextMessage}",
+                                    replyMarkup: userStateController.menuInlineBtns);
 
-                        var photoPath = await _botMenu.TtkRep.GetPhoto(choseIdMenuButton);
-                        Console.WriteLine($"{photoPath}");
-                        using (var stream = System.IO.File.OpenRead(photoPath))
-                        {
-                            await _botClient.EditMessageMediaAsync(
-                                chatId: chat.Id,
-                                messageId: callbackQuery.Message.MessageId,
-                                media: new InputMediaPhoto(new InputFileStream(stream)),
-                                replyMarkup: userStateController.menuInlineBtns
-                            );
-                        }
+                        userStateControllers.Add(userStateController);
                     }
                     catch (Exception ex)
                     {
@@ -268,7 +265,49 @@ class Program
                     userStateControllers.Add(userStateController);
                     break;
                 }
+            case "singleOrigin":
+                {
+                    await botClient.AnswerCallbackQueryAsync(callbackQuery.Id);
+                    if (choseIdMenuButton == 1)
+                    {
+                        userStateController = new UserStateController(chat.Id, 1, callbackQuery.Message.MessageId, new InlineKeyboardMarkup(await _botMenu.SingleOriginMenuAsync(choseIdMenuButton, 1)), $"Зерно под фильтр");
+                    }
+                    else
+                    {
+                        userStateController = new UserStateController(chat.Id, 1, callbackQuery.Message.MessageId, new InlineKeyboardMarkup(await _botMenu.SingleOriginMenuAsync(choseIdMenuButton, 1)), $"Зерно под эспрессо");
+                    }
+                    await _botClient.EditMessageTextAsync(
+                                    chatId: chat.Id,
+                                    messageId: callbackQuery.Message.MessageId,
+                                    text: $"{userStateController.TextMessage}",
+                                    replyMarkup: userStateController.menuInlineBtns);
+                    Console.WriteLine($"ChatId = {userStateController.userChatId} || messageId = {userStateController.messageIndex} || Вложенность меню = {userStateController.userMenuIndex}");
+                    userStateControllers.Add(userStateController);
 
+                    break;
+                }
+            case "singleOriginCard":
+                {
+                    userStateController = new UserStateController(chat.Id, 2, callbackQuery.Message.MessageId,
+                        new InlineKeyboardMarkup(new[]
+                                            {
+                                                new InlineKeyboardButton("Back")
+                                                {
+                                                    Text = "Назад",
+                                                    CallbackData = $"Back||{2}"
+                                                }
+                                            }),
+                         $"{_botMenu.singleOriginRep.ToString(choseIdMenuButton)}");
+                    await botClient.AnswerCallbackQueryAsync(callbackQuery.Id);
+                    await _botClient.EditMessageTextAsync(
+                                        chatId: chat.Id,
+                                        messageId: callbackQuery.Message.MessageId,
+                                        text: userStateController.TextMessage,
+                                        replyMarkup: userStateController.menuInlineBtns);
+                    Console.WriteLine($"ChatId = {userStateController.userChatId} || messageId = {userStateController.messageIndex} || Вложенность меню = {userStateController.userMenuIndex}");
+                    userStateControllers.Add(userStateController);
+                    break;
+                }
 
             default:
                 return;

@@ -35,6 +35,7 @@ namespace ttk_bot
         public ttkRepository? TtkRep;
         public TtkCategoriesRepository? drinkCategoriesRep;
         public VolumesRepository? volumesRep;
+        public SingleOriginRepository? singleOriginRep;
 
 
 
@@ -43,11 +44,16 @@ namespace ttk_bot
         public BotMenu()
         {
             _context = new TgBotContext();
+
             itemsRep = new ItemsRepository(_context);
             shippersRep = new ShippersRepository(_context);
+
             TtkRep = new ttkRepository(_context);
             drinkCategoriesRep = new TtkCategoriesRepository(_context);
             volumesRep = new VolumesRepository(_context);
+
+            singleOriginRep = new SingleOriginRepository(_context);
+
             DrinkVolumeChecker();
         }
 
@@ -110,7 +116,7 @@ namespace ttk_bot
                     buttonRows.Add(new List<InlineKeyboardButton> { button });
                 }
             }
-            buttonRows.Add(new List<InlineKeyboardButton> { 
+            buttonRows.Add(new List<InlineKeyboardButton> {
                 new InlineKeyboardButton("Back")
                     {
                         Text = "Назад",
@@ -132,7 +138,7 @@ namespace ttk_bot
                     Text = item.Category,
                     CallbackData = $"categoryDrinks||{item.Id}"
                 };
-                
+
                 buttonRows.Add(new List<InlineKeyboardButton> { button });
             }
             return buttonRows;
@@ -166,7 +172,7 @@ namespace ttk_bot
                 if (drink.CategoryId == drinkCategoryId && !drinksRepit.Contains(drink.Name))
                 {
                     drinksRepit.Add(drink.Name);
-                    
+
                     var button = new InlineKeyboardButton("list ttk menu")
                     {
                         Text = $"{drink.Name}",
@@ -232,12 +238,12 @@ namespace ttk_bot
         public async Task<List<List<InlineKeyboardButton>>> VolumesDrinksMenuAsync(int drinkId, int indexMenu)
         {
             var buttonRows = new List<List<InlineKeyboardButton>>();
-            var drinkName = drinksByMultipleVolumes.First(x => x.Id ==drinkId).Name;
-            List<string> volumes = new List<string>() {"0.2","0.3","0.4", " " };
+            var drinkName = drinksByMultipleVolumes.First(x => x.Id == drinkId).Name;
+            List<string> volumes = new List<string>() { "0.2", "0.3", "0.4", " " };
 
-            foreach (var drink in  drinksByMultipleVolumes)
+            foreach (var drink in drinksByMultipleVolumes)
             {
-                if(drinkName == drink.Name)
+                if (drinkName == drink.Name)
                 {
                     var button = new InlineKeyboardButton("list ttk menu")
                     {
@@ -255,6 +261,52 @@ namespace ttk_bot
                     }});
 
             volumeDrinkMenu = new InlineKeyboardMarkup(buttonRows);
+
+            return buttonRows;
+        }
+
+        public async Task<List<List<InlineKeyboardButton>>> SingleOriginType() // 0 - зерно
+        {
+            List<List<InlineKeyboardButton>> buttonRows = new List<List<InlineKeyboardButton>>();
+            buttonRows.Add(new List<InlineKeyboardButton>
+            {
+                new InlineKeyboardButton("Filter")
+                {
+                    Text = "Зерно под фильтр",
+                    CallbackData = $"singleOrigin||{1}"
+                },
+                new InlineKeyboardButton("Espresso")
+                {
+                    Text = "Зерно под эспрессо",
+                    CallbackData = $"singleOrigin||{2}"
+                }
+            });
+            return buttonRows;
+        }
+
+        public async Task<List<List<InlineKeyboardButton>>> SingleOriginMenuAsync(int idType, int indexMenu) // 1 - зерно уже или под эспрессо или под фильтр
+        {
+            List<List<InlineKeyboardButton>> buttonRows = new List<List<InlineKeyboardButton>>();
+
+            var listSingles = _context.SingleOrigins.ToList();
+
+            foreach (var item in listSingles.Where(x => x.TypeId == idType))
+            {
+
+                var button = new InlineKeyboardButton("singleOriginCard Menu ")
+                {
+                    Text = $"{item.Name}",
+                    CallbackData = $"singleOriginCard||{item.Id}"
+                };
+                buttonRows.Add(new List<InlineKeyboardButton> { button });
+            }
+            buttonRows.Add(new List<InlineKeyboardButton> {
+                new InlineKeyboardButton("Back")
+                    {
+                        Text = "Назад",
+                        CallbackData = $"Back||{indexMenu}"
+                    }});
+
 
             return buttonRows;
         }

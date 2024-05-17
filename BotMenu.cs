@@ -133,13 +133,16 @@ namespace ttk_bot
 
             foreach (var item in await drinkCategoriesRep.Get())
             {
-                var button = new InlineKeyboardButton($"{item.Category}")
+                if(item.Category != "Добавки")
                 {
-                    Text = item.Category,
-                    CallbackData = $"categoryDrinks||{item.Id}"
-                };
+                    var button = new InlineKeyboardButton($"{item.Category}")
+                    {
+                        Text = item.Category,
+                        CallbackData = $"categoryDrinks||{item.Id}"
+                    };
 
-                buttonRows.Add(new List<InlineKeyboardButton> { button });
+                    buttonRows.Add(new List<InlineKeyboardButton> { button });
+                }
             }
             return buttonRows;
         }

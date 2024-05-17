@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.IO;
+using System.IO.Pipes;
 using System.Linq;
 using Telegram.Bot;
 using Telegram.Bot.Exceptions;
@@ -150,7 +151,14 @@ class Program
                                 text: $"{userStateController.TextMessage}",
                                 replyMarkup: userStateController.menuInlineBtns
                             );
+                    //await _botClient.DeleteMessageAsync(chat.Id, messageId: message.MessageId);
+                    
                     Console.WriteLine($"ChatId = {userStateController.userChatId} || messageId = {userStateController.messageIndex} || Вложенность меню = {userStateController.userMenuIndex}");
+                    break;
+                }
+            case "BackPhoto":
+                {
+                    await _botClient.DeleteMessageAsync(chat.Id, messageId: callbackQuery.Message.MessageId);
                     break;
                 }
             case "shipper":
@@ -229,27 +237,39 @@ class Program
                 {
                     try
                     {
+                        ///
                         userStateController = new UserStateController(chat.Id, 2, callbackQuery.Message.MessageId,
                         new InlineKeyboardMarkup(new[]
                                             {
                                                 new InlineKeyboardButton("Back")
                                                 {
                                                     Text = "Назад",
-                                                    CallbackData = $"Back||{2}"
+                                                    CallbackData = $"BackPhoto||{2}"
                                                 }
                                             }),
                          $"{_botMenu.TtkRep.ToString(choseIdMenuButton)}");
-                        await _botClient.EditMessageTextAsync(
+                        /*await _botClient.EditMessageTextAsync(
                                     chatId: chat.Id,
                                     messageId: callbackQuery.Message.MessageId,
                                     text: $"{userStateController.TextMessage}",
                                     replyMarkup: userStateController.menuInlineBtns);
+                        */
 
-                        userStateControllers.Add(userStateController);
+                        // фото 
+                        var photoPath = _context.DrinksTtks.FirstOrDefault(p => p.Id == choseIdMenuButton);
+                        Console.WriteLine($"Incorrect photo path {photoPath}");
+
+                        using (FileStream stream = new FileStream(photoPath.PhotoPath, FileMode.Open, FileAccess.Read))
+                        {
+                            InputFileStream inputOnlineFile = new InputFileStream(stream);
+                            await botClient.SendPhotoAsync(chatId: chat.Id, photo: inputOnlineFile, caption: $"{userStateController.TextMessage}", replyMarkup: userStateController.menuInlineBtns);
+                        }
+
+                        //userStateControllers.Add(userStateController);
                     }
                     catch (Exception ex)
                     {
-                        Console.WriteLine(ex.ToString() + $"Incorrect photo path");
+                        Console.WriteLine(ex.ToString());
 
                         throw;
                     }

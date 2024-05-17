@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ttk_bot")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c82bad22eaaea0b0f184b658a9f0b178b7e73544")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7c72b3d4cea40797b7eaea2de33817310ca625c7")]
 [assembly: System.Reflection.AssemblyProductAttribute("ttk_bot")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ttk_bot")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

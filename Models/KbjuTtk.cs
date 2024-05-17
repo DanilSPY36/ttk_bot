@@ -25,4 +25,6 @@ public partial class KbjuTtk
     public float? Energy { get; set; }
 
     public float? Caffeine { get; set; }
+
+    public int? CategoryId { get; set; }
 }

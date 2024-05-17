@@ -27,6 +27,8 @@ public partial class TgBotContext : DbContext
 
     public virtual DbSet<KbjuTtk> KbjuTtks { get; set; }
 
+    public virtual DbSet<RolesDim> RolesDims { get; set; }
+
     public virtual DbSet<Shipper> Shippers { get; set; }
 
     public virtual DbSet<SingleOrigin> SingleOrigins { get; set; }
@@ -194,6 +196,7 @@ public partial class TgBotContext : DbContext
             entity.Property(e => e.Caffeine).HasColumnName("caffeine");
             entity.Property(e => e.Calories).HasColumnName("calories");
             entity.Property(e => e.Carbohydrates).HasColumnName("carbohydrates");
+            entity.Property(e => e.CategoryId).HasColumnName("category_id");
             entity.Property(e => e.Energy).HasColumnName("energy");
             entity.Property(e => e.Fats).HasColumnName("fats");
             entity.Property(e => e.Name)
@@ -203,6 +206,20 @@ public partial class TgBotContext : DbContext
             entity.Property(e => e.Variety)
                 .HasColumnType("character varying")
                 .HasColumnName("variety");
+        });
+
+        modelBuilder.Entity<RolesDim>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("roles_dim_pk");
+
+            entity.ToTable("roles_dim", "user_prod", tb => tb.HasComment("Должности"));
+
+            entity.Property(e => e.Id)
+                .ValueGeneratedNever()
+                .HasColumnName("id");
+            entity.Property(e => e.RoleName)
+                .HasColumnType("character varying")
+                .HasColumnName("role_name");
         });
 
         modelBuilder.Entity<Shipper>(entity =>
@@ -347,6 +364,7 @@ public partial class TgBotContext : DbContext
                 .HasComment("tg name")
                 .HasColumnType("character varying")
                 .HasColumnName("name");
+            entity.Property(e => e.RoleId).HasColumnName("role_id");
             entity.Property(e => e.SpotId).HasColumnName("spot_id");
             entity.Property(e => e.TgUserId).HasColumnName("tg_user_id");
         });

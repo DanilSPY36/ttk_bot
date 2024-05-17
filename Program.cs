@@ -71,7 +71,12 @@ class Program
                     switch (message.Text)
                     {
                         case "/start":
-                            await botClient.SendTextMessageAsync(chatInfo.Id, "Твоя главная клавиатура.", replyMarkup: _botMenu.StartMenu());
+                            await botClient.SendTextMessageAsync(chatInfo.Id, "Приветствую. Я 'цикорий и доски бот' читай микрогайд: \n\n" +
+                                "Зерно - ты сможешь найти всю информацию о моносортах и блендах\n\n" +
+                                "Поставщики - вся выпечка, кбжу, составы, сроки,  условия хранения и аллергены\n\n" +
+                                "ТТК - все технические карты основного меню\n\n" +
+                                "КБЖУ напитки - кбжу любого напитка.\n\n" +
+                                "Если есть вопросы, предложения или нашли что-то неладное, то напишите ему @DanilSPY", replyMarkup: _botMenu.StartMenu());
                             Console.WriteLine($"{user.Username} Send: {message.Text}");
                             break;
                         default:

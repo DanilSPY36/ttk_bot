@@ -28,4 +28,6 @@ public partial class User
     public bool? IsAccess { get; set; }
 
     public int? SpotId { get; set; }
+
+    public int? RoleId { get; set; }
 }

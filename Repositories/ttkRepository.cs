@@ -34,8 +34,8 @@ namespace ttk_bot.Repositories
                        $"Вес 1 порции: " +
                        $"{matchedItem.Weight}\n\n" +
                        $"Добавки: \n" +
-                       $"{matchedItem.Additives} \n\n" +
-                       $"Описание: \n{matchedItem.Description}";
+                       $"{matchedItem.Additives} \n\n";
+                       //+$"Описание: \n{matchedItem.Description}";
             }
             else
             {

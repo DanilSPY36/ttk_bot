@@ -7,16 +7,20 @@ using Telegram.Bot.Types.ReplyMarkups;
 
 namespace ttk_bot
 {
-    public class UserStateController
+    public class UserState
     {
-        public UserStateController() { }
-        public UserStateController(long userChatId, int userMenuIndex, int messageIndex, InlineKeyboardMarkup menuInlineBtns, string TextMessage)
+        public UserState() 
+        {
+            
+        }
+        public UserState(long userChatId, int userMenuIndex, int messageIndex, InlineKeyboardMarkup menuInlineBtns, string TextMessage)
         {
             this.userChatId = userChatId;
             this.userMenuIndex = userMenuIndex;
             this.messageIndex = messageIndex;
             this.menuInlineBtns = menuInlineBtns;
             this.TextMessage = TextMessage;
+
         }
 
         public int userMenuIndex { get; set; } = 0;
@@ -24,7 +28,6 @@ namespace ttk_bot
         public long userChatId { get; set; } = 0;
         public InlineKeyboardMarkup menuInlineBtns { get; set; }
         public string? TextMessage { get; set; }
-
         public void RemoveMenu(InlineKeyboardMarkup menuInlineBtns)
         {
             TextMessage = null;

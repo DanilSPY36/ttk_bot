@@ -15,17 +15,10 @@ namespace ttk_bot
         //списки напитков и еды для распределения по объемам
         private List<DrinksTtk>? drinksByOneVolume;
         private List<DrinksTtk>? drinksByMultipleVolumes;
-        private List<VolumesDim>? volumesDims;
 
+        // меню клавиатура 
         private ReplyKeyboardMarkup? startMenu;
-        private InlineKeyboardMarkup? baseListMenu;
-        private InlineKeyboardMarkup? shippersMenu;
-        private InlineKeyboardMarkup? drinkCategoryMenu;
-        private InlineKeyboardMarkup? itemsShipperMenu;
-        private InlineKeyboardMarkup? ttkDrinkMenu;
-        private InlineKeyboardMarkup? volumeDrinkMenu;
 
-        private InlineKeyboardMarkup? registrationMenu;
 
         private TgBotContext _context;
 
@@ -36,7 +29,7 @@ namespace ttk_bot
         public TtkCategoriesRepository? drinkCategoriesRep;
         public VolumesRepository? volumesRep;
         public SingleOriginRepository? singleOriginRep;
-
+        public KBJUttkRepository KBJUttkRep;
 
 
 
@@ -51,6 +44,8 @@ namespace ttk_bot
             TtkRep = new ttkRepository(_context);
             drinkCategoriesRep = new TtkCategoriesRepository(_context);
             volumesRep = new VolumesRepository(_context);
+            KBJUttkRep = new KBJUttkRepository(_context);
+
 
             singleOriginRep = new SingleOriginRepository(_context);
 
@@ -68,13 +63,54 @@ namespace ttk_bot
             new KeyboardButton("ТТК"),
         }
     };
-
+            buttonRows.Add(new KeyboardButton[] { new KeyboardButton("КБЖУ напитки") });
             startMenu = new ReplyKeyboardMarkup(buttonRows)
             {
                 ResizeKeyboard = true
             };
 
             return startMenu;
+        }
+        private async void DrinkVolumeChecker()
+        {
+            var drinks = await TtkRep.Get();
+            Dictionary<string, List<int>> drinkVolumes = new Dictionary<string, List<int>>();
+
+            drinksByOneVolume = new List<DrinksTtk>();
+            drinksByMultipleVolumes = new List<DrinksTtk>();
+
+            foreach (var drink in drinks)
+            {
+                if (!drinkVolumes.ContainsKey(drink.Name))
+                {
+                    drinkVolumes[drink.Name] = new List<int>();
+                }
+                drinkVolumes[drink.Name].Add(drink.VolumeId);
+            }
+
+
+            foreach (var drink in drinks)
+            {
+                if (drinkVolumes[drink.Name].Count == 1)
+                {
+                    drinksByOneVolume.Add(drink);
+                }
+                else
+                {
+                    drinksByMultipleVolumes.Add(drink);
+                }
+            }
+
+            foreach (var item in drinksByOneVolume)
+            {
+                Console.WriteLine($"{item.Name} || {item.VolumeId}");
+            }
+            Console.WriteLine("\n|||||||||||||||||||||\n");
+
+            foreach (var item in drinksByMultipleVolumes)
+            {
+                Console.WriteLine($"{item.Name} || {item.VolumeId}");
+            }
         }
 
         public async Task<List<List<InlineKeyboardButton>>> ShippersMenuAsync()
@@ -149,7 +185,6 @@ namespace ttk_bot
 
         public async Task<List<List<InlineKeyboardButton>>> DrinksMenuAsync(int drinkCategoryId, int indexMenu)
         {
-            volumesDims = await volumesRep.Get();
             var buttonRows = new List<List<InlineKeyboardButton>>();
             List<string> volumes = new List<string>() { "0.2", "0,3", "0,4", " " };
             var drinksRepit = new List<string>();
@@ -196,48 +231,6 @@ namespace ttk_bot
             return buttonRows;
         }
 
-        private async void DrinkVolumeChecker()
-        {
-            var drinks = await TtkRep.Get();
-            Dictionary<string, List<int>> drinkVolumes = new Dictionary<string, List<int>>();
-
-            drinksByOneVolume = new List<DrinksTtk>();
-            drinksByMultipleVolumes = new List<DrinksTtk>();
-
-            foreach (var drink in drinks)
-            {
-                if (!drinkVolumes.ContainsKey(drink.Name))
-                {
-                    drinkVolumes[drink.Name] = new List<int>();
-                }
-                drinkVolumes[drink.Name].Add(drink.VolumeId);
-            }
-
-
-            foreach (var drink in drinks)
-            {
-                if (drinkVolumes[drink.Name].Count == 1)
-                {
-                    drinksByOneVolume.Add(drink);
-                }
-                else
-                {
-                    drinksByMultipleVolumes.Add(drink);
-                }
-            }
-
-            foreach (var item in drinksByOneVolume)
-            {
-                Console.WriteLine($"{item.Name} || {item.VolumeId}");
-            }
-            Console.WriteLine("\n|||||||||||||||||||||\n");
-
-            foreach (var item in drinksByMultipleVolumes)
-            {
-                Console.WriteLine($"{item.Name} || {item.VolumeId}");
-            }
-        }
-
         public async Task<List<List<InlineKeyboardButton>>> VolumesDrinksMenuAsync(int drinkId, int indexMenu)
         {
             var buttonRows = new List<List<InlineKeyboardButton>>();
@@ -263,7 +256,6 @@ namespace ttk_bot
                         CallbackData = $"Back||{indexMenu}"
                     }});
 
-            volumeDrinkMenu = new InlineKeyboardMarkup(buttonRows);
 
             return buttonRows;
         }

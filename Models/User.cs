@@ -19,15 +19,30 @@ public partial class User
 
     public string? LastName { get; set; }
 
-    public int? ChatId { get; set; }
+    public long? ChatId { get; set; }
 
-    public int? TgUserId { get; set; }
+    public long? TgUserId { get; set; }
 
     public bool? IsAdmin { get; set; }
 
-    public bool? IsAccess { get; set; }
+    public bool IsAccess { get; set; }
 
     public int? SpotId { get; set; }
 
     public int? RoleId { get; set; }
+
+
+    public User(string name, string? firstName, string? lastName, long? chatId, long? tgUserId, int? spotId, int? roleId)
+    {
+        
+        Name = name;
+        FirstName = firstName;
+        LastName = lastName;
+        ChatId = chatId;
+        TgUserId = tgUserId;
+        IsAdmin = false;
+        IsAccess = false;
+        SpotId = spotId;
+        RoleId = roleId;
+    }
 }

@@ -15,6 +15,8 @@ public partial class TgBotContext : DbContext
     {
     }
 
+    public virtual DbSet<BranchesDim> BranchesDims { get; set; }
+
     public virtual DbSet<CategoriesDim> CategoriesDims { get; set; }
 
     public virtual DbSet<CategoriesItemsDim> CategoriesItemsDims { get; set; }
@@ -26,6 +28,8 @@ public partial class TgBotContext : DbContext
     public virtual DbSet<Item> Items { get; set; }
 
     public virtual DbSet<KbjuTtk> KbjuTtks { get; set; }
+
+    public virtual DbSet<Operation> Operations { get; set; }
 
     public virtual DbSet<RolesDim> RolesDims { get; set; }
 
@@ -47,6 +51,20 @@ public partial class TgBotContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<BranchesDim>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("menus_dim_pk");
+
+            entity.ToTable("branches_dim", "statistic_prod", tb => tb.HasComment("Ветки меню"));
+
+            entity.Property(e => e.Id)
+                .ValueGeneratedNever()
+                .HasColumnName("id");
+            entity.Property(e => e.Branch)
+                .HasColumnType("character varying")
+                .HasColumnName("branch");
+        });
+
         modelBuilder.Entity<CategoriesDim>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("categories_dim_pk");
@@ -206,6 +224,25 @@ public partial class TgBotContext : DbContext
             entity.Property(e => e.Variety)
                 .HasColumnType("character varying")
                 .HasColumnName("variety");
+        });
+
+        modelBuilder.Entity<Operation>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("use_cases_pk");
+
+            entity.ToTable("operations", "statistic_prod");
+
+            entity.Property(e => e.Id)
+                .ValueGeneratedNever()
+                .HasColumnName("id");
+            entity.Property(e => e.BranchId)
+                .HasComment("Ветка меню")
+                .HasColumnName("branch_id");
+            entity.Property(e => e.DateTime)
+                .HasColumnType("timestamp without time zone")
+                .HasColumnName("date_time");
+            entity.Property(e => e.ProductId).HasColumnName("product_id");
+            entity.Property(e => e.UserId).HasColumnName("user_id");
         });
 
         modelBuilder.Entity<RolesDim>(entity =>

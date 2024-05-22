@@ -31,10 +31,9 @@ public partial class User
 
     public int? RoleId { get; set; }
 
-
     public User(string name, string? firstName, string? lastName, long? chatId, long? tgUserId, int? spotId, int? roleId)
     {
-        
+
         Name = name;
         FirstName = firstName;
         LastName = lastName;

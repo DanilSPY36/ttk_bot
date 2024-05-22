@@ -101,7 +101,7 @@ namespace ttk_bot
                 }
             }
 
-            foreach (var item in drinksByOneVolume)
+            /*foreach (var item in drinksByOneVolume)
             {
                 Console.WriteLine($"{item.Name} || {item.VolumeId}");
             }
@@ -110,7 +110,7 @@ namespace ttk_bot
             foreach (var item in drinksByMultipleVolumes)
             {
                 Console.WriteLine($"{item.Name} || {item.VolumeId}");
-            }
+            }*/
         }
 
         public async Task<List<List<InlineKeyboardButton>>> ShippersMenuAsync()

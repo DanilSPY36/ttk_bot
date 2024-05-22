@@ -40,17 +40,17 @@ class Program
 
         _receiverOptions = new ReceiverOptions
         {
+            
             AllowedUpdates = new[]
             {
                 UpdateType.Message,
                 UpdateType.CallbackQuery,
             },
-
             ThrowPendingUpdates = true,
+            
         };
 
         using var cts = new CancellationTokenSource();
-
 
         _botClient.StartReceiving(UpdateHandler, ErrorHandler, _receiverOptions, cts.Token);
         var me = await _botClient.GetMeAsync();
@@ -59,16 +59,17 @@ class Program
     }
     private static async Task UpdateHandler(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
     {
-        
-        
+
             switch (update.Type)
             {
                 case UpdateType.Message:
                     {
-                        var message = update.Message;
+                    var message = update.Message;
                         var user = message.From;
                         var chatInfo = message.Chat;
-                        if (await usersRep.accessCheck(user.Username, user.FirstName, user.LastName, chatInfo.Id, user.Id, 123, 5))
+                        
+                        
+                    if (await usersRep.accessCheck(user.Username, user.FirstName, user.LastName, chatInfo.Id, user.Id, 123, 5))
                         {
                             Console.WriteLine($"{user.Username} Пишет хуйню следующего характера: {message.Text} || messageId = {message.MessageId}\n");
                             switch (message.Text)
@@ -79,7 +80,7 @@ class Program
                                         "Поставщики - вся выпечка, кбжу, составы, сроки,  условия хранения и аллергены\n\n" +
                                         "ТТК - все технические карты основного меню\n\n" +
                                         "КБЖУ напитки - кбжу любого напитка.\n\n" +
-                                        "Если есть вопросы, предложения или нашли что-то неладное, то напишите ему @DanilSPY", replyMarkup: _botMenu.StartMenu());
+                                        "Если есть вопросы, предложения или нашли что-то неладное, то напишите ему @DanilSPY", replyMarkup: _botMenu.StartMenu(),protectContent: true);
                                     Console.WriteLine($"{user.Username} Send: {message.Text}");
                                     break;
                                 default:
@@ -90,7 +91,7 @@ class Program
                         }
                         else
                         {
-                            _botClient.SendTextMessageAsync(message.Chat.Id, "У вас нет доступа\n\n Напишите @DanilSPY с какого вы спота и с просьбой выдать пропуск");
+                            _botClient.SendTextMessageAsync(message.Chat.Id, "У вас нет доступа\n\n Напишите @DanilSPY с какого вы спота с просьбой выдать пропуск", protectContent: true);
                             return;
                         }
                     }
@@ -117,19 +118,19 @@ class Program
                 {
 
                     userStateController = new UserState(chatId, 0, message.MessageId + 1, new InlineKeyboardMarkup(await _botMenu.ShippersMenuAsync()), "Список поставщиков:");
-                    await _botClient.SendTextMessageAsync(userStateController.userChatId, userStateController.TextMessage, replyMarkup: userStateController.menuInlineBtns);
+                    await _botClient.SendTextMessageAsync(userStateController.userChatId, userStateController.TextMessage, replyMarkup: userStateController.menuInlineBtns, protectContent: true);
                     break;
                 }
             case "ТТК":
                 {
                     userStateController = new UserState(chatId, 0, message.MessageId + 1, new InlineKeyboardMarkup(await _botMenu.CategoryDrinksMenuAsync()), "ТТК на напитки:");
-                    await _botClient.SendTextMessageAsync(userStateController.userChatId, userStateController.TextMessage, replyMarkup: userStateController.menuInlineBtns);
+                    await _botClient.SendTextMessageAsync(userStateController.userChatId, userStateController.TextMessage, replyMarkup: userStateController.menuInlineBtns, protectContent: true);
                     break;
                 }
             case "Зерно":
                 {
                     userStateController = new UserState(chatId, 0, message.MessageId + 1, new InlineKeyboardMarkup(await _botMenu.SingleOriginType()), "Выбери тип зерНННЫЫЫААА: ");
-                    await _botClient.SendTextMessageAsync(userStateController.userChatId, userStateController.TextMessage, replyMarkup: userStateController.menuInlineBtns);
+                    await _botClient.SendTextMessageAsync(userStateController.userChatId, userStateController.TextMessage, replyMarkup: userStateController.menuInlineBtns, protectContent: true);
                     break;
                 }
             default:
@@ -268,7 +269,7 @@ class Program
                         using (FileStream stream = new FileStream(photoPath.PhotoPath, FileMode.Open, FileAccess.Read))
                         {
                             InputFileStream inputOnlineFile = new InputFileStream(stream);
-                            await botClient.SendPhotoAsync(chatId: chat.Id, photo: inputOnlineFile, caption: $"{userStateController.TextMessage}", replyMarkup: userStateController.menuInlineBtns);
+                            await botClient.SendPhotoAsync(chatId: chat.Id, photo: inputOnlineFile, caption: $"{userStateController.TextMessage}", replyMarkup: userStateController.menuInlineBtns, protectContent: true);
                         }
 
 

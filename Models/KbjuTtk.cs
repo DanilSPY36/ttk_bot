@@ -27,4 +27,9 @@ public partial class KbjuTtk
     public float? Caffeine { get; set; }
 
     public int? CategoryId { get; set; }
+
+    public int VolumeId { get; set; }
+
+    public int? TtkId { get; set; }
+
 }

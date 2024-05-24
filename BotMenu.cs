@@ -1,5 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,7 +18,7 @@ namespace ttk_bot
         //списки напитков и еды для распределения по объемам
         private List<DrinksTtk>? drinksByOneVolume;
         private List<DrinksTtk>? drinksByMultipleVolumes;
-
+        private List<DrinksTtk>? drinks;
         // меню клавиатура 
         private ReplyKeyboardMarkup? startMenu;
 
@@ -29,10 +32,12 @@ namespace ttk_bot
         public TtkCategoriesRepository? drinkCategoriesRep;
         public VolumesRepository? volumesRep;
         public SingleOriginRepository? singleOriginRep;
+
         public KBJUttkRepository KBJUttkRep;
 
+        public List<KBJUttkRepository> sortedkBJUttkRepositories;
 
-
+        public List<KbjuTtk> kbjuTtks;
 
         public BotMenu()
         {
@@ -46,10 +51,13 @@ namespace ttk_bot
             volumesRep = new VolumesRepository(_context);
             KBJUttkRep = new KBJUttkRepository(_context);
 
+            sortedkBJUttkRepositories = new List<KBJUttkRepository>();
+
 
             singleOriginRep = new SingleOriginRepository(_context);
 
             DrinkVolumeChecker();
+            KBJUController();
         }
 
         public ReplyKeyboardMarkup StartMenu()
@@ -63,7 +71,7 @@ namespace ttk_bot
             new KeyboardButton("ТТК"),
         }
     };
-            buttonRows.Add(new KeyboardButton[] { new KeyboardButton("КБЖУ напитки") });
+            buttonRows.Add(new KeyboardButton[] { new KeyboardButton("КБЖУ основное меню") });
             startMenu = new ReplyKeyboardMarkup(buttonRows)
             {
                 ResizeKeyboard = true
@@ -73,7 +81,8 @@ namespace ttk_bot
         }
         private async void DrinkVolumeChecker()
         {
-            var drinks = await TtkRep.Get();
+            drinks = new List<DrinksTtk>();
+            drinks = await TtkRep.Get();
             Dictionary<string, List<int>> drinkVolumes = new Dictionary<string, List<int>>();
 
             drinksByOneVolume = new List<DrinksTtk>();
@@ -88,7 +97,6 @@ namespace ttk_bot
                 drinkVolumes[drink.Name].Add(drink.VolumeId);
             }
 
-
             foreach (var drink in drinks)
             {
                 if (drinkVolumes[drink.Name].Count == 1)
@@ -100,17 +108,87 @@ namespace ttk_bot
                     drinksByMultipleVolumes.Add(drink);
                 }
             }
+        }
 
-            /*foreach (var item in drinksByOneVolume)
+        /// <summary>
+        /// крч тут чет индексы напутаны логик верна но чет не то все ровно 
+        /// 
+        /// </summary>
+        private async void KBJUController()
+        {
+            kbjuTtks = await KBJUttkRep.Get();
+
+            // Группировка напитков по названию и по объему
+            var groupedByNameDrinks = kbjuTtks.GroupBy(x => new { x.Name, x.VolumeId, x.TtkId });
+            
+            List<string> volumes = new List<string>() { "0.2", "0,3", "0,4", " " };
+
+            foreach (var item in groupedByNameDrinks)
             {
-                Console.WriteLine($"{item.Name} || {item.VolumeId}");
+                Console.WriteLine($"name: {item.Key.Name}              \t\t volume: {item.Key.VolumeId}\t ttkId: {item.Key.TtkId}");
             }
-            Console.WriteLine("\n|||||||||||||||||||||\n");
 
-            foreach (var item in drinksByMultipleVolumes)
+
+            foreach (var item in groupedByNameDrinks) // работает
             {
-                Console.WriteLine($"{item.Name} || {item.VolumeId}");
-            }*/
+                //Console.WriteLine($"Name: {item.Key.VolumeId}  Volums: {item.Key.Name}");
+                // добавили все сгруппированные напитки по имени и объему
+                var temp = new KBJUttkRepository(item.Key.Name, item.Key.VolumeId, item.Key.TtkId);
+                sortedkBJUttkRepositories.Add(temp);
+                foreach (var sorted in sortedkBJUttkRepositories)  
+                {
+                    var drinksFromDb = kbjuTtks.FindAll(x => x.Name == sorted.name && x.VolumeId == sorted.volume_id && x.TtkId == sorted.ttk_id);
+                    temp.kbjuTtks = new List<KbjuTtk>(drinksFromDb);
+                }
+            }
+
+            //var tempOrder = sortedkBJUttkRepositories.OrderBy(x => x.name).ThenBy(y => y.volume_id);
+            //sortedkBJUttkRepositories = tempOrder.ToList();
+            // надо заполнить молоко находим имя и объем 
+
+            foreach (var item in sortedkBJUttkRepositories)
+            {
+                var drinksFromDb = kbjuTtks.FindAll(x => x.TtkId == item.ttk_id && x.VolumeId == item.volume_id && x.Name == item.name); // получаем список объектов с одинаковым именем и объемом
+
+                foreach (var vareaty in drinksFromDb)
+                {
+                    if(item.name == vareaty.Name && item.volume_id == vareaty.VolumeId) // если имя и объем совпадает то добавляем молоко
+                    {
+                        item.variety.Add(vareaty.Variety);
+                    }
+                }
+            }
+
+            foreach (var item in sortedkBJUttkRepositories)
+            {
+                Console.WriteLine("||||||||||||||||||||||||||||||");
+                Console.WriteLine($"Name: {item.name} || ttkId: {item.ttk_id}");
+                Console.WriteLine($"Volums: {item.volume_id}");
+                Console.WriteLine("Variaty: ");
+                foreach (var va in item.variety)
+                {
+                    Console.WriteLine($"{va}");
+                }
+                foreach (var obj in item.kbjuTtks)
+                {
+                    Console.WriteLine($"{obj.Name} || {obj.Id} || {obj.TtkId} || {obj.VolumeId} || {obj.Variety}");
+                }
+                Console.WriteLine("\n\n ");
+
+            }
+
+        } // готовый sortedkBJUttkRepositories сгруппированный по имени и по объемам
+
+        private async Task<KBJUttkRepository> VariatyChecker(string name, int? volume)
+        {
+            foreach (var item in sortedkBJUttkRepositories)
+            {
+                if (item.name == name && item.volume_id == volume)
+                {
+                    return item;
+                }
+            }
+            return null;
         }
 
         public async Task<List<List<InlineKeyboardButton>>> ShippersMenuAsync()
@@ -169,7 +247,7 @@ namespace ttk_bot
 
             foreach (var item in await drinkCategoriesRep.Get())
             {
-                if(item.Category != "Добавки")
+                if(item.Id != 17 && item.Id != 18)
                 {
                     var button = new InlineKeyboardButton($"{item.Category}")
                     {
@@ -258,6 +336,103 @@ namespace ttk_bot
 
 
             return buttonRows;
+        }
+
+
+        public async Task<List<List<InlineKeyboardButton>>> CategoryKBJUMenuAsync()
+        {
+            var buttonRows = new List<List<InlineKeyboardButton>>();
+
+            foreach (var item in await drinkCategoriesRep.Get())
+            {
+                    var button = new InlineKeyboardButton($"{item.Category}")
+                    {
+                        Text = item.Category,
+                        CallbackData = $"categoryKBJUDrinks||{item.Id}"
+                    };
+
+                    buttonRows.Add(new List<InlineKeyboardButton> { button });
+            }
+            return buttonRows;
+        }
+        public async Task<List<List<InlineKeyboardButton>>> DrinksKBJUMenuAsync(int drinkCategoryId, int indexMenu)
+        {
+            var buttonRows = new List<List<InlineKeyboardButton>>();
+            List<string> volumes = new List<string>() { "0.2", "0,3", "0,4", " " };
+            var drinksRepit = new List<string>();
+
+            foreach (var drink in drinksByOneVolume)
+            {
+                if (drink.CategoryId == drinkCategoryId && !drinksRepit.Contains(drink.Name))
+                {
+                    drinksRepit.Add(drink.Name);
+
+                    var button = new InlineKeyboardButton("list ttk menu")
+                    {
+                        Text = $"{drink.Name} {volumes[drink.VolumeId - 1]}",
+                        CallbackData = $"KBJUBByOneVolume||{drink.Id}"
+                    };
+                    buttonRows.Add(new List<InlineKeyboardButton> { button });
+                }
+            }
+
+
+            foreach (var drink in drinksByMultipleVolumes)
+            {
+                if (drink.CategoryId == drinkCategoryId && !drinksRepit.Contains(drink.Name))
+                {
+                    drinksRepit.Add(drink.Name);
+
+                    var button = new InlineKeyboardButton("list ttk menu")
+                    {
+                        Text = $"{drink.Name}",
+                        CallbackData = $"KBJUByMultipleVolumes||{drink.Id}"
+                    };
+                    buttonRows.Add(new List<InlineKeyboardButton> { button });
+                }
+            }
+            buttonRows.Add(
+            new List<InlineKeyboardButton> { new InlineKeyboardButton("list ttk menu")
+                    {
+                        Text = $"Назад",
+                        CallbackData = $"Back||{indexMenu}"
+                    }
+                }
+            );
+
+            return buttonRows;
+        }
+
+
+        public async Task<List<List<InlineKeyboardButton>>> DrinkKBJUVariaty(int id) // когда уже нажали в ттк на напиток получили карточку напитка мы знаем его id и объем
+        {
+            var buttonRows = new List<List<InlineKeyboardButton>>();
+            var drinkFromTTK = drinks.FirstOrDefault(d => d.Id == id);
+
+            var drinkFromKBJU = await VariatyChecker(drinkFromTTK.Name, drinkFromTTK.VolumeId);
+
+            List<string> milkList = drinkFromKBJU.GetVariaty(id, drinkFromTTK.VolumeId);
+
+
+            if (milkList.Count == 0) // если у напитка нет молока выводим чисто карточку напитка
+            {
+
+            }
+            else 
+            {
+                foreach (var item in milkList) 
+                {
+                    var button = new InlineKeyboardButton($"{item}")
+                    {
+                        Text = item,
+                        CallbackData = $"categoryKBJUDrinks||{item}"
+                    };
+                    buttonRows.Add(new List<InlineKeyboardButton> { button });
+                }
+            }
+
+
+            return buttonRows;        // тут мы должны вернуть список кнопок молока у конкретного напитка емли они есть .. если нет то просто вывести инфу о кбжу 
         }
 
         public async Task<List<List<InlineKeyboardButton>>> SingleOriginType() // 0 - зерно

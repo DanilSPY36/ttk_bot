@@ -37,7 +37,7 @@ public partial class TgBotContext : DbContext
 
     public virtual DbSet<SingleOrigin> SingleOrigins { get; set; }
 
-    public virtual DbSet<SingleOriginType> SingleOriginTypes { get; set; }
+    public virtual DbSet<SingleOriginTypesDim> SingleOriginTypesDims { get; set; }
 
     public virtual DbSet<SpotsDim> SpotsDims { get; set; }
 
@@ -47,7 +47,7 @@ public partial class TgBotContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseNpgsql("Host=192.168.0.189:5433;Database=tg_bot;Username=postgres;Password=postgres");
+        => optionsBuilder.UseNpgsql("Host=192.168.1.121:5434;Database=tg_bot;Username=postgres;Password=postgres");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -221,9 +221,11 @@ public partial class TgBotContext : DbContext
                 .HasColumnType("character varying")
                 .HasColumnName("name");
             entity.Property(e => e.Proteins).HasColumnName("proteins");
+            entity.Property(e => e.TtkId).HasColumnName("ttk_id");
             entity.Property(e => e.Variety)
                 .HasColumnType("character varying")
                 .HasColumnName("variety");
+            entity.Property(e => e.VolumeId).HasColumnName("volume_id");
         });
 
         modelBuilder.Entity<Operation>(entity =>
@@ -345,11 +347,11 @@ public partial class TgBotContext : DbContext
                 .HasColumnName("variety");
         });
 
-        modelBuilder.Entity<SingleOriginType>(entity =>
+        modelBuilder.Entity<SingleOriginTypesDim>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("single_origin_types_pk");
 
-            entity.ToTable("single_origin_types", "single_origin_prod", tb => tb.HasComment("Типы зерна"));
+            entity.ToTable("single_origin_types_dim", "single_origin_prod", tb => tb.HasComment("Типы зерна"));
 
             entity.Property(e => e.Id)
                 .ValueGeneratedNever()

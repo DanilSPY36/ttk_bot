@@ -43,18 +43,44 @@ namespace ttk_bot.Repositories
             List<string> volumes = new List<string>() { "0.2", "0.3", "0.4", " " };
             if (matchedItem != null)
             {
-                return $"{matchedItem.Name} {volumes[matchedItem.VolumeId - 1]}\n" +
+                return $"{matchedItem.Name} {volumes[matchedItem.VolumeId - 1]} {matchedItem.Variety}\n" +
                        $"Кофеин: " +
-                       $"{matchedItem.Caffeine}\n" +
+                       $"{matchedItem.Caffeine:F1}\n" +
                        $"Калории: " +
-                       $"{matchedItem.Calories}\n" +
+                       $"{matchedItem.Calories:F1}\n" +
                        $"Белки: " +
-                       $"{matchedItem.Proteins}\n" +
+                       $"{matchedItem.Proteins:F1}\n" +
                        $"Жиры: " +
-                       $"{matchedItem.Fats} \n" +
+                       $"{matchedItem.Fats:F1} \n" +
                        $"Углеводы: " +
-                       $"{matchedItem.Carbohydrates}\n" +
-                       $"кДж: {matchedItem.Energy} ";
+                       $"{matchedItem.Carbohydrates:F1}\n" +
+                       $"кДж: {matchedItem.Energy:F1} ";
+                
+            }
+            else
+            {
+                return "drink = null";
+            }
+        }
+        public string GetKBJU(int VariationId)
+        {
+            var matchedItem = kbjuTtks.FirstOrDefault(x => x.Name == this.name && x.VolumeId == volume_id && x.Variety == variety[VariationId - 1]);
+            List<string> volumes = new List<string>() { "0.2", "0.3", "0.4", " " };
+            if (matchedItem != null)
+            {
+                return $"{matchedItem.Name} {volumes[matchedItem.VolumeId - 1]}\n" +
+                       $"Молоко {matchedItem.Variety:F1}\n" +
+                       $"Кофеин: " +
+                       $"{matchedItem.Caffeine:F1}\n" +
+                       $"Калории: " +
+                       $"{matchedItem.Calories:F1}\n" +
+                       $"Белки: " +
+                       $"{matchedItem.Proteins:F1}\n" +
+                       $"Жиры: " +
+                       $"{matchedItem.Fats:F1} \n" +
+                       $"Углеводы: " +
+                       $"{matchedItem.Carbohydrates:F1}\n" +
+                       $"кДж: {matchedItem.Energy:F1} ";
                 //+$"Описание: \n{matchedItem.Description}";
             }
             else
@@ -64,7 +90,6 @@ namespace ttk_bot.Repositories
         }
 
 
-        
 
         public List<string> GetVariaty(int id, int volume)
         {

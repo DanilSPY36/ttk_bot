@@ -190,6 +190,17 @@ namespace ttk_bot
             }
             return null;
         }
+        private async Task<KBJUttkRepository> VariatyChecker(int id)
+        {
+            foreach (var item in sortedkBJUttkRepositories)
+            {
+                if (item.ttk_id == id )
+                {
+                    return item;
+                }
+            }
+            return null;
+        }
 
         public async Task<List<List<InlineKeyboardButton>>> ShippersMenuAsync()
         {
@@ -244,8 +255,10 @@ namespace ttk_bot
         public async Task<List<List<InlineKeyboardButton>>> CategoryDrinksMenuAsync()
         {
             var buttonRows = new List<List<InlineKeyboardButton>>();
-
-            foreach (var item in await drinkCategoriesRep.Get())
+            var Drinkcategories = await drinkCategoriesRep.Get();
+            Drinkcategories.OrderBy(x => x.Id);
+            var sortedById = Drinkcategories.OrderBy(x => x.Id);
+            foreach (var item in sortedById)
             {
                 if(item.Id != 17 && item.Id != 18)
                 {
@@ -393,7 +406,7 @@ namespace ttk_bot
             var buttonRows = new List<List<InlineKeyboardButton>>();
             var drinkFromTTK = drinks.FirstOrDefault(d => d.Id == id);
 
-            var drinkFromKBJU = await VariatyChecker(drinkFromTTK.Name, drinkFromTTK.VolumeId);
+            var drinkFromKBJU = await VariatyChecker(id);
 
             List<string> milkList = drinkFromKBJU.GetVariaty(id, drinkFromTTK.VolumeId);
 

@@ -27,12 +27,14 @@ class Program
     private static List<UserState> userStateControllers;
     private static UserState userStateController;
     private static UsersRepository usersRep;
-    private static MenuTree menuTree;
+    private static Dictionary<KBJUttkRepository, List<string>> choseKBJUDrink;
+
     static async Task Main()
     {
         _botClient = new TelegramBotClient("7190916687:AAG4L9eYwyj8bLJtXajo6uTP-k-MuIkRdIs");
         _botMenu = new BotMenu();
         usersRep = new UsersRepository(_context = new TgBotContext());
+        choseKBJUDrink = new Dictionary<KBJUttkRepository, List<string>>();
         var itemsRep = new ItemsRepository(_context = new TgBotContext());
 
         userStateControllers = new List<UserState> { };
@@ -154,17 +156,15 @@ class Program
         {
             case "Back":
                 {
-                    var stateTmp = userStateControllers.LastOrDefault(x => x.userChatId == chat.Id && x.messageIndex == callbackQuery.Message.MessageId && x.userMenuIndex == choseIdMenuButton);
+                    var stateTmp = userStateControllers.Last(x => x.userChatId == chat.Id && x.messageIndex == callbackQuery.Message.MessageId && x.userMenuIndex == choseIdMenuButton);
 
                     userStateControllers.Remove(stateTmp);
-
-                    userStateController = userStateControllers.Last(x => x.userChatId == chat.Id && x.messageIndex == callbackQuery.Message.MessageId && x.userMenuIndex == choseIdMenuButton - 1);
 
                     await _botClient.EditMessageTextAsync(
                                 chatId: chat.Id,
                                 messageId: callbackQuery.Message.MessageId,
-                                text: $"{userStateController.TextMessage}",
-                                replyMarkup: userStateController.menuInlineBtns
+                                text: $"{userStateControllers.Last().TextMessage}",
+                                replyMarkup: userStateControllers.Last().menuInlineBtns
                             );
                     //await _botClient.DeleteMessageAsync(chat.Id, messageId: message.MessageId);
 
@@ -175,6 +175,7 @@ class Program
                 {
                     await _botClient.DeleteMessageAsync(chat.Id, messageId: callbackQuery.Message.MessageId);
                     await _botClient.DeleteMessageAsync(chat.Id, messageId: callbackQuery.Message.MessageId -1);
+                    userStateControllers.Remove(userStateControllers.Last());
                     break;
                 }
             case "shipper":
@@ -233,6 +234,7 @@ class Program
                     userStateControllers.Add(userStateController);
                     break;
                 }
+
             case "categoryDrinks":
                 {
                     await botClient.AnswerCallbackQueryAsync(callbackQuery.Id);
@@ -284,7 +286,20 @@ class Program
                     catch (Exception ex)
                     {
                         Console.WriteLine(ex.ToString());
-                        userStateController = new UserState(chat.Id, 2, callbackQuery.Message.MessageId,
+                        if (choseIdMenuButton == 10025) // swell-set
+                        {
+                            userStateController = new UserState(chat.Id, 2, callbackQuery.Message.MessageId,
+                                            new InlineKeyboardMarkup(new[]
+                                           {
+                                                new InlineKeyboardButton("Back")
+                                                {
+                                                    Text = "Назад",
+                                                    CallbackData = $"Back||{2}"
+                                                }}), $"{_botMenu.TtkRep.ToString(choseIdMenuButton)}");
+                        }
+                        else
+                        {
+                            userStateController = new UserState(chat.Id, 2, callbackQuery.Message.MessageId,
                        new InlineKeyboardMarkup(new[]
                                            {
                                                 new InlineKeyboardButton("Back")
@@ -297,8 +312,9 @@ class Program
                                                     Text = "КБЖУ",
                                                     CallbackData = $"KBJU||{choseIdMenuButton}"
                                                 }
-                                           }),
-                        $"{_botMenu.TtkRep.ToString(choseIdMenuButton)}");
+                                           }), $"{_botMenu.TtkRep.ToString(choseIdMenuButton)}");
+                        }
+                        
                         await _botClient.EditMessageTextAsync(
                                    chatId: chat.Id,
                                    messageId: callbackQuery.Message.MessageId,
@@ -328,6 +344,7 @@ class Program
                     userStateControllers.Add(userStateController);
                     break;
                 }
+
             case "singleOrigin":
                 {
                     await botClient.AnswerCallbackQueryAsync(callbackQuery.Id);
@@ -377,14 +394,15 @@ class Program
                 {
                     var buttonRows = new List<List<InlineKeyboardButton>>();
                     
-                    var tempButtoms = await _botMenu.DrinkKBJUVariaty(choseIdMenuButton, 3);
+                    choseKBJUDrink = await _botMenu.DrinkKBJUVariaty(choseIdMenuButton, 3);
 
-                    foreach (var x in tempButtoms.First().Value)
+                    foreach (var x in choseKBJUDrink.First().Value)
                     {
+                        int index = choseKBJUDrink.First().Value.IndexOf(x);
                         var button = new InlineKeyboardButton($"{x}")
                         {
                             Text = x,
-                            CallbackData = $"DrinkVariation||{x}"
+                            CallbackData = $"DrinkVariationPhoto||{index + 1}" // индекс молока крч в одном напитке 
                         };
                         buttonRows.Add(new List<InlineKeyboardButton> { button });
                     }
@@ -395,10 +413,10 @@ class Program
                     }});
 
 
-                    var obj = tempButtoms.Keys.FirstOrDefault(x => x.ttk_id == choseIdMenuButton);
+                    var obj = choseKBJUDrink.Keys.FirstOrDefault(x => x.ttk_id == choseIdMenuButton);
 
-                    Console.WriteLine($"amount variation:{tempButtoms.Values.Count()}");
-                    if (tempButtoms.First().Value.Count() == 0) // если у напитка нет вариаций
+                    Console.WriteLine($"amount variation:{choseKBJUDrink.First().Value.Count()}");
+                    if (choseKBJUDrink.First().Value.Count() == 0 || choseKBJUDrink.First().Value.Count() == 1) // если у напитка нет вариаций
                     {
                         
                         await _botClient.EditMessageTextAsync(
@@ -425,13 +443,69 @@ class Program
                     }
                     break;
                 }
-            case "DrinkVariation":
+            case "KBJU": // выбор молока после нажатия на KBJU на карточке с фотографией
                 {
+                    var buttonRows = new List<List<InlineKeyboardButton>>();
 
-                    /*await _botClient.EditMessageTextAsync(
+                    choseKBJUDrink = await _botMenu.DrinkKBJUVariaty(choseIdMenuButton, 3);
+
+                    foreach (var x in choseKBJUDrink.First().Value)
+                    {
+                        int index = choseKBJUDrink.First().Value.IndexOf(x);
+                        var button = new InlineKeyboardButton($"{x}")
+                        {
+                            Text = x,
+                            CallbackData = $"DrinkVariation||{index + 1}" // индекс молока крч в одном напитке 
+                        };
+                        buttonRows.Add(new List<InlineKeyboardButton> { button });
+                    }
+                    buttonRows.Add(new List<InlineKeyboardButton> {new InlineKeyboardButton("Back")
+                    {
+                        Text = "Назад",
+                        CallbackData = $"Back||{2}"
+                    }});
+
+
+                    var obj = choseKBJUDrink.Keys.FirstOrDefault(x => x.ttk_id == choseIdMenuButton);
+
+                    Console.WriteLine($"amount variation:{choseKBJUDrink.First().Value.Count()}");
+                    if (choseKBJUDrink.First().Value.Count() == 0 || choseKBJUDrink.First().Value.Count() == 1) // если у напитка нет вариаций
+                    {
+
+                        await _botClient.EditMessageTextAsync(
                                    chatId: chat.Id,
                                    messageId: callbackQuery.Message.MessageId,
-                                   text: $"{userStateController.TextMessage} КБЖУ {obj.GetKBJU()}", // надо написать метод который будет по выбранному молоку присылать карточку конкретного напитка 
+                                   text: $"{userStateController.TextMessage} КБЖУ {obj.GetKBJU()}",
+                                   replyMarkup: userStateController.menuInlineBtns = new InlineKeyboardMarkup(new[]
+                                            {
+                                                new InlineKeyboardButton("Back")
+                                                {
+                                                    Text = "Назад",
+                                                    CallbackData = $"Back||{2}"
+                                                }
+                                            }));
+                    }
+                    else
+                    {
+
+                        await _botClient.EditMessageTextAsync(
+                                   chatId: chat.Id,
+                                   messageId: callbackQuery.Message.MessageId,
+                                   text: $"{userStateController.TextMessage}",
+                                   replyMarkup: new InlineKeyboardMarkup(buttonRows));
+                    }
+                    break;
+                }
+
+            case "DrinkVariationPhoto":
+                {
+                    // надо достать список объектов кбжу и из него достать напиток с определенным молоком
+
+                    //Console.WriteLine(choseKBJUDrink.First().Key.GetKBJU(choseIdMenuButton));
+                    await _botClient.EditMessageTextAsync(
+                                   chatId: chat.Id,
+                                   messageId: callbackQuery.Message.MessageId,
+                                   text: $"{userStateController.TextMessage} КБЖУ\n{choseKBJUDrink.First().Key.GetKBJU(choseIdMenuButton)}", // надо написать метод который будет по выбранному молоку присылать карточку конкретного напитка 
                                    replyMarkup: userStateController.menuInlineBtns = new InlineKeyboardMarkup(new[]
                                             {
                                                 new InlineKeyboardButton("Back")
@@ -439,10 +513,29 @@ class Program
                                                     Text = "Назад",
                                                     CallbackData = $"BackPhoto||{2}"
                                                 }
-                                            }));*/
+                                            }));
                     break;
                 }
-            
+            case "DrinkVariation":
+                {
+                    // надо достать список объектов кбжу и из него достать напиток с определенным молоком
+
+                    //Console.WriteLine(choseKBJUDrink.First().Key.GetKBJU(choseIdMenuButton));
+                    await _botClient.EditMessageTextAsync(
+                                   chatId: chat.Id,
+                                   messageId: callbackQuery.Message.MessageId,
+                                   text: $"{userStateController.TextMessage} КБЖУ\n{choseKBJUDrink.First().Key.GetKBJU(choseIdMenuButton)}", // надо написать метод который будет по выбранному молоку присылать карточку конкретного напитка 
+                                   replyMarkup: userStateController.menuInlineBtns = new InlineKeyboardMarkup(new[]
+                                            {
+                                                new InlineKeyboardButton("Back")
+                                                {
+                                                    Text = "Назад",
+                                                    CallbackData = $"Back||{2}"
+                                                }
+                                            }));
+                    break;
+                }
+
             default:
                 return;
         }

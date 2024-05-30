@@ -29,17 +29,17 @@ namespace ttk_bot.Repositories
         {
             return await _context.Users.AsNoTracking().ToListAsync();
         }
-        private async Task newUserDbAdd( string name, string? firstName, string? lastName, long? chatId, long? tgUserId, int? spotId, int? roleId)
+        private async Task newUserDbAdd(int id, string name, string? firstName, string? lastName, long? chatId, long? tgUserId, int? spotId, int? roleId)
         {
-            var newUser = new User(name, firstName, lastName, chatId, tgUserId, spotId,  roleId);
+            var newUser = new User(id, name, firstName, lastName, chatId, tgUserId, spotId,  roleId);
             usersList.Add(newUser);
             _context.Users.Add(newUser);
             _context.SaveChanges();
         }
-        public async Task<bool> accessCheck(string name, string? firstName, string? lastName, long? chatId, long? tgUserId, int? spotId, int? roleId)
+        public async Task<bool> accessCheck( string name, string? firstName, string? lastName, long? chatId, long? tgUserId, int? spotId, int? roleId)
         {
             usersList = await _context.Users.AsNoTracking().ToListAsync();
-
+            var lastUserId = await _context.Users.MaxAsync(id => id.Id);
 
             // проходим по списку пользователей.
             foreach (var user in usersList)
@@ -51,7 +51,7 @@ namespace ttk_bot.Repositories
                 }
             }
             // если не нашли то добавляем нового в дб и в лист с доступом 0
-            await newUserDbAdd(name, firstName, lastName, chatId, tgUserId, spotId, roleId);
+            await newUserDbAdd(lastUserId  + 1, name, firstName, lastName, chatId, tgUserId, spotId, roleId);
             return false;
         }
     }

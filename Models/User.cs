@@ -32,9 +32,9 @@ public partial class User
 
     public int? RoleId { get; set; }
 
-    public User(string name, string? firstName, string? lastName, long? chatId, long? tgUserId, int? spotId, int? roleId)
+    public User(int Id, string name, string? firstName, string? lastName, long? chatId, long? tgUserId, int? spotId, int? roleId)
     {
-
+        this.Id = Id;
         Name = name;
         FirstName = firstName;
         LastName = lastName;

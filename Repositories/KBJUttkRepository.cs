@@ -19,7 +19,7 @@ namespace ttk_bot.Repositories
         public List<string>? variety { get; set; }
         public List<KbjuTtk> kbjuTtks { get; set; }
 
-
+        public KBJUttkRepository() { }
         public KBJUttkRepository(string name, int volume_id, int? ttk_id) 
         {
             this.name = name;
@@ -37,23 +37,24 @@ namespace ttk_bot.Repositories
         {
             return _context.KbjuTtks.AsNoTracking().ToList();
         }
-        public string ToString(int id)
+        public string GetKBJU()
         {
-            var matchedItem = _context.KbjuTtks.FirstOrDefault(i => i.Id == id);
-
+            var matchedItem = kbjuTtks.FirstOrDefault(x => x.Name == this.name && x.VolumeId == volume_id);
+            List<string> volumes = new List<string>() { "0.2", "0.3", "0.4", " " };
             if (matchedItem != null)
             {
-                return $"{matchedItem.Name}\n\n" +
-                       $"Кофеин: \n" +
-                       $"{matchedItem.Caffeine}\n\n" +
-                       $"Каллории: \n" +
-                       $"{matchedItem.Calories}\n\n" +
+                return $"{matchedItem.Name} {volumes[matchedItem.VolumeId - 1]}\n" +
+                       $"Кофеин: " +
+                       $"{matchedItem.Caffeine}\n" +
+                       $"Калории: " +
+                       $"{matchedItem.Calories}\n" +
                        $"Белки: " +
-                       $"{matchedItem.Proteins}\n\n" +
+                       $"{matchedItem.Proteins}\n" +
                        $"Жиры: " +
-                       $"{matchedItem.Fats} \n\n" +
-                       $"Угливоды: " +
-                       $"{matchedItem.Carbohydrates}";
+                       $"{matchedItem.Fats} \n" +
+                       $"Углеводы: " +
+                       $"{matchedItem.Carbohydrates}\n" +
+                       $"кДж: {matchedItem.Energy} ";
                 //+$"Описание: \n{matchedItem.Description}";
             }
             else
@@ -67,7 +68,7 @@ namespace ttk_bot.Repositories
 
         public List<string> GetVariaty(int id, int volume)
         {
-            var temp = kbjuTtks.FindAll(i => i.Id == id && i.VolumeId == volume);
+            var temp = kbjuTtks.FindAll(i => i.TtkId == id && i.VolumeId == volume);
             var list = new List<string>();
             foreach (var item in temp)
             {

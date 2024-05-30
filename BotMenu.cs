@@ -71,7 +71,6 @@ namespace ttk_bot
             new KeyboardButton("ТТК"),
         }
     };
-            buttonRows.Add(new KeyboardButton[] { new KeyboardButton("КБЖУ основное меню") });
             startMenu = new ReplyKeyboardMarkup(buttonRows)
             {
                 ResizeKeyboard = true
@@ -162,7 +161,7 @@ namespace ttk_bot
             foreach (var item in sortedkBJUttkRepositories)
             {
                 Console.WriteLine("||||||||||||||||||||||||||||||");
-                Console.WriteLine($"Name: {item.name} || ttkId: {item.ttk_id}");
+                Console.WriteLine($"Name: {item.name} || KBJUId: {item.id} ||  ttkId: {item.ttk_id} || ");
                 Console.WriteLine($"Volums: {item.volume_id}");
                 Console.WriteLine("Variaty: ");
                 foreach (var va in item.variety)
@@ -185,6 +184,7 @@ namespace ttk_bot
             {
                 if (item.name == name && item.volume_id == volume)
                 {
+                    
                     return item;
                 }
             }
@@ -338,23 +338,6 @@ namespace ttk_bot
             return buttonRows;
         }
 
-
-        public async Task<List<List<InlineKeyboardButton>>> CategoryKBJUMenuAsync()
-        {
-            var buttonRows = new List<List<InlineKeyboardButton>>();
-
-            foreach (var item in await drinkCategoriesRep.Get())
-            {
-                    var button = new InlineKeyboardButton($"{item.Category}")
-                    {
-                        Text = item.Category,
-                        CallbackData = $"categoryKBJUDrinks||{item.Id}"
-                    };
-
-                    buttonRows.Add(new List<InlineKeyboardButton> { button });
-            }
-            return buttonRows;
-        }
         public async Task<List<List<InlineKeyboardButton>>> DrinksKBJUMenuAsync(int drinkCategoryId, int indexMenu)
         {
             var buttonRows = new List<List<InlineKeyboardButton>>();
@@ -404,8 +387,9 @@ namespace ttk_bot
         }
 
 
-        public async Task<List<List<InlineKeyboardButton>>> DrinkKBJUVariaty(int id) // когда уже нажали в ттк на напиток получили карточку напитка мы знаем его id и объем
+        public async Task<Dictionary<KBJUttkRepository, List<string>>> DrinkKBJUVariaty(int id, int indexMenu) // когда уже нажали в ттк на напиток получили карточку напитка мы знаем его id и объем
         {
+            
             var buttonRows = new List<List<InlineKeyboardButton>>();
             var drinkFromTTK = drinks.FirstOrDefault(d => d.Id == id);
 
@@ -413,26 +397,16 @@ namespace ttk_bot
 
             List<string> milkList = drinkFromKBJU.GetVariaty(id, drinkFromTTK.VolumeId);
 
+            
+                
+            
 
-            if (milkList.Count == 0) // если у напитка нет молока выводим чисто карточку напитка
+            var ReturnDict = new Dictionary<KBJUttkRepository, List<string>>
             {
+                { drinkFromKBJU, milkList }
+            };
 
-            }
-            else 
-            {
-                foreach (var item in milkList) 
-                {
-                    var button = new InlineKeyboardButton($"{item}")
-                    {
-                        Text = item,
-                        CallbackData = $"categoryKBJUDrinks||{item}"
-                    };
-                    buttonRows.Add(new List<InlineKeyboardButton> { button });
-                }
-            }
-
-
-            return buttonRows;        // тут мы должны вернуть список кнопок молока у конкретного напитка емли они есть .. если нет то просто вывести инфу о кбжу 
+            return ReturnDict;        // тут мы должны вернуть список кнопок молока у конкретного напитка емли они есть .. если нет то просто вывести инфу о кбжу 
         }
 
         public async Task<List<List<InlineKeyboardButton>>> SingleOriginType() // 0 - зерно

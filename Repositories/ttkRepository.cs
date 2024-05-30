@@ -31,6 +31,7 @@ namespace ttk_bot.Repositories
                        $"{matchedItem.Ingridients}\n\n" +
                        $"Как готовить: \n" +
                        $"{matchedItem.HowToCook}\n\n" +
+                       $"Описание: {matchedItem.Description}\n\n" +
                        $"Вес 1 порции: " +
                        $"{matchedItem.Weight}\n\n" +
                        $"Добавки: \n" +

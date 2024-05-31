@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "lu9jvghY9SeKfVDNo8KJy0D1u5CaGoA+G/8JM2hP1VVfCcsBgik85DHxj1d0kPC+C4zBINxhe58GHADYWk9HCA==",
+  "dgSpecHash": "p8UoeUjuYF8=",
   "success": true,
   "projectFilePath": "P:\\Visual Studio 2022\\sours\\repos\\Job_projects\\ttk_bot\\ttk_bot.csproj",
   "expectedPackageFiles": [
@@ -34,8 +34,10 @@
     "C:\\Users\\Danil\\.nuget\\packages\\microsoft.extensions.logging.abstractions\\8.0.0\\microsoft.extensions.logging.abstractions.8.0.0.nupkg.sha512",
     "C:\\Users\\Danil\\.nuget\\packages\\microsoft.extensions.options\\8.0.0\\microsoft.extensions.options.8.0.0.nupkg.sha512",
     "C:\\Users\\Danil\\.nuget\\packages\\microsoft.extensions.primitives\\8.0.0\\microsoft.extensions.primitives.8.0.0.nupkg.sha512",
+    "C:\\Users\\Danil\\.nuget\\packages\\microsoft.net.build.containers\\8.0.301\\microsoft.net.build.containers.8.0.301.nupkg.sha512",
     "C:\\Users\\Danil\\.nuget\\packages\\microsoft.netcore.platforms\\1.1.0\\microsoft.netcore.platforms.1.1.0.nupkg.sha512",
     "C:\\Users\\Danil\\.nuget\\packages\\microsoft.netcore.targets\\1.1.0\\microsoft.netcore.targets.1.1.0.nupkg.sha512",
+    "C:\\Users\\Danil\\.nuget\\packages\\microsoft.visualstudio.azure.containers.tools.targets\\1.20.1\\microsoft.visualstudio.azure.containers.tools.targets.1.20.1.nupkg.sha512",
     "C:\\Users\\Danil\\.nuget\\packages\\microsoft.win32.primitives\\4.3.0\\microsoft.win32.primitives.4.3.0.nupkg.sha512",
     "C:\\Users\\Danil\\.nuget\\packages\\mono.texttemplating\\2.2.1\\mono.texttemplating.2.2.1.nupkg.sha512",
     "C:\\Users\\Danil\\.nuget\\packages\\netstandard.library\\1.6.1\\netstandard.library.1.6.1.nupkg.sha512",

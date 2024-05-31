@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+https://go.microsoft.com/fwlink/?LinkID=208121.
+-->
+<Project>
+  <PropertyGroup>
+    <EncryptedPassword>AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAA93aAyt4XlUWToQXNyGlcrAAAAAACAAAAAAAQZgAAAAEAACAAAACQyjzvyNzlmfMtt1UxkbqaLIF+zIGpkBXISlRLOKXTiwAAAAAOgAAAAAIAACAAAACPe5d3rUn/Z31roY3VHhR3wUX4Y8KsEIuJe/4diJy0nDAAAABi6KnbS4kUL+yqlkim0SZUFCwKli96rqkG4Ap2sXIrLPq4kUMAFTwywjJLbUInkUdAAAAA9zKilKIGcimB1ulmQ+S90eyE1ZO2JqgVbJ1dAaZWQPqPbxYQWaNueVATFXZfpVzAbmyhhCQw1R/QWzz/G2FYlA==</EncryptedPassword>
+    <History>False|2024-05-30T17:48:54.2753259Z||;False|2024-05-30T20:44:46.5011418+03:00||;False|2024-05-30T20:07:19.0832838+03:00||;False|2024-05-30T19:47:03.1802520+03:00||;False|2024-05-30T19:45:31.1662368+03:00||;False|2024-05-30T19:44:04.0348195+03:00||;False|2024-05-30T19:41:58.1564180+03:00||;False|2024-05-30T19:41:38.6838824+03:00||;False|2024-05-30T19:41:15.3443405+03:00||;</History>
+    <LastFailureDetails>
+    </LastFailureDetails>
+  </PropertyGroup>
+</Project>

@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "ttk_bot": {
+      "commandName": "Project"
+    },
+    "Container (Dockerfile)": {
+      "commandName": "Docker"
+    }
+  }
+}

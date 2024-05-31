@@ -1,0 +1,138 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "P:\\Visual Studio 2022\\sours\\repos\\Job_projects\\ttk_bot\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{A6ABEA30-0D16-4039-9D97-1BCD82C7CF76}|ttk_bot.csproj|p:\\visual studio 2022\\sours\\repos\\job_projects\\ttk_bot\\dockerfile||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{A6ABEA30-0D16-4039-9D97-1BCD82C7CF76}|ttk_bot.csproj|solutionrelative:dockerfile||{8B382828-6202-11D1-8870-0000F87579D2}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A6ABEA30-0D16-4039-9D97-1BCD82C7CF76}|ttk_bot.csproj|p:\\visual studio 2022\\sours\\repos\\job_projects\\ttk_bot\\repositories\\ttkrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A6ABEA30-0D16-4039-9D97-1BCD82C7CF76}|ttk_bot.csproj|solutionrelative:repositories\\ttkrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A6ABEA30-0D16-4039-9D97-1BCD82C7CF76}|ttk_bot.csproj|p:\\visual studio 2022\\sours\\repos\\job_projects\\ttk_bot\\botmenu.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A6ABEA30-0D16-4039-9D97-1BCD82C7CF76}|ttk_bot.csproj|solutionrelative:botmenu.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A6ABEA30-0D16-4039-9D97-1BCD82C7CF76}|ttk_bot.csproj|p:\\visual studio 2022\\sours\\repos\\job_projects\\ttk_bot\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A6ABEA30-0D16-4039-9D97-1BCD82C7CF76}|ttk_bot.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A6ABEA30-0D16-4039-9D97-1BCD82C7CF76}|ttk_bot.csproj|p:\\visual studio 2022\\sours\\repos\\job_projects\\ttk_bot\\repositories\\kbjuttkrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A6ABEA30-0D16-4039-9D97-1BCD82C7CF76}|ttk_bot.csproj|solutionrelative:repositories\\kbjuttkrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A6ABEA30-0D16-4039-9D97-1BCD82C7CF76}|ttk_bot.csproj|p:\\visual studio 2022\\sours\\repos\\job_projects\\ttk_bot\\models\\kbjuttk.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A6ABEA30-0D16-4039-9D97-1BCD82C7CF76}|ttk_bot.csproj|solutionrelative:models\\kbjuttk.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 4,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{b1e99781-ab81-11d0-b683-00aa00a3ee26}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:128:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:129:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Dockerfile",
+              "DocumentMoniker": "P:\\Visual Studio 2022\\sours\\repos\\Job_projects\\ttk_bot\\Dockerfile",
+              "RelativeDocumentMoniker": "Dockerfile",
+              "ToolTip": "P:\\Visual Studio 2022\\sours\\repos\\Job_projects\\ttk_bot\\Dockerfile",
+              "RelativeToolTip": "Dockerfile",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABYAAAAkAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2024-05-30T18:00:09.189Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "ttkRepository.cs",
+              "DocumentMoniker": "P:\\Visual Studio 2022\\sours\\repos\\Job_projects\\ttk_bot\\Repositories\\ttkRepository.cs",
+              "RelativeDocumentMoniker": "Repositories\\ttkRepository.cs",
+              "ToolTip": "P:\\Visual Studio 2022\\sours\\repos\\Job_projects\\ttk_bot\\Repositories\\ttkRepository.cs",
+              "RelativeToolTip": "Repositories\\ttkRepository.cs",
+              "ViewState": "AQIAABMAAAAAAAAAAAAcwBsAAAANAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-05-24T12:46:15.596Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "KbjuTtk.cs",
+              "DocumentMoniker": "P:\\Visual Studio 2022\\sours\\repos\\Job_projects\\ttk_bot\\Models\\KbjuTtk.cs",
+              "RelativeDocumentMoniker": "Models\\KbjuTtk.cs",
+              "ToolTip": "P:\\Visual Studio 2022\\sours\\repos\\Job_projects\\ttk_bot\\Models\\KbjuTtk.cs",
+              "RelativeToolTip": "Models\\KbjuTtk.cs",
+              "ViewState": "AQIAAA0AAAAAAAAAAAAmwCEAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-05-24T12:44:29.494Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "KBJUttkRepository.cs",
+              "DocumentMoniker": "P:\\Visual Studio 2022\\sours\\repos\\Job_projects\\ttk_bot\\Repositories\\KBJUttkRepository.cs",
+              "RelativeDocumentMoniker": "Repositories\\KBJUttkRepository.cs",
+              "ToolTip": "P:\\Visual Studio 2022\\sours\\repos\\Job_projects\\ttk_bot\\Repositories\\KBJUttkRepository.cs",
+              "RelativeToolTip": "Repositories\\KBJUttkRepository.cs",
+              "ViewState": "AQIAABcAAAAAAAAAAAAawEEAAAAIAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-05-24T09:15:18.468Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Program.cs",
+              "DocumentMoniker": "P:\\Visual Studio 2022\\sours\\repos\\Job_projects\\ttk_bot\\Program.cs",
+              "RelativeDocumentMoniker": "Program.cs",
+              "ToolTip": "P:\\Visual Studio 2022\\sours\\repos\\Job_projects\\ttk_bot\\Program.cs",
+              "RelativeToolTip": "Program.cs",
+              "ViewState": "AQIAAHAAAAAAAAAAAAApwH8AAACZAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-05-24T08:31:38.811Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "BotMenu.cs",
+              "DocumentMoniker": "P:\\Visual Studio 2022\\sours\\repos\\Job_projects\\ttk_bot\\BotMenu.cs",
+              "RelativeDocumentMoniker": "BotMenu.cs",
+              "ToolTip": "P:\\Visual Studio 2022\\sours\\repos\\Job_projects\\ttk_bot\\BotMenu.cs",
+              "RelativeToolTip": "BotMenu.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAsAAAAbAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-05-22T07:50:03.378Z"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{cce594b6-0c39-4442-ba28-10c64ac7e89f}"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

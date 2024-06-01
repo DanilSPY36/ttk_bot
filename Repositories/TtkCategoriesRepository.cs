@@ -23,7 +23,7 @@ namespace ttk_bot.Repositories
         public async Task<string> Get(int id)
         {
             var categoryDimsList = await _context.CategoriesDims.ToListAsync();
-            return categoryDimsList[id - 1].Category;
+            return categoryDimsList.First(x=> x.Id == id).Category;
         }
     }
 }

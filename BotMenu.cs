@@ -408,18 +408,48 @@ namespace ttk_bot
 
             var drinkFromKBJU = await VariatyChecker(id);
 
-            List<string> milkList = drinkFromKBJU.GetVariaty(id, drinkFromTTK.VolumeId);
+            if (drinkFromKBJU == null)
+            {
+                Console.WriteLine("такого в кбжу нет");
+                List<string> milkList = new List<string>();
+                var ReturnDict = new Dictionary<KBJUttkRepository, List<string>>
+                    {
+                        { drinkFromKBJU, milkList }
+                    };
+                return ReturnDict;
+            }
+            else
+            {
+                try
+                {
+                    List<string> milkList = drinkFromKBJU.GetVariaty(id, drinkFromTTK.VolumeId);
+                    var ReturnDict = new Dictionary<KBJUttkRepository, List<string>>
+                    {
+                        { drinkFromKBJU, milkList }
+                    };
+                    return ReturnDict;
+
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    List<string> milkList = new List<string>();
+                    var ReturnDict = new Dictionary<KBJUttkRepository, List<string>>
+                    {
+                        { drinkFromKBJU, milkList }
+                    };
+                    return ReturnDict;
+                }
+
+            }
+
 
             
                 
             
 
-            var ReturnDict = new Dictionary<KBJUttkRepository, List<string>>
-            {
-                { drinkFromKBJU, milkList }
-            };
 
-            return ReturnDict;        // тут мы должны вернуть список кнопок молока у конкретного напитка емли они есть .. если нет то просто вывести инфу о кбжу 
+                  // тут мы должны вернуть список кнопок молока у конкретного напитка емли они есть .. если нет то просто вывести инфу о кбжу 
         }
 
         public async Task<List<List<InlineKeyboardButton>>> SingleOriginType() // 0 - зерно

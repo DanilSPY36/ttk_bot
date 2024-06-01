@@ -73,11 +73,11 @@ class Program
                         
                     if (await usersRep.accessCheck(user.Username, user.FirstName, user.LastName, chatInfo.Id, user.Id, 123, 5))
                         {
-                            Console.WriteLine($"{user.Username} Пишет хуйню следующего характера: {message.Text} || messageId = {message.MessageId}\n");
+                            Console.WriteLine($"{user.Username} написал сообщение: {message.Text} || messageId = {message.MessageId}\n");
                             switch (message.Text)
                             {
                                 case "/start":
-                                    await botClient.SendTextMessageAsync(chatInfo.Id, "Приветствую. Я 'цикорий и доски бот' читай микрогайд: \n\n" +
+                                    await botClient.SendTextMessageAsync(chatInfo.Id, "Категорически Приветствую. Я твой личный ттк-бот, читай микрогайд: \n\n" +
                                         "Зерно - ты сможешь найти всю информацию о моносортах и блендах\n\n" +
                                         "Поставщики - вся выпечка, кбжу, составы, сроки,  условия хранения и аллергены\n\n" +
                                         "ТТК - все технические карты основного меню\n\n" +
@@ -93,7 +93,7 @@ class Program
                         }
                         else
                         {
-                            _botClient.SendTextMessageAsync(message.Chat.Id, "У вас нет доступа\n\n Напишите @DanilSPY с какого вы спота с просьбой выдать пропуск", protectContent: true);
+                            _botClient.SendTextMessageAsync(message.Chat.Id, "У вас нет доступа\n\nНапишите @DanilSPY с какого вы спота с просьбой выдать пропуск", protectContent: true);
                             return;
                         }
                     }
@@ -131,7 +131,7 @@ class Program
                 }
             case "Зерно":
                 {
-                    userStateController = new UserState(chatId, 0, message.MessageId + 1, new InlineKeyboardMarkup(await _botMenu.SingleOriginType()), "Выбери тип зерНННЫЫЫААА: ");
+                    userStateController = new UserState(chatId, 0, message.MessageId + 1, new InlineKeyboardMarkup(await _botMenu.SingleOriginType()), "Выбери тип зерa: ");
                     await _botClient.SendTextMessageAsync(userStateController.userChatId, userStateController.TextMessage, replyMarkup: userStateController.menuInlineBtns, protectContent: false);
                     break;
                 }
@@ -210,6 +210,7 @@ class Program
                                         messageId: callbackQuery.Message.MessageId,
                                         text: userStateController.TextMessage,
                                         replyMarkup: userStateController.menuInlineBtns);
+                    userStateControllers.Add(userStateController);
                     break;
                 }
             case "item":

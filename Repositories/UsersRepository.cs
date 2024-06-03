@@ -54,5 +54,7 @@ namespace ttk_bot.Repositories
             await newUserDbAdd(lastUserId  + 1, name, firstName, lastName, chatId, tgUserId, spotId, roleId);
             return false;
         }
+
+
     }
 }

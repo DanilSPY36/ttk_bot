@@ -36,8 +36,8 @@ namespace ttk_bot.Repositories
                                 $"Углеводы, гр: {matchedItem.Carbohydrates}  \n" +
                                 $"Калорийность, ккал: {matchedItem.Calories}  \n" +
                                 $"КлДж: {matchedItem.Energy}\n\n" +
-                                $"Сроки хранения: {matchedItem.StorageCond}  \n" +
-                                $"Условия хранения: {matchedItem.ExpirationDate}  \n\n" +
+                                $"Сроки хранения: {matchedItem.ExpirationDate}  \n" +
+                                $"Условия хранения: {matchedItem.StorageCond} \n\n" +
                                 $"Описание: {matchedItem.Description}\n";
             }
             else

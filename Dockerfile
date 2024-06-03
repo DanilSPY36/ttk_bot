@@ -20,4 +20,6 @@ RUN dotnet publish "./ttk_bot.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+VOLUME ["/app/Photos/DrinkPhotos"]
+COPY ./Photos/DrickPhotos /app/Photos/DrinkPhotos
 ENTRYPOINT ["dotnet", "ttk_bot.dll"]

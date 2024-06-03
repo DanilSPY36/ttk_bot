@@ -31,7 +31,7 @@ class Program
 
     static async Task Main()
     {
-        _botClient = new TelegramBotClient("7190916687:AAG4L9eYwyj8bLJtXajo6uTP-k-MuIkRdIs");
+        _botClient = new TelegramBotClient("7495262247:AAGyfHLqX9D4AdTbCiDVcz6fG9uuG7Frges");
         _botMenu = new BotMenu();
         usersRep = new UsersRepository(_context = new TgBotContext());
         choseKBJUDrink = new Dictionary<KBJUttkRepository, List<string>>();
@@ -82,7 +82,7 @@ class Program
                                         "Поставщики - вся выпечка, кбжу, составы, сроки,  условия хранения и аллергены\n\n" +
                                         "ТТК - все технические карты основного меню\n\n" +
                                         "КБЖУ напитки - кбжу любого напитка.\n\n" +
-                                        "Если есть вопросы, предложения или нашли что-то неладное, то напишите ему @DanilSPY", replyMarkup: _botMenu.StartMenu(),protectContent: false);
+                                        "Если есть вопросы, предложения или нашли что-то неладное, то напишите ему @DanilSPY", replyMarkup: _botMenu.StartMenu(),protectContent: true);
                                     Console.WriteLine($"{user.Username} Send: {message.Text}");
                                     break;
                                 default:
@@ -93,6 +93,7 @@ class Program
                         }
                         else
                         {
+                            
                             _botClient.SendTextMessageAsync(message.Chat.Id, "У вас нет доступа\n\nНапишите @DanilSPY с какого вы спота с просьбой выдать пропуск", protectContent: true);
                             return;
                         }
@@ -120,19 +121,19 @@ class Program
                 {
 
                     userStateController = new UserState(chatId, 0, message.MessageId + 1, new InlineKeyboardMarkup(await _botMenu.ShippersMenuAsync()), "Список поставщиков:");
-                    await _botClient.SendTextMessageAsync(userStateController.userChatId, userStateController.TextMessage, replyMarkup: userStateController.menuInlineBtns, protectContent: false);
+                    await _botClient.SendTextMessageAsync(userStateController.userChatId, userStateController.TextMessage, replyMarkup: userStateController.menuInlineBtns, protectContent: true);
                     break;
                 }
             case "ТТК":
                 {
                     userStateController = new UserState(chatId, 0, message.MessageId + 1, new InlineKeyboardMarkup(await _botMenu.CategoryDrinksMenuAsync()), "ТТК на напитки:");
-                    await _botClient.SendTextMessageAsync(userStateController.userChatId, userStateController.TextMessage, replyMarkup: userStateController.menuInlineBtns, protectContent: false);
+                    await _botClient.SendTextMessageAsync(userStateController.userChatId, userStateController.TextMessage, replyMarkup: userStateController.menuInlineBtns, protectContent: true);
                     break;
                 }
             case "Зерно":
                 {
                     userStateController = new UserState(chatId, 0, message.MessageId + 1, new InlineKeyboardMarkup(await _botMenu.SingleOriginType()), "Выбери тип зерa: ");
-                    await _botClient.SendTextMessageAsync(userStateController.userChatId, userStateController.TextMessage, replyMarkup: userStateController.menuInlineBtns, protectContent: false);
+                    await _botClient.SendTextMessageAsync(userStateController.userChatId, userStateController.TextMessage, replyMarkup: userStateController.menuInlineBtns, protectContent: true);
                     break;
                 }
             default:
@@ -275,11 +276,12 @@ class Program
 
                         // фото 
                         var photoPath = _context.DrinksTtks.FirstOrDefault(p => p.Id == choseIdMenuButton);
+                        Console.WriteLine($"Photo Path: {photoPath.PhotoPath}");
                         using (FileStream stream = new FileStream(photoPath.PhotoPath, FileMode.Open, FileAccess.Read))
                         {
                             InputFileStream inputOnlineFile = new InputFileStream(stream);
-                            await botClient.SendPhotoAsync(chatId: chat.Id, photo: inputOnlineFile, protectContent: false);
-                            await botClient.SendTextMessageAsync(chatId: chat.Id, text: $"{userStateController.TextMessage}", replyMarkup: userStateController.menuInlineBtns, protectContent: false);
+                            await botClient.SendPhotoAsync(chatId: chat.Id, photo: inputOnlineFile, protectContent: true);
+                            await botClient.SendTextMessageAsync(chatId: chat.Id, text: $"{userStateController.TextMessage}", replyMarkup: userStateController.menuInlineBtns, protectContent: true);
                         }
 
 

@@ -221,6 +221,12 @@ namespace ttk_bot
                 buttonRows.Add(new List<InlineKeyboardButton> { buttonInfo, button });
 
             }
+            buttonRows.Add(new List<InlineKeyboardButton> {
+                new InlineKeyboardButton("Delete")
+                    {
+                        Text = "Удалить сообщение",
+                        CallbackData = "Delete||0"
+                    }});
             return buttonRows;
         }
 
@@ -271,6 +277,12 @@ namespace ttk_bot
                     buttonRows.Add(new List<InlineKeyboardButton> { button });
                 }
             }
+            buttonRows.Add(new List<InlineKeyboardButton> {
+                new InlineKeyboardButton("Del")
+                    {
+                        Text = "Удалить сообщение",
+                        CallbackData = "Delete||0"
+                    }});
             return buttonRows;
         }
 
@@ -468,6 +480,12 @@ namespace ttk_bot
                     CallbackData = $"singleOrigin||{2}"
                 }
             });
+            buttonRows.Add(new List<InlineKeyboardButton> {
+                new InlineKeyboardButton("Del")
+                    {
+                        Text = "Удалить сообщение",
+                        CallbackData = "Delete||0"
+                    }});
             return buttonRows;
         }
 

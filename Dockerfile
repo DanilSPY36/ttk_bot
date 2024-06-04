@@ -21,5 +21,5 @@ FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 VOLUME ["/app/Photos/DrinkPhotos"]
-COPY ./Photos/DrickPhotos /app/Photos/DrinkPhotos
+COPY ./Photos /app/Photos
 ENTRYPOINT ["dotnet", "ttk_bot.dll"]

@@ -31,7 +31,7 @@ class Program
 
     static async Task Main()
     {
-        _botClient = new TelegramBotClient("7495262247:AAGyfHLqX9D4AdTbCiDVcz6fG9uuG7Frges");
+        _botClient = new TelegramBotClient("7190916687:AAG4L9eYwyj8bLJtXajo6uTP-k-MuIkRdIs");
         _botMenu = new BotMenu();
         usersRep = new UsersRepository(_context = new TgBotContext());
         choseKBJUDrink = new Dictionary<KBJUttkRepository, List<string>>();
@@ -56,6 +56,10 @@ class Program
 
         _botClient.StartReceiving(UpdateHandler, ErrorHandler, _receiverOptions, cts.Token);
         var me = await _botClient.GetMeAsync();
+
+        usersRep.BotUpdateInfoMessage(_botClient);
+
+
         Console.WriteLine($"{me.FirstName} запущен!");
         await Task.Delay(-1);
     }
@@ -236,7 +240,6 @@ class Program
                     userStateControllers.Add(userStateController);
                     break;
                 }
-
             case "categoryDrinks":
                 {
                     await botClient.AnswerCallbackQueryAsync(callbackQuery.Id);
@@ -499,7 +502,6 @@ class Program
                     }
                     break;
                 }
-
             case "DrinkVariationPhoto":
                 {
                     // надо достать список объектов кбжу и из него достать напиток с определенным молоком
@@ -539,6 +541,17 @@ class Program
                     break;
                 }
 
+            case "Delete":
+                {
+                    await _botClient.DeleteMessageAsync(chat.Id, messageId: callbackQuery.Message.MessageId);
+                    var tempMessage = userStateControllers.Find(x => x.userChatId == chat.Id && x.messageIndex == callbackQuery.Message.MessageId);
+                    if(tempMessage != null)
+                    {
+                        userStateControllers.Remove(tempMessage);
+                    }
+
+                    break;
+                }
             default:
                 return;
         }

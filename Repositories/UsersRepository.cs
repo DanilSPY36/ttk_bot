@@ -1,11 +1,14 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using Telegram.Bot;
 using Telegram.Bot.Types;
+using Telegram.Bot.Types.ReplyMarkups;
 using ttk_bot.Models;
 using User = ttk_bot.Models.User;
 
@@ -36,7 +39,7 @@ namespace ttk_bot.Repositories
             _context.Users.Add(newUser);
             _context.SaveChanges();
         }
-        public async Task<bool> accessCheck( string name, string? firstName, string? lastName, long? chatId, long? tgUserId, int? spotId, int? roleId)
+        public async Task<bool> accessCheck(string name, string? firstName, string? lastName, long? chatId, long? tgUserId, int? spotId, int? roleId)
         {
             usersList = await _context.Users.AsNoTracking().ToListAsync();
             var lastUserId = await _context.Users.MaxAsync(id => id.Id);
@@ -55,6 +58,29 @@ namespace ttk_bot.Repositories
             return false;
         }
 
+        public async Task BotUpdateInfoMessage(ITelegramBotClient _botClient)
+        {
+            string message = "Категорически приветствую!\n" +
+                             "Меня чутка обновили. Список изменений:\n" +
+                             "1) Можно удалять основные меню ТТК, Поставщики, Зерно.\n" +
+                             "2) Теперь нельзя копировать и переотправлять мои сообщения.\n" +
+                             "3) Исправили некоторые ошибки в ифнормации продуктов поставщиков.\n\n" +
+                             "Если обнаружили ошибки пишите ему @DanilSPY\n" +
+                             "Приятного пользования и рабочего дня, ваш 313-ый";
+            var tempUsers = await Get();
+            var replyMark = new InlineKeyboardMarkup(new[]
+                                            {
+                                                new InlineKeyboardButton("Back")
+                                                {
+                                                    Text = "Удалить сообщение",
+                                                    CallbackData = $"Delete||0"
+                                                } });
+
+            foreach (var user in tempUsers) 
+            {
+                _botClient.SendTextMessageAsync(chatId: user.ChatId , message, replyMarkup: replyMark, protectContent: true);
+            }
+        }
 
     }
 }

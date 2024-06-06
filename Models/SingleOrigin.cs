@@ -3,9 +3,6 @@ using System.Collections.Generic;
 
 namespace ttk_bot.Models;
 
-/// <summary>
-/// Моносорта
-/// </summary>
 public partial class SingleOrigin
 {
     public int Id { get; set; }

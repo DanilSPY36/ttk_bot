@@ -3,9 +3,6 @@ using System.Collections.Generic;
 
 namespace ttk_bot.Models;
 
-/// <summary>
-/// Основное ТТК по бару
-/// </summary>
 public partial class DrinksTtk
 {
     public int Id { get; set; }
@@ -30,13 +27,7 @@ public partial class DrinksTtk
 
     public string? Additives { get; set; }
 
-    /// <summary>
-    /// Заготовки (вместо blank)
-    /// </summary>
     public string? Prep { get; set; }
 
-    /// <summary>
-    /// Содержит относительный путь к изображению в папке с проектом
-    /// </summary>
     public string? PhotoPath { get; set; }
 }

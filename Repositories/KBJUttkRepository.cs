@@ -10,12 +10,12 @@ namespace ttk_bot.Repositories
 {
     public class KBJUttkRepository
     {
-        private readonly TgBotContext _context;
+        private readonly TgBotFirstContext _context;
 
         public string? name { get; set; }
         public int id { get; set; }
         public int? ttk_id { get; set; }
-        public int? volume_id { get; set; }
+        public int volume_id { get; set; }
         public List<string>? variety { get; set; }
         public List<KbjuTtk> kbjuTtks { get; set; }
 
@@ -27,7 +27,7 @@ namespace ttk_bot.Repositories
             this.ttk_id = ttk_id;
             variety = new List<string>();
         }
-        public KBJUttkRepository(TgBotContext context)
+        public KBJUttkRepository(TgBotFirstContext context)
         {
             _context = context;
             kbjuTtks = _context.KbjuTtks.AsNoTracking().ToList();

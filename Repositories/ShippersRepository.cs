@@ -10,8 +10,8 @@ namespace ttk_bot.Repositories
 {
     public class ShippersRepository
     {
-        private readonly TgBotContext _context;
-        public ShippersRepository(TgBotContext context) 
+        private readonly TgBotFirstContext _context;
+        public ShippersRepository(TgBotFirstContext context) 
         {
             _context = context;
         }

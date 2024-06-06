@@ -7,16 +7,13 @@ using ttk_bot.Models;
 
 namespace ttk_bot.Repositories
 {
-    public class VolumesRepository
+    public class BranchesDimRepository
     {
         private readonly TgBotFirstContext _context;
-        public VolumesRepository(TgBotFirstContext context)
+
+        public BranchesDimRepository(TgBotFirstContext context)
         {
             _context = context;
-        }
-        public async Task<List<VolumesDim>> Get()
-        {
-            return _context.VolumesDims.ToList();
         }
     }
 }

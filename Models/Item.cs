@@ -3,9 +3,6 @@ using System.Collections.Generic;
 
 namespace ttk_bot.Models;
 
-/// <summary>
-/// Продукция поставщиков
-/// </summary>
 public partial class Item
 {
     public int Id { get; set; }
@@ -16,9 +13,6 @@ public partial class Item
 
     public string? Description { get; set; }
 
-    /// <summary>
-    /// Состав
-    /// </summary>
     public string? Composition { get; set; }
 
     public int? Weight { get; set; }
@@ -43,19 +37,10 @@ public partial class Item
 
     public bool? SoyaFree { get; set; }
 
-    /// <summary>
-    /// 100% Натуральный!!! Эксперты в шоке!! Для мужского здоро...
-    /// </summary>
     public bool? Natural100 { get; set; }
 
-    /// <summary>
-    /// Условия хранения
-    /// </summary>
     public string? StorageCond { get; set; }
 
-    /// <summary>
-    /// Срок годности
-    /// </summary>
     public string? ExpirationDate { get; set; }
 
     public string? Allergens { get; set; }

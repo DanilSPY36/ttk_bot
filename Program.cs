@@ -20,7 +20,7 @@ class Program
 {
     private static ITelegramBotClient _botClient = null!;
     private static ReceiverOptions _receiverOptions = null!;
-    private static TgBotContext? _context;
+    private static TgBotFirstContext? _context;
     private static BotMenu _botMenu = null!;
 
     // тест логики меню
@@ -29,16 +29,19 @@ class Program
     private static UsersRepository usersRep;
     private static Dictionary<KBJUttkRepository, List<string>> choseKBJUDrink;
 
+    //статистика
+    private static OperationRepository operationRep;
+
     static async Task Main()
     {
-        _botClient = new TelegramBotClient("7190916687:AAG4L9eYwyj8bLJtXajo6uTP-k-MuIkRdIs");
+        _botClient = new TelegramBotClient("7451248242:AAEtWuvnh-dQgiTOiZV6prGs8EiBxrt2i8A");
         _botMenu = new BotMenu();
-        usersRep = new UsersRepository(_context = new TgBotContext());
+        usersRep = new UsersRepository(_context = new TgBotFirstContext());
         choseKBJUDrink = new Dictionary<KBJUttkRepository, List<string>>();
-        var itemsRep = new ItemsRepository(_context = new TgBotContext());
-
+        var itemsRep = new ItemsRepository(_context = new TgBotFirstContext());
         userStateControllers = new List<UserState> { };
 
+        operationRep = new OperationRepository(_context = new TgBotFirstContext());
 
         _receiverOptions = new ReceiverOptions
         {
@@ -57,7 +60,8 @@ class Program
         _botClient.StartReceiving(UpdateHandler, ErrorHandler, _receiverOptions, cts.Token);
         var me = await _botClient.GetMeAsync();
 
-        usersRep.BotUpdateInfoMessage(_botClient);
+            // оповещение пользователей о новой обнове. 
+        //usersRep.BotUpdateInfoMessage(_botClient);
 
 
         Console.WriteLine($"{me.FirstName} запущен!");
@@ -164,12 +168,17 @@ class Program
                     var stateTmp = userStateControllers.Last(x => x.userChatId == chat.Id && x.messageIndex == callbackQuery.Message.MessageId && x.userMenuIndex == choseIdMenuButton);
 
                     userStateControllers.Remove(stateTmp);
+                    
+
+                    // надо доставать не последний в списке, а последний в списке с проверкой на юзера 
+
+                    stateTmp = userStateControllers.Last(x => x.userChatId == chat.Id && x.messageIndex == callbackQuery.Message.MessageId);
 
                     await _botClient.EditMessageTextAsync(
                                 chatId: chat.Id,
                                 messageId: callbackQuery.Message.MessageId,
-                                text: $"{userStateControllers.Last().TextMessage}",
-                                replyMarkup: userStateControllers.Last().menuInlineBtns
+                                text: $"{stateTmp.TextMessage}",
+                                replyMarkup: stateTmp.menuInlineBtns
                             );
                     //await _botClient.DeleteMessageAsync(chat.Id, messageId: message.MessageId);
 
@@ -238,6 +247,9 @@ class Program
                                         replyMarkup: userStateController.menuInlineBtns);
                     Console.WriteLine($"ChatId = {userStateController.userChatId} || messageId = {userStateController.messageIndex} || Вложенность меню = {userStateController.userMenuIndex}");
                     userStateControllers.Add(userStateController);
+                    Console.WriteLine($"DAte: {callbackQuery.Message.Date}");
+                    await operationRep.addOperation(callbackQuery.Message.Date, user.Id, 2, choseIdMenuButton);
+
                     break;
                 }
             case "categoryDrinks":
@@ -306,7 +318,7 @@ class Program
                         else
                         {
                             userStateController = new UserState(chat.Id, 2, callbackQuery.Message.MessageId,
-                       new InlineKeyboardMarkup(new[]
+                                            new InlineKeyboardMarkup(new[]
                                            {
                                                 new InlineKeyboardButton("Back")
                                                 {
@@ -326,12 +338,14 @@ class Program
                                    messageId: callbackQuery.Message.MessageId,
                                    text: $"{userStateController.TextMessage}",
                                    replyMarkup: userStateController.menuInlineBtns);
+                        
 
                         throw;
                     }
                     finally
                     {
                         userStateControllers.Add(userStateController);
+                        await operationRep.addOperation(callbackQuery.Message.Date, user.Id, 1, choseIdMenuButton);
                     }
                     break;
                 }
@@ -392,6 +406,7 @@ class Program
                                         replyMarkup: userStateController.menuInlineBtns);
                     Console.WriteLine($"ChatId = {userStateController.userChatId} || messageId = {userStateController.messageIndex} || Вложенность меню = {userStateController.userMenuIndex}");
                     userStateControllers.Add(userStateController);
+                    await operationRep.addOperation(callbackQuery.Message.Date, user.Id, 3, choseIdMenuButton);
                     break;
                 }
 
@@ -447,6 +462,7 @@ class Program
                                    text: $"{userStateController.TextMessage}",
                                    replyMarkup: new InlineKeyboardMarkup(buttonRows));
                     }
+                    //await operationRep.addOperation(callbackQuery.Message.Date, user.Id, 4, choseIdMenuButton);
                     break;
                 }
             case "KBJU": // выбор молока после нажатия на KBJU на карточке с фотографией
@@ -500,6 +516,7 @@ class Program
                                    text: $"{userStateController.TextMessage}",
                                    replyMarkup: new InlineKeyboardMarkup(buttonRows));
                     }
+                    //await operationRep.addOperation(callbackQuery.Message.Date, user.Id, 4, choseIdMenuButton);
                     break;
                 }
             case "DrinkVariationPhoto":

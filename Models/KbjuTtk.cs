@@ -3,9 +3,6 @@ using System.Collections.Generic;
 
 namespace ttk_bot.Models;
 
-/// <summary>
-/// КБЖУ ТТК
-/// </summary>
 public partial class KbjuTtk
 {
     public int Id { get; set; }
@@ -31,5 +28,4 @@ public partial class KbjuTtk
     public int VolumeId { get; set; }
 
     public int? TtkId { get; set; }
-
 }

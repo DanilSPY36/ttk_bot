@@ -26,17 +26,35 @@ namespace ttk_bot.Repositories
 
             if (matchedItem != null)
             {
-                return $"{matchedItem.Name}\n\n" +
-                       $"Ингридиенты: \n" +
-                       $"{matchedItem.Ingridients}\n\n" +
-                       $"Как готовить: \n" +
-                       $"{matchedItem.HowToCook}\n\n" +
-                       $"Описание: {matchedItem.Description}\n\n" +
-                       $"Вес 1 порции: " +
-                       $"{matchedItem.Weight}\n\n" +
-                       $"Добавки: \n" +
-                       $"{matchedItem.Additives} \n\n";
-                       //+$"Описание: \n{matchedItem.Description}";
+                string output = "";
+                output += $"{matchedItem.Name}\n\n";
+
+                if (!string.IsNullOrEmpty(matchedItem.Ingridients))
+                {
+                    output += $"Ингридиенты: \n{matchedItem.Ingridients}\n\n";
+                }
+
+                if (!string.IsNullOrEmpty(matchedItem.HowToCook))
+                {
+                    output += $"Как готовить: \n{matchedItem.HowToCook}\n\n";
+                }
+
+                if (!string.IsNullOrEmpty(matchedItem.Description))
+                {
+                    output += $"Описание: {matchedItem.Description}\n\n";
+                }
+
+                if (matchedItem.Weight != null)
+                {
+                    output += $"Вес 1 порции: {matchedItem.Weight}\n\n";
+                }
+
+                if (!string.IsNullOrEmpty(matchedItem.Additives))
+                {
+                    output += $"Добавки: \n{matchedItem.Additives}\n\n";
+                }
+
+                return output;
             }
             else
             {

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Runtime.CompilerServices;
 
 namespace ttk_bot.Models;
@@ -9,6 +10,7 @@ namespace ttk_bot.Models;
 /// </summary>
 public partial class User
 {
+    [Key]
     public int Id { get; set; }
 
     /// <summary>

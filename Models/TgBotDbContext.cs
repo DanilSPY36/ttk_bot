@@ -69,58 +69,69 @@ public partial class TgBotDbContext : DbContext
 
         modelBuilder.Entity<BranchesDim>(entity =>
         {
-            entity
-                .HasNoKey()
-                .ToTable("branches_dim", "statistic_prod");
+            entity.HasKey(e => e.Id).HasName("branches_dim_pk");
 
+            entity.ToTable("branches_dim", "statistic_prod");
+
+            entity.Property(e => e.Id)
+                .ValueGeneratedNever()
+                .HasColumnName("id");
             entity.Property(e => e.Branch)
                 .HasColumnType("character varying")
                 .HasColumnName("branch");
-            entity.Property(e => e.Id).HasColumnName("id");
         });
 
         modelBuilder.Entity<CategoriesDim>(entity =>
         {
-            entity
-                .HasNoKey()
-                .ToTable("categories_dim", "ttk_prod");
+            entity.HasKey(e => e.Id).HasName("categories_dim_pk");
 
+            entity.ToTable("categories_dim", "ttk_prod");
+
+            entity.Property(e => e.Id)
+                .ValueGeneratedNever()
+                .HasColumnName("id");
             entity.Property(e => e.Category)
                 .HasColumnType("character varying")
                 .HasColumnName("category");
-            entity.Property(e => e.Id).HasColumnName("id");
         });
 
         modelBuilder.Entity<CategoriesItemsDim>(entity =>
         {
-            entity
-                .HasNoKey()
-                .ToTable("categories_items_dim", "shipper_prod");
+            entity.HasKey(e => e.Id).HasName("categories_items_dim_pk");
 
+            entity.ToTable("categories_items_dim", "shipper_prod");
+
+            entity.Property(e => e.Id)
+                .ValueGeneratedNever()
+                .HasColumnName("id");
             entity.Property(e => e.Category)
                 .HasColumnType("character varying")
                 .HasColumnName("category");
-            entity.Property(e => e.Id).HasColumnName("id");
         });
 
         modelBuilder.Entity<ContainersDim>(entity =>
         {
-            entity
-                .HasNoKey()
-                .ToTable("containers_dim", "ttk_prod");
+            entity.HasKey(e => e.Id).HasName("containers_dim_pk");
 
+            entity.ToTable("containers_dim", "ttk_prod");
+
+            entity.Property(e => e.Id)
+                .ValueGeneratedNever()
+                .HasColumnName("id");
             entity.Property(e => e.Container)
                 .HasColumnType("character varying")
                 .HasColumnName("container");
-            entity.Property(e => e.Id).HasColumnName("id");
         });
 
         modelBuilder.Entity<DrinksTtk>(entity =>
         {
-            entity
-                .HasNoKey()
-                .ToTable("drinks_ttk", "ttk_prod");
+            entity.HasKey(e => e.Id).HasName("drinks_ttk_pk");
 
+            entity.ToTable("drinks_ttk", "ttk_prod");
+
+            entity.Property(e => e.Id)
+                .ValueGeneratedNever()
+                .HasColumnName("id");
             entity.Property(e => e.Additives)
                 .HasColumnType("character varying")
                 .HasColumnName("additives");
@@ -132,7 +143,6 @@ public partial class TgBotDbContext : DbContext
             entity.Property(e => e.HowToCook)
                 .HasColumnType("character varying")
                 .HasColumnName("how_to_cook");
-            entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.Ingridients)
                 .HasColumnType("character varying")
                 .HasColumnName("ingridients");
@@ -154,10 +164,13 @@ public partial class TgBotDbContext : DbContext
 
         modelBuilder.Entity<Item>(entity =>
         {
-            entity
-                .HasNoKey()
-                .ToTable("items", "shipper_prod");
+            entity.HasKey(e => e.Id).HasName("items_pk");
 
+            entity.ToTable("items", "shipper_prod");
+
+            entity.Property(e => e.Id)
+                .ValueGeneratedNever()
+                .HasColumnName("id");
             entity.Property(e => e.Allergens)
                 .HasColumnType("character varying")
                 .HasColumnName("allergens");
@@ -177,7 +190,6 @@ public partial class TgBotDbContext : DbContext
                 .HasColumnName("expiration_date");
             entity.Property(e => e.Fats).HasColumnName("fats");
             entity.Property(e => e.GlutenFree).HasColumnName("gluten_free");
-            entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.Name)
                 .HasColumnType("character varying")
                 .HasColumnName("name");
@@ -200,17 +212,19 @@ public partial class TgBotDbContext : DbContext
 
         modelBuilder.Entity<KbjuTtk>(entity =>
         {
-            entity
-                .HasNoKey()
-                .ToTable("kbju_ttk", "ttk_prod");
+            entity.HasKey(e => e.Id).HasName("kbju_ttk_pk");
 
+            entity.ToTable("kbju_ttk", "ttk_prod");
+
+            entity.Property(e => e.Id)
+                .ValueGeneratedNever()
+                .HasColumnName("id");
             entity.Property(e => e.Caffeine).HasColumnName("caffeine");
             entity.Property(e => e.Calories).HasColumnName("calories");
             entity.Property(e => e.Carbohydrates).HasColumnName("carbohydrates");
             entity.Property(e => e.CategoryId).HasColumnName("category_id");
             entity.Property(e => e.Energy).HasColumnName("energy");
             entity.Property(e => e.Fats).HasColumnName("fats");
-            entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.Name)
                 .HasColumnType("character varying")
                 .HasColumnName("name");
@@ -237,11 +251,13 @@ public partial class TgBotDbContext : DbContext
 
         modelBuilder.Entity<RolesDim>(entity =>
         {
-            entity
-                .HasNoKey()
-                .ToTable("roles_dim", "user_prod");
+            entity.HasKey(e => e.Id).HasName("roles_dim_pk");
 
-            entity.Property(e => e.Id).HasColumnName("id");
+            entity.ToTable("roles_dim", "user_prod");
+
+            entity.Property(e => e.Id)
+                .ValueGeneratedNever()
+                .HasColumnName("id");
             entity.Property(e => e.RoleName)
                 .HasColumnType("character varying")
                 .HasColumnName("role_name");
@@ -249,10 +265,13 @@ public partial class TgBotDbContext : DbContext
 
         modelBuilder.Entity<Shipper>(entity =>
         {
-            entity
-                .HasNoKey()
-                .ToTable("shippers", "shipper_prod");
+            entity.HasKey(e => e.Id).HasName("shippers_pk");
 
+            entity.ToTable("shippers", "shipper_prod");
+
+            entity.Property(e => e.Id)
+                .ValueGeneratedNever()
+                .HasColumnName("id");
             entity.Property(e => e.City)
                 .HasColumnType("character varying")
                 .HasColumnName("city");
@@ -265,7 +284,6 @@ public partial class TgBotDbContext : DbContext
             entity.Property(e => e.FullName)
                 .HasColumnType("character varying")
                 .HasColumnName("full_name");
-            entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.Inn)
                 .HasColumnType("character varying")
                 .HasColumnName("inn");
@@ -282,10 +300,13 @@ public partial class TgBotDbContext : DbContext
 
         modelBuilder.Entity<SingleOrigin>(entity =>
         {
-            entity
-                .HasNoKey()
-                .ToTable("single_origins", "single_origin_prod");
+            entity.HasKey(e => e.Id).HasName("single_origins_pk");
 
+            entity.ToTable("single_origins", "single_origin_prod");
+
+            entity.Property(e => e.Id)
+                .ValueGeneratedNever()
+                .HasColumnName("id");
             entity.Property(e => e.Acidity)
                 .HasColumnType("character varying")
                 .HasColumnName("acidity");
@@ -305,7 +326,6 @@ public partial class TgBotDbContext : DbContext
             entity.Property(e => e.Height)
                 .HasColumnType("character varying")
                 .HasColumnName("height");
-            entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.IsArchive).HasColumnName("is_archive");
             entity.Property(e => e.Name)
                 .HasColumnType("character varying")
@@ -331,11 +351,13 @@ public partial class TgBotDbContext : DbContext
 
         modelBuilder.Entity<SingleOriginTypesDim>(entity =>
         {
-            entity
-                .HasNoKey()
-                .ToTable("single_origin_types_dim", "single_origin_prod");
+            entity.HasKey(e => e.Id).HasName("single_origin_types_dim_pk");
 
-            entity.Property(e => e.Id).HasColumnName("id");
+            entity.ToTable("single_origin_types_dim", "single_origin_prod");
+
+            entity.Property(e => e.Id)
+                .ValueGeneratedNever()
+                .HasColumnName("id");
             entity.Property(e => e.Type)
                 .HasColumnType("character varying")
                 .HasColumnName("type");
@@ -343,14 +365,16 @@ public partial class TgBotDbContext : DbContext
 
         modelBuilder.Entity<SpotsDim>(entity =>
         {
-            entity
-                .HasNoKey()
-                .ToTable("spots_dim", "user_prod");
+            entity.HasKey(e => e.Id).HasName("spots_dim_pk");
 
+            entity.ToTable("spots_dim", "user_prod");
+
+            entity.Property(e => e.Id)
+                .ValueGeneratedNever()
+                .HasColumnName("id");
             entity.Property(e => e.City)
                 .HasColumnType("character varying")
                 .HasColumnName("city");
-            entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.Region)
                 .HasColumnType("character varying")
                 .HasColumnName("region");
@@ -361,15 +385,17 @@ public partial class TgBotDbContext : DbContext
 
         modelBuilder.Entity<User>(entity =>
         {
-            entity
-                .HasNoKey()
-                .ToTable("users", "user_prod");
+            entity.HasKey(e => e.Id).HasName("users_pk");
 
+            entity.ToTable("users", "user_prod");
+
+            entity.Property(e => e.Id)
+                .ValueGeneratedNever()
+                .HasColumnName("id");
             entity.Property(e => e.ChatId).HasColumnName("chat_id");
             entity.Property(e => e.FirstName)
                 .HasColumnType("character varying")
                 .HasColumnName("first_name");
-            entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.IsAccess).HasColumnName("is_access");
             entity.Property(e => e.IsAdmin).HasColumnName("is_admin");
             entity.Property(e => e.LastName)
@@ -385,11 +411,13 @@ public partial class TgBotDbContext : DbContext
 
         modelBuilder.Entity<VolumesDim>(entity =>
         {
-            entity
-                .HasNoKey()
-                .ToTable("volumes_dim", "ttk_prod");
+            entity.HasKey(e => e.Id).HasName("volumes_dim_pk");
 
-            entity.Property(e => e.Id).HasColumnName("id");
+            entity.ToTable("volumes_dim", "ttk_prod");
+
+            entity.Property(e => e.Id)
+                .ValueGeneratedNever()
+                .HasColumnName("id");
             entity.Property(e => e.Volume)
                 .HasColumnType("character varying")
                 .HasColumnName("volume");

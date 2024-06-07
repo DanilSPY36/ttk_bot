@@ -108,11 +108,6 @@ namespace ttk_bot
                 }
             }
         }
-
-        /// <summary>
-        /// крч тут чет индексы напутаны логик верна но чет не то все ровно 
-        /// 
-        /// </summary>
         private async void KBJUController()
         {
             kbjuTtks = await KBJUttkRep.Get();
@@ -201,7 +196,6 @@ namespace ttk_bot
             }
             return null;
         }
-
         public async Task<List<List<InlineKeyboardButton>>> ShippersMenuAsync()
         {
             List<List<InlineKeyboardButton>> buttonRows = new List<List<InlineKeyboardButton>>();
@@ -229,7 +223,6 @@ namespace ttk_bot
                     }});
             return buttonRows;
         }
-
         public async Task<List<List<InlineKeyboardButton>>> ItemsShipperMenuAsync(int shipperId, int indexMenu)
         {
             List<List<InlineKeyboardButton>> buttonRows = new List<List<InlineKeyboardButton>>();
@@ -257,7 +250,6 @@ namespace ttk_bot
 
             return buttonRows;
         }
-
         public async Task<List<List<InlineKeyboardButton>>> CategoryDrinksMenuAsync()
         {
             var buttonRows = new List<List<InlineKeyboardButton>>();
@@ -285,7 +277,6 @@ namespace ttk_bot
                     }});
             return buttonRows;
         }
-
         public async Task<List<List<InlineKeyboardButton>>> DrinksMenuAsync(int drinkCategoryId, int indexMenu)
         {
             var buttonRows = new List<List<InlineKeyboardButton>>();
@@ -333,7 +324,6 @@ namespace ttk_bot
 
             return buttonRows;
         }
-
         public async Task<List<List<InlineKeyboardButton>>> VolumesDrinksMenuAsync(int drinkId, int indexMenu)
         {
             var buttonRows = new List<List<InlineKeyboardButton>>();
@@ -362,7 +352,6 @@ namespace ttk_bot
 
             return buttonRows;
         }
-
         public async Task<List<List<InlineKeyboardButton>>> DrinksKBJUMenuAsync(int drinkCategoryId, int indexMenu)
         {
             var buttonRows = new List<List<InlineKeyboardButton>>();
@@ -410,8 +399,6 @@ namespace ttk_bot
 
             return buttonRows;
         }
-
-
         public async Task<Dictionary<KBJUttkRepository, List<string>>> DrinkKBJUVariaty(int id, int indexMenu) // когда уже нажали в ттк на напиток получили карточку напитка мы знаем его id и объем
         {
             
@@ -463,7 +450,6 @@ namespace ttk_bot
 
                   // тут мы должны вернуть список кнопок молока у конкретного напитка емли они есть .. если нет то просто вывести инфу о кбжу 
         }
-
         public async Task<List<List<InlineKeyboardButton>>> SingleOriginType() // 0 - зерно
         {
             List<List<InlineKeyboardButton>> buttonRows = new List<List<InlineKeyboardButton>>();
@@ -488,12 +474,11 @@ namespace ttk_bot
                     }});
             return buttonRows;
         }
-
         public async Task<List<List<InlineKeyboardButton>>> SingleOriginMenuAsync(int idType, int indexMenu) // 1 - зерно уже или под эспрессо или под фильтр
         {
             List<List<InlineKeyboardButton>> buttonRows = new List<List<InlineKeyboardButton>>();
 
-            var listSingles = _context.SingleOrigins.ToList();
+            var listSingles = _context.SingleOrigins.OrderBy(x => x.Name).ToList();
 
             foreach (var item in listSingles.Where(x => x.TypeId == idType))
             {
@@ -515,5 +500,37 @@ namespace ttk_bot
 
             return buttonRows;
         }
+        public async Task<List<List<InlineKeyboardButton>>> ReturnAccess(User user)
+        {
+            List<List<InlineKeyboardButton>> buttonRows = new List<List<InlineKeyboardButton>>();
+
+            buttonRows.Add(new List<InlineKeyboardButton> {
+                new InlineKeyboardButton("AccessTrue")
+                    {
+                        Text = "Дать доступ",
+                        CallbackData = $"Access_true||{user.Id}"
+                    }
+
+            });
+            buttonRows.Add(new List<InlineKeyboardButton> {
+                
+                new InlineKeyboardButton("AccessFalse")
+                    {
+                        Text = "Запретить",
+                        CallbackData = $"Access_false||{user.Id}"
+                    }
+            });
+            buttonRows.Add(new List<InlineKeyboardButton> {
+                new InlineKeyboardButton("Remove")
+                    {
+                        Text = "Удалить с базы",
+                        CallbackData = $"RemoveUserFromDb||{user.Id}"
+                    },
+
+            });
+
+            return buttonRows;
+        }
     }
+
 }

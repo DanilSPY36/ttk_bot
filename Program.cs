@@ -32,6 +32,7 @@ class Program
     //статистика
     private static OperationRepository operationRep;
 
+
     static async Task Main()
     {
         _botClient = new TelegramBotClient("7451248242:AAEtWuvnh-dQgiTOiZV6prGs8EiBxrt2i8A");
@@ -103,6 +104,10 @@ class Program
                         {
                             
                             _botClient.SendTextMessageAsync(message.Chat.Id, "У вас нет доступа\n\nНапишите @DanilSPY с какого вы спота с просьбой выдать пропуск", protectContent: true);
+
+                            // выдача доступа в нашем приватном чате разрабов. в телеге.
+                            var accessNewUser = _context.Users.FirstOrDefault(x => x.ChatId == message.Chat.Id);
+                            _botClient.SendTextMessageAsync(chatId: -4224330568, text:$"Выдать доступ пользователю: @{accessNewUser.Name} ?", replyMarkup: new InlineKeyboardMarkup(await _botMenu.ReturnAccess(accessNewUser)));
                             return;
                         }
                     }
@@ -569,6 +574,29 @@ class Program
 
                     break;
                 }
+
+            case "Access_true":
+                {
+                    
+                    var userTemp = _context.Users.FirstOrDefault(x => x.Id == choseIdMenuButton);
+                    userTemp.IsAccess = true;
+                    try
+                    {
+                        _context.Users.Update(userTemp);
+                        _context.SaveChanges();
+
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"{ex}");
+                        throw;
+                    }
+                    await _botClient.EditMessageTextAsync(
+                                   chatId: -4224330568,
+                                   messageId: callbackQuery.Message.MessageId,
+                                   text: $"@{userTemp.Name} Доступ = {userTemp.IsAccess}");
+                    break;
+                }
             default:
                 return;
         }
@@ -586,6 +614,4 @@ class Program
         Console.WriteLine(ErrorMessage);
         return Task.CompletedTask;
     }
-
-    
 }

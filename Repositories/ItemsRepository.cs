@@ -27,23 +27,66 @@ namespace ttk_bot.Repositories
             var matchedItem = _context.Items.FirstOrDefault(i => i.Id == id);
             if (matchedItem != null)
             {
-                return $"{matchedItem.Name}\n\n" +
-                                $"Состав: " +
-                                $"{matchedItem.Composition}\n\n" +
-                                $"Вес 1 порции: {matchedItem.Weight} \n" +
-                                $"Белки, гр: {matchedItem.Proteins} \n" +
-                                $"Жиры, гр: {matchedItem.Fats} \n" +
-                                $"Углеводы, гр: {matchedItem.Carbohydrates}  \n" +
-                                $"Калорийность, ккал: {matchedItem.Calories}  \n" +
-                                $"КлДж: {matchedItem.Energy}\n\n" +
-                                $"Сроки хранения: {matchedItem.ExpirationDate}  \n" +
-                                $"Условия хранения: {matchedItem.StorageCond} \n\n" +
-                                $"Описание: {matchedItem.Description}\n";
+                string output = "";
+                output += $"{matchedItem.Name}\n\n";
+
+                if (!string.IsNullOrEmpty(matchedItem.Composition))
+                {
+                    output += $"Состав: {matchedItem.Composition}\n\n";
+                }
+
+                if (matchedItem.Weight != null)
+                {
+                    output += $"Вес 1 порции: {matchedItem.Weight}\n";
+                }
+
+                if (matchedItem.Proteins != null)
+                {
+                    output += $"Белки, гр: {matchedItem.Proteins}\n";
+                }
+
+                if (matchedItem.Fats != null)
+                {
+                    output += $"Жиры, гр: {matchedItem.Fats}\n";
+                }
+
+                if (matchedItem.Carbohydrates != null)
+                {
+                    output += $"Углеводы, гр: {matchedItem.Carbohydrates}\n";
+                }
+
+                if (matchedItem.Calories != null)
+                {
+                    output += $"Калорийность, ккал: {matchedItem.Calories}\n";
+                }
+
+                if (matchedItem.Energy != null)
+                {
+                    output += $"КлДж: {matchedItem.Energy}\n\n";
+                }
+
+                if (!string.IsNullOrEmpty(matchedItem.ExpirationDate))
+                {
+                    output += $"Сроки хранения: {matchedItem.ExpirationDate}\n";
+                }
+
+                if (!string.IsNullOrEmpty(matchedItem.StorageCond))
+                {
+                    output += $"Условия хранения: {matchedItem.StorageCond}\n\n";
+                }
+
+                if (!string.IsNullOrEmpty(matchedItem.Description))
+                {
+                    output += $"Описание: {matchedItem.Description}\n";
+                }
+
+                return output;
             }
             else
             {
                 return "null item";
             }
+
         }
     }
 }

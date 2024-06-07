@@ -28,22 +28,66 @@ namespace ttk_bot.Repositories
 
             if (matchedItem != null)
             {
-                return $"{matchedItem.Name}\n\n" +
-                       $"Регион: {matchedItem.Region}\n\n" +
-                       $"Обработка: {matchedItem.Process}\n\n" +
-                       $"Букет: {matchedItem.Flavor} \n\n" +
-                       $"Кислотность: {matchedItem.Acidity}\n\n" +
-                       $"Дескрипторы: {matchedItem.Taste}\n\n" +
-                       $"Послевкусие: {matchedItem.Aftertaste}\n\n" +
-                       $"Тело: {matchedItem.Body}\n\n" +
-                       $"Q grade: {matchedItem.Q}\n\n" +
-                       $"Разновидности: {matchedItem.Variety}\n\n" +
-                       $"Описание: \n{matchedItem.Description}";
+                string output = "";
+                output += $"{matchedItem.Name}\n\n";
+
+                if (!string.IsNullOrEmpty(matchedItem.Region))
+                {
+                    output += $"Регион: {matchedItem.Region}\n\n";
+                }
+
+                if (!string.IsNullOrEmpty(matchedItem.Process))
+                {
+                    output += $"Обработка: {matchedItem.Process}\n\n";
+                }
+
+                if (!string.IsNullOrEmpty(matchedItem.Flavor))
+                {
+                    output += $"Букет: {matchedItem.Flavor}\n\n";
+                }
+
+                if (!string.IsNullOrEmpty(matchedItem.Acidity))
+                {
+                    output += $"Кислотность: {matchedItem.Acidity}\n\n";
+                }
+
+                if (!string.IsNullOrEmpty(matchedItem.Taste))
+                {
+                    output += $"Дескрипторы: {matchedItem.Taste}\n\n";
+                }
+
+                if (!string.IsNullOrEmpty(matchedItem.Aftertaste))
+                {
+                    output += $"Послевкусие: {matchedItem.Aftertaste}\n\n";
+                }
+
+                if (!string.IsNullOrEmpty(matchedItem.Body))
+                {
+                    output += $"Тело: {matchedItem.Body}\n\n";
+                }
+
+                if (!string.IsNullOrEmpty(matchedItem.Q.ToString()))
+                {
+                    output += $"Q grade: {matchedItem.Q}\n\n";
+                }
+
+                if (!string.IsNullOrEmpty(matchedItem.Variety))
+                {
+                    output += $"Разновидности: {matchedItem.Variety}\n\n";
+                }
+
+                if (!string.IsNullOrEmpty(matchedItem.Description))
+                {
+                    output += $"Описание: \n{matchedItem.Description}";
+                }
+
+                return output;
             }
             else
             {
                 return "drink = null";
             }
+
         }
     }
 }

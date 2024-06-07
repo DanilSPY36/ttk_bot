@@ -117,10 +117,10 @@ namespace ttk_bot
             
             List<string> volumes = new List<string>() { "0.2", "0,3", "0,4", " " };
 
-            foreach (var item in groupedByNameDrinks)
+            /*foreach (var item in groupedByNameDrinks)
             {
                 Console.WriteLine($"name: {item.Key.Name}              \t\t volume: {item.Key.VolumeId}\t ttkId: {item.Key.TtkId}");
-            }
+            }*/
 
 
             foreach (var item in groupedByNameDrinks) // работает
@@ -153,7 +153,7 @@ namespace ttk_bot
                 }
             }
 
-            foreach (var item in sortedkBJUttkRepositories)
+            /*foreach (var item in sortedkBJUttkRepositories)
             {
                 Console.WriteLine("||||||||||||||||||||||||||||||");
                 Console.WriteLine($"Name: {item.name} || KBJUId: {item.id} ||  ttkId: {item.ttk_id} || ");
@@ -169,7 +169,7 @@ namespace ttk_bot
                 }
                 Console.WriteLine("\n\n ");
 
-            }
+            }*/
 
         } // готовый sortedkBJUttkRepositories сгруппированный по имени и по объемам
 
@@ -277,24 +277,44 @@ namespace ttk_bot
                     }});
             return buttonRows;
         }
-        public async Task<List<List<InlineKeyboardButton>>> DrinksMenuAsync(int drinkCategoryId, int indexMenu)
+        public async Task<List<List<InlineKeyboardButton>>> DrinksMenuAsync(int drinkCategoryId, int indexMenu, int? spotId)
         {
             var buttonRows = new List<List<InlineKeyboardButton>>();
             List<string> volumes = new List<string>() { "0.2", "0,3", "0,4", " " };
             var drinksRepit = new List<string>();
+            DrinkVolumeChecker();
+
 
             foreach (var drink in drinksByOneVolume)
             {
-                if (drink.CategoryId == drinkCategoryId && !drinksRepit.Contains(drink.Name))
+                if(drink.CategoryId == 0) // если это локал  
                 {
-                    drinksRepit.Add(drink.Name);
-
-                    var button = new InlineKeyboardButton("list ttk menu")
+                    // если spotId пользователя совпадает с spotId напитка
+                    if (drink.CategoryId == drinkCategoryId && !drinksRepit.Contains(drink.Name) && drink.SpotId == spotId)
                     {
-                        Text = $"{drink.Name} {volumes[drink.VolumeId - 1]}",
-                        CallbackData = $"drinkByOneVolume||{drink.Id}"
-                    };
-                    buttonRows.Add(new List<InlineKeyboardButton> { button });
+                        drinksRepit.Add(drink.Name);
+
+                        var button = new InlineKeyboardButton("list ttk menu")
+                        {
+                            Text = $"{drink.Name} {volumes[drink.VolumeId - 1]}",
+                            CallbackData = $"drinkByOneVolume||{drink.Id}"
+                        };
+                        buttonRows.Add(new List<InlineKeyboardButton> { button });
+                    }
+                }
+                else
+                {
+                    if (drink.CategoryId == drinkCategoryId && !drinksRepit.Contains(drink.Name))
+                    {
+                        drinksRepit.Add(drink.Name);
+
+                        var button = new InlineKeyboardButton("list ttk menu")
+                        {
+                            Text = $"{drink.Name} {volumes[drink.VolumeId - 1]}",
+                            CallbackData = $"drinkByOneVolume||{drink.Id}"
+                        };
+                        buttonRows.Add(new List<InlineKeyboardButton> { button });
+                    }
                 }
             }
 
@@ -441,14 +461,6 @@ namespace ttk_bot
                 }
 
             }
-
-
-            
-                
-            
-
-
-                  // тут мы должны вернуть список кнопок молока у конкретного напитка емли они есть .. если нет то просто вывести инфу о кбжу 
         }
         public async Task<List<List<InlineKeyboardButton>>> SingleOriginType() // 0 - зерно
         {
@@ -532,5 +544,4 @@ namespace ttk_bot
             return buttonRows;
         }
     }
-
 }

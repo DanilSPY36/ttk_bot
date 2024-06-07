@@ -35,7 +35,7 @@ class Program
 
     static async Task Main()
     {
-        _botClient = new TelegramBotClient("7451248242:AAEtWuvnh-dQgiTOiZV6prGs8EiBxrt2i8A");
+        _botClient = new TelegramBotClient("7190916687:AAG4L9eYwyj8bLJtXajo6uTP-k-MuIkRdIs");
         _botMenu = new BotMenu();
         usersRep = new UsersRepository(_context = new TgBotDbContext());
         choseKBJUDrink = new Dictionary<KBJUttkRepository, List<string>>();
@@ -62,7 +62,7 @@ class Program
         var me = await _botClient.GetMeAsync();
 
             // оповещение пользователей о новой обнове. 
-        //usersRep.BotUpdateInfoMessage(_botClient);
+        usersRep.BotUpdateInfoMessage(_botClient);
 
 
         Console.WriteLine($"{me.FirstName} запущен!");
@@ -86,12 +86,12 @@ class Program
                             switch (message.Text)
                             {
                                 case "/start":
-                                    await botClient.SendTextMessageAsync(chatInfo.Id, "Категорически Приветствую. Я твой личный ттк-бот, читай микрогайд: \n\n" +
+                                    await botClient.SendTextMessageAsync(chatInfo.Id, "Алоха 🌴, я твой личный ттк-бот, читай микрогайд: \n\n" +
                                         "Зерно - ты сможешь найти всю информацию о моносортах и блендах\n\n" +
                                         "Поставщики - вся выпечка, кбжу, составы, сроки,  условия хранения и аллергены\n\n" +
-                                        "ТТК - все технические карты основного меню\n\n" +
-                                        "КБЖУ напитки - кбжу любого напитка.\n\n" +
-                                        "Если есть вопросы, предложения или нашли что-то неладное, то напишите ему @DanilSPY", replyMarkup: _botMenu.StartMenu(),protectContent: true);
+                                        "ТТК - все технические карты основного меню, так же у каждой карточки напитка есть КБЖУ\n\n" +
+                                        "Если есть вопросы, предложения или нашли что-то неладное, обращайтесь к нему @DanilSPY\n\n" +
+                                        "Vibe use and high waves🏄‍♂️🏄‍♂️🏄‍♂️", replyMarkup: _botMenu.StartMenu(),protectContent: true);
                                     Console.WriteLine($"{user.Username} Send: {message.Text}");
                                     break;
                                 default:
@@ -154,7 +154,7 @@ class Program
         }
         userStateControllers.Add(userStateController);
 
-        Console.WriteLine($"ChatId = {userStateController.userChatId} || messageId = {userStateController.messageIndex} || Вложенность меню = {userStateController.userMenuIndex}");
+        //Console.WriteLine($"ChatId = {userStateController.userChatId} || messageId = {userStateController.messageIndex} || Вложенность меню = {userStateController.userMenuIndex}");
     }
     private static async Task CallBackQueryMenu(ITelegramBotClient botClient, Update update)
     {
@@ -162,7 +162,8 @@ class Program
         var callbackQuery = update.CallbackQuery;
         var chatInfo = callbackQuery.Message.Chat;
         var user = callbackQuery.From;
-        Console.WriteLine($"{user.FirstName} ({user.Id}) нажал на кнопку: {callbackQuery.Data}");
+        Console.WriteLine($"Date: {callbackQuery.Message.Date} || {user.Username} ({user.Id}) нажал на кнопку: {callbackQuery.Data}");
+        
         var chat = callbackQuery.Message.Chat;
         var choseMenuButton = callbackQuery.Data.Split("||");
         int choseIdMenuButton = int.Parse(choseMenuButton[1]);
@@ -187,7 +188,7 @@ class Program
                             );
                     //await _botClient.DeleteMessageAsync(chat.Id, messageId: message.MessageId);
 
-                    Console.WriteLine($"ChatId = {userStateController.userChatId} || messageId = {userStateController.messageIndex} || Вложенность меню = {userStateController.userMenuIndex}");
+                    //Console.WriteLine($"ChatId = {userStateController.userChatId} || messageId = {userStateController.messageIndex} || Вложенность меню = {userStateController.userMenuIndex}");
                     break;
                 }
             case "BackPhoto":
@@ -207,7 +208,7 @@ class Program
                                     messageId: callbackQuery.Message.MessageId,
                                     text: $"{userStateController.TextMessage}",
                                     replyMarkup: userStateController.menuInlineBtns);
-                    Console.WriteLine($"ChatId = {userStateController.userChatId} || messageId = {userStateController.messageIndex} || Вложенность меню = {userStateController.userMenuIndex}");
+                    //Console.WriteLine($"ChatId = {userStateController.userChatId} || messageId = {userStateController.messageIndex} || Вложенность меню = {userStateController.userMenuIndex}");
                     userStateControllers.Add(userStateController);
                     break;
                 }
@@ -250,9 +251,9 @@ class Program
                                         messageId: callbackQuery.Message.MessageId,
                                         text: userStateController.TextMessage,
                                         replyMarkup: userStateController.menuInlineBtns);
-                    Console.WriteLine($"ChatId = {userStateController.userChatId} || messageId = {userStateController.messageIndex} || Вложенность меню = {userStateController.userMenuIndex}");
+                    //Console.WriteLine($"ChatId = {userStateController.userChatId} || messageId = {userStateController.messageIndex} || Вложенность меню = {userStateController.userMenuIndex}");
                     userStateControllers.Add(userStateController);
-                    Console.WriteLine($"DAte: {callbackQuery.Message.Date}");
+                    
                     await operationRep.addOperation(callbackQuery.Message.Date, user.Id, 2, choseIdMenuButton);
 
                     break;
@@ -260,16 +261,18 @@ class Program
             case "categoryDrinks":
                 {
                     await botClient.AnswerCallbackQueryAsync(callbackQuery.Id);
-
                     var categoryDrinksName = await _botMenu.drinkCategoriesRep.Get(choseIdMenuButton);
-                    userStateController = new UserState(chat.Id, 1, callbackQuery.Message.MessageId, new InlineKeyboardMarkup(await _botMenu.DrinksMenuAsync(choseIdMenuButton, 1)), $"Категория - {categoryDrinksName}");
+                    //var tempUser = _context.Users.FirstOrDefault(x => x.ChatId == callbackQuery.Message.Chat.Id);
+                    var tempUsers = await usersRep.Get();
+                    var tempUser = tempUsers.FirstOrDefault(x => x.ChatId == callbackQuery.Message.Chat.Id);
+                    userStateController = new UserState(chat.Id, 1, callbackQuery.Message.MessageId, new InlineKeyboardMarkup(await _botMenu.DrinksMenuAsync(choseIdMenuButton, 1, tempUser.SpotId)), $"Категория - {categoryDrinksName}");
 
                     await _botClient.EditMessageTextAsync(
                                     chatId: chat.Id,
                                     messageId: callbackQuery.Message.MessageId,
                                     text: $"{userStateController.TextMessage}",
                                     replyMarkup: userStateController.menuInlineBtns);
-                    Console.WriteLine($"ChatId = {userStateController.userChatId} || messageId = {userStateController.messageIndex} || Вложенность меню = {userStateController.userMenuIndex}");
+                    //Console.WriteLine($"ChatId = {userStateController.userChatId} || messageId = {userStateController.messageIndex} || Вложенность меню = {userStateController.userMenuIndex}");
                     userStateControllers.Add(userStateController);
                     break;
                 }
@@ -303,7 +306,7 @@ class Program
                             await botClient.SendPhotoAsync(chatId: chat.Id, photo: inputOnlineFile, protectContent: true);
                             await botClient.SendTextMessageAsync(chatId: chat.Id, text: $"{userStateController.TextMessage}", replyMarkup: userStateController.menuInlineBtns, protectContent: true);
                         }
-
+                        
 
                     }
                     catch (Exception ex)
@@ -365,7 +368,7 @@ class Program
                                     text: $"{userStateController.TextMessage}",
                                     replyMarkup: userStateController.menuInlineBtns);
 
-                    Console.WriteLine($"ChatId = {userStateController.userChatId} || messageId = {userStateController.messageIndex} || Вложенность меню = {userStateController.userMenuIndex}");
+                    //Console.WriteLine($"ChatId = {userStateController.userChatId} || messageId = {userStateController.messageIndex} || Вложенность меню = {userStateController.userMenuIndex}");
                     userStateControllers.Add(userStateController);
                     break;
                 }
@@ -386,7 +389,7 @@ class Program
                                     messageId: callbackQuery.Message.MessageId,
                                     text: $"{userStateController.TextMessage}",
                                     replyMarkup: userStateController.menuInlineBtns);
-                    Console.WriteLine($"ChatId = {userStateController.userChatId} || messageId = {userStateController.messageIndex} || Вложенность меню = {userStateController.userMenuIndex}");
+                    //Console.WriteLine($"ChatId = {userStateController.userChatId} || messageId = {userStateController.messageIndex} || Вложенность меню = {userStateController.userMenuIndex}");
                     userStateControllers.Add(userStateController);
 
                     break;
@@ -409,7 +412,7 @@ class Program
                                         messageId: callbackQuery.Message.MessageId,
                                         text: userStateController.TextMessage,
                                         replyMarkup: userStateController.menuInlineBtns);
-                    Console.WriteLine($"ChatId = {userStateController.userChatId} || messageId = {userStateController.messageIndex} || Вложенность меню = {userStateController.userMenuIndex}");
+                    //Console.WriteLine($"ChatId = {userStateController.userChatId} || messageId = {userStateController.messageIndex} || Вложенность меню = {userStateController.userMenuIndex}");
                     userStateControllers.Add(userStateController);
                     await operationRep.addOperation(callbackQuery.Message.Date, user.Id, 3, choseIdMenuButton);
                     break;
@@ -441,14 +444,14 @@ class Program
 
                     var obj = choseKBJUDrink.Keys.FirstOrDefault(x => x.ttk_id == choseIdMenuButton);
 
-                    Console.WriteLine($"amount variation:{choseKBJUDrink.First().Value.Count()}");
+                    //Console.WriteLine($"amount variation:{choseKBJUDrink.First().Value.Count()}");
                     if (choseKBJUDrink.First().Value.Count() == 0 || choseKBJUDrink.First().Value.Count() == 1) // если у напитка нет вариаций
                     {
                         
                         await _botClient.EditMessageTextAsync(
                                    chatId: chat.Id,
                                    messageId: callbackQuery.Message.MessageId,
-                                   text: $"{userStateController.TextMessage} КБЖУ {obj.GetKBJU()}",
+                                   text: $"{userStateController.TextMessage}КБЖУ {obj.GetKBJU()}",
                                    replyMarkup: userStateController.menuInlineBtns = new InlineKeyboardMarkup(new[]
                                             {
                                                 new InlineKeyboardButton("Back")
@@ -495,14 +498,14 @@ class Program
 
                     var obj = choseKBJUDrink.Keys.FirstOrDefault(x => x.ttk_id == choseIdMenuButton);
 
-                    Console.WriteLine($"amount variation:{choseKBJUDrink.First().Value.Count()}");
+                    //Console.WriteLine($"amount variation:{choseKBJUDrink.First().Value.Count()}");
                     if (choseKBJUDrink.First().Value.Count() == 0 || choseKBJUDrink.First().Value.Count() == 1) // если у напитка нет вариаций
                     {
 
                         await _botClient.EditMessageTextAsync(
                                    chatId: chat.Id,
                                    messageId: callbackQuery.Message.MessageId,
-                                   text: $"{userStateController.TextMessage} КБЖУ {obj.GetKBJU()}",
+                                   text: $"{userStateController.TextMessage}КБЖУ {obj.GetKBJU()}",
                                    replyMarkup: userStateController.menuInlineBtns = new InlineKeyboardMarkup(new[]
                                             {
                                                 new InlineKeyboardButton("Back")

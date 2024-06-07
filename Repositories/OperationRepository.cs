@@ -28,8 +28,9 @@ namespace ttk_bot.Repositories
                 operation.UserId = userContext.Id;
                 operation.BranchId = branchId;
                 operation.ProductId = productId;
-                operation.Timestamp = (long)(time - new DateTime(1970, 1, 1)).TotalSeconds;
-
+                //time.AddHours(3);
+                operation.Timestamp = (long)(time - new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalSeconds + 10800;
+                
                 _context.Operations.Add(operation);
                 _context.SaveChanges();
 

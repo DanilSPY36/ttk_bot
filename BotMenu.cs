@@ -23,7 +23,7 @@ namespace ttk_bot
         private ReplyKeyboardMarkup? startMenu;
 
 
-        private TgBotFirstContext _context;
+        private TgBotDbContext _context;
 
         public ItemsRepository? itemsRep;
         public ShippersRepository? shippersRep;
@@ -41,7 +41,7 @@ namespace ttk_bot
 
         public BotMenu()
         {
-            _context = new TgBotFirstContext();
+            _context = new TgBotDbContext();
 
             itemsRep = new ItemsRepository(_context);
             shippersRep = new ShippersRepository(_context);

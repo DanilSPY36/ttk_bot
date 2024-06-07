@@ -10,7 +10,7 @@ namespace ttk_bot.Repositories
 {
     public class KBJUttkRepository
     {
-        private readonly TgBotFirstContext _context;
+        private readonly TgBotDbContext _context;
 
         public string? name { get; set; }
         public int id { get; set; }
@@ -27,7 +27,7 @@ namespace ttk_bot.Repositories
             this.ttk_id = ttk_id;
             variety = new List<string>();
         }
-        public KBJUttkRepository(TgBotFirstContext context)
+        public KBJUttkRepository(TgBotDbContext context)
         {
             _context = context;
             kbjuTtks = _context.KbjuTtks.AsNoTracking().ToList();

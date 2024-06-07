@@ -1,7 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 
 namespace ttk_bot.Models;
 
@@ -14,6 +12,6 @@ public partial class Operation
     public int ProductId { get; set; }
 
     public long Timestamp { get; set; }
-    
+
     public int Id { get; set; }
 }

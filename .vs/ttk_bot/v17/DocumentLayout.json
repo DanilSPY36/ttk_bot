@@ -3,6 +3,22 @@
   "WorkspaceRootPath": "P:\\Visual Studio 2022\\sours\\repos\\Job_projects\\ttk_bot\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{A6ABEA30-0D16-4039-9D97-1BCD82C7CF76}|ttk_bot.csproj|p:\\visual studio 2022\\sours\\repos\\job_projects\\ttk_bot\\models\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A6ABEA30-0D16-4039-9D97-1BCD82C7CF76}|ttk_bot.csproj|solutionrelative:models\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A6ABEA30-0D16-4039-9D97-1BCD82C7CF76}|ttk_bot.csproj|p:\\visual studio 2022\\sours\\repos\\job_projects\\ttk_bot\\models\\kbjuttk.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A6ABEA30-0D16-4039-9D97-1BCD82C7CF76}|ttk_bot.csproj|solutionrelative:models\\kbjuttk.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A6ABEA30-0D16-4039-9D97-1BCD82C7CF76}|ttk_bot.csproj|p:\\visual studio 2022\\sours\\repos\\job_projects\\ttk_bot\\models\\tgbotdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A6ABEA30-0D16-4039-9D97-1BCD82C7CF76}|ttk_bot.csproj|solutionrelative:models\\tgbotdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|P:\\Visual Studio 2022\\sours\\repos\\Job_projects\\ttk_bot\\Migrations\\20240607081409_FirstMigration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Migrations\\20240607081409_FirstMigration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{A6ABEA30-0D16-4039-9D97-1BCD82C7CF76}|ttk_bot.csproj|p:\\visual studio 2022\\sours\\repos\\job_projects\\ttk_bot\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A6ABEA30-0D16-4039-9D97-1BCD82C7CF76}|ttk_bot.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -22,7 +38,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 6,
+          "SelectedChildIndex": 4,
           "Children": [
             {
               "$type": "Bookmark",
@@ -42,7 +58,59 @@
             },
             {
               "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "User.cs",
+              "DocumentMoniker": "P:\\Visual Studio 2022\\sours\\repos\\Job_projects\\ttk_bot\\Models\\User.cs",
+              "RelativeDocumentMoniker": "Models\\User.cs",
+              "ToolTip": "P:\\Visual Studio 2022\\sours\\repos\\Job_projects\\ttk_bot\\Models\\User.cs",
+              "RelativeToolTip": "Models\\User.cs",
+              "ViewState": "AQIAAAoAAAAAAAAAAAAswBoAAAAmAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-07T08:14:46.341Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "KbjuTtk.cs",
+              "DocumentMoniker": "P:\\Visual Studio 2022\\sours\\repos\\Job_projects\\ttk_bot\\Models\\KbjuTtk.cs",
+              "RelativeDocumentMoniker": "Models\\KbjuTtk.cs",
+              "ToolTip": "P:\\Visual Studio 2022\\sours\\repos\\Job_projects\\ttk_bot\\Models\\KbjuTtk.cs",
+              "RelativeToolTip": "Models\\KbjuTtk.cs",
+              "ViewState": "AQIAAAkAAAAAAAAAAAA5wBsAAAAOAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-07T08:14:31.725Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "20240607081409_FirstMigration.cs",
+              "DocumentMoniker": "P:\\Visual Studio 2022\\sours\\repos\\Job_projects\\ttk_bot\\Migrations\\20240607081409_FirstMigration.cs",
+              "RelativeDocumentMoniker": "Migrations\\20240607081409_FirstMigration.cs",
+              "ToolTip": "P:\\Visual Studio 2022\\sours\\repos\\Job_projects\\ttk_bot\\Migrations\\20240607081409_FirstMigration.cs",
+              "RelativeToolTip": "Migrations\\20240607081409_FirstMigration.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-07T08:14:09.361Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 2,
+              "Title": "TgBotDbContext.cs",
+              "DocumentMoniker": "P:\\Visual Studio 2022\\sours\\repos\\Job_projects\\ttk_bot\\Models\\TgBotDbContext.cs",
+              "RelativeDocumentMoniker": "Models\\TgBotDbContext.cs",
+              "ToolTip": "P:\\Visual Studio 2022\\sours\\repos\\Job_projects\\ttk_bot\\Models\\TgBotDbContext.cs",
+              "RelativeToolTip": "Models\\TgBotDbContext.cs",
+              "ViewState": "AQIAAB8AAAAAAAAAAAAAwAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-07T08:13:21.959Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
               "Title": "OperationRepository.cs",
               "DocumentMoniker": "P:\\Visual Studio 2022\\sours\\repos\\Job_projects\\ttk_bot\\Repositories\\OperationRepository.cs",
               "RelativeDocumentMoniker": "Repositories\\OperationRepository.cs",
@@ -55,7 +123,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 5,
               "Title": "Operation.cs",
               "DocumentMoniker": "P:\\Visual Studio 2022\\sours\\repos\\Job_projects\\ttk_bot\\Models\\Operation.cs",
               "RelativeDocumentMoniker": "Models\\Operation.cs",
@@ -63,18 +131,17 @@
               "RelativeToolTip": "Models\\Operation.cs",
               "ViewState": "AQIAAAMAAAAAAAAAAAAAABEAAAAfAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-06-04T17:04:54.719Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-06-04T17:04:54.719Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 4,
               "Title": "Program.cs",
               "DocumentMoniker": "P:\\Visual Studio 2022\\sours\\repos\\Job_projects\\ttk_bot\\Program.cs",
               "RelativeDocumentMoniker": "Program.cs",
               "ToolTip": "P:\\Visual Studio 2022\\sours\\repos\\Job_projects\\ttk_bot\\Program.cs",
               "RelativeToolTip": "Program.cs",
-              "ViewState": "AQIAAJ0AAAAAAAAAAAAcwK4AAABLAAAA",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAB8AAAAQAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-05-24T08:31:38.811Z",
               "EditorCaption": ""

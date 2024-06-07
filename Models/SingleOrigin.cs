@@ -34,4 +34,8 @@ public partial class SingleOrigin
     public float Q { get; set; }
 
     public string? Description { get; set; }
+
+    public int? BeanCategoryId { get; set; }
+
+    public bool? IsArchive { get; set; }
 }

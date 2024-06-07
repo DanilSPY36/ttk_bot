@@ -11,9 +11,9 @@ namespace ttk_bot.Repositories
 {
     public class OperationRepository
     {
-        private readonly TgBotFirstContext _context;
+        private readonly TgBotDbContext _context;
 
-        public OperationRepository(TgBotFirstContext context)
+        public OperationRepository(TgBotDbContext context)
         {
             _context = context;
         }

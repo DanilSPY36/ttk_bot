@@ -10,9 +10,9 @@ namespace ttk_bot.Repositories
 {
     public class SingleOriginRepository
     {
-        private readonly TgBotFirstContext _context;
+        private readonly TgBotDbContext _context;
 
-        public SingleOriginRepository(TgBotFirstContext _context)
+        public SingleOriginRepository(TgBotDbContext _context)
         {
             this._context = _context;
         }

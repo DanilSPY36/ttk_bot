@@ -20,7 +20,7 @@ class Program
 {
     private static ITelegramBotClient _botClient = null!;
     private static ReceiverOptions _receiverOptions = null!;
-    private static TgBotFirstContext? _context;
+    private static TgBotDbContext? _context;
     private static BotMenu _botMenu = null!;
 
     // тест логики меню
@@ -36,12 +36,12 @@ class Program
     {
         _botClient = new TelegramBotClient("7451248242:AAEtWuvnh-dQgiTOiZV6prGs8EiBxrt2i8A");
         _botMenu = new BotMenu();
-        usersRep = new UsersRepository(_context = new TgBotFirstContext());
+        usersRep = new UsersRepository(_context = new TgBotDbContext());
         choseKBJUDrink = new Dictionary<KBJUttkRepository, List<string>>();
-        var itemsRep = new ItemsRepository(_context = new TgBotFirstContext());
+        var itemsRep = new ItemsRepository(_context = new TgBotDbContext());
         userStateControllers = new List<UserState> { };
 
-        operationRep = new OperationRepository(_context = new TgBotFirstContext());
+        operationRep = new OperationRepository(_context = new TgBotDbContext());
 
         _receiverOptions = new ReceiverOptions
         {

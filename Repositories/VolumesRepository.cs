@@ -9,8 +9,8 @@ namespace ttk_bot.Repositories
 {
     public class VolumesRepository
     {
-        private readonly TgBotFirstContext _context;
-        public VolumesRepository(TgBotFirstContext context)
+        private readonly TgBotDbContext _context;
+        public VolumesRepository(TgBotDbContext context)
         {
             _context = context;
         }

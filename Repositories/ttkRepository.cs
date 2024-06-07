@@ -10,8 +10,8 @@ namespace ttk_bot.Repositories
 {
     public class ttkRepository
     {
-        private readonly TgBotFirstContext _context;
-        public ttkRepository(TgBotFirstContext context) 
+        private readonly TgBotDbContext _context;
+        public ttkRepository(TgBotDbContext context) 
         {
             _context = context;
         }

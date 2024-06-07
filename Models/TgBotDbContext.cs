@@ -4,16 +4,18 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ttk_bot.Models;
 
-public partial class TgBotFirstContext : DbContext
+public partial class TgBotDbContext : DbContext
 {
-    public TgBotFirstContext()
+    public TgBotDbContext()
     {
     }
 
-    public TgBotFirstContext(DbContextOptions<TgBotFirstContext> options)
+    public TgBotDbContext(DbContextOptions<TgBotDbContext> options)
         : base(options)
     {
     }
+
+    public virtual DbSet<BeanCategoriesDim> BeanCategoriesDims { get; set; }
 
     public virtual DbSet<BranchesDim> BranchesDims { get; set; }
 
@@ -51,6 +53,20 @@ public partial class TgBotFirstContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<BeanCategoriesDim>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("bean_category_dim_pk");
+
+            entity.ToTable("bean_categories_dim", "single_origin_prod", tb => tb.HasComment("Линейка зерна (create, innovate, basse)"));
+
+            entity.Property(e => e.Id)
+                .ValueGeneratedNever()
+                .HasColumnName("id");
+            entity.Property(e => e.BeanCategory)
+                .HasColumnType("character varying")
+                .HasColumnName("bean_category");
+        });
+
         modelBuilder.Entity<BranchesDim>(entity =>
         {
             entity
@@ -212,9 +228,7 @@ public partial class TgBotFirstContext : DbContext
 
             entity.ToTable("operations", "statistic_prod");
 
-            entity.Property(e => e.Id)
-                .UseIdentityAlwaysColumn()
-                .HasColumnName("id");
+            entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.BranchId).HasColumnName("branch_id");
             entity.Property(e => e.ProductId).HasColumnName("product_id");
             entity.Property(e => e.Timestamp).HasColumnName("timestamp");
@@ -278,6 +292,7 @@ public partial class TgBotFirstContext : DbContext
             entity.Property(e => e.Aftertaste)
                 .HasColumnType("character varying")
                 .HasColumnName("aftertaste");
+            entity.Property(e => e.BeanCategoryId).HasColumnName("bean_category_id");
             entity.Property(e => e.Body)
                 .HasColumnType("character varying")
                 .HasColumnName("body");
@@ -291,6 +306,7 @@ public partial class TgBotFirstContext : DbContext
                 .HasColumnType("character varying")
                 .HasColumnName("height");
             entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.IsArchive).HasColumnName("is_archive");
             entity.Property(e => e.Name)
                 .HasColumnType("character varying")
                 .HasColumnName("name");

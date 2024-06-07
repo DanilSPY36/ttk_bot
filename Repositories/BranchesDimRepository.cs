@@ -9,9 +9,9 @@ namespace ttk_bot.Repositories
 {
     public class BranchesDimRepository
     {
-        private readonly TgBotFirstContext _context;
+        private readonly TgBotDbContext _context;
 
-        public BranchesDimRepository(TgBotFirstContext context)
+        public BranchesDimRepository(TgBotDbContext context)
         {
             _context = context;
         }

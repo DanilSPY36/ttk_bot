@@ -16,14 +16,14 @@ namespace ttk_bot.Repositories
 {
     public class UsersRepository
     {
-        private readonly TgBotFirstContext _context;
+        private readonly TgBotDbContext _context;
         private List<User> usersList = new List<User>();
 
         public UsersRepository()
         {
             usersList = new List<User>();
         }
-        public UsersRepository(TgBotFirstContext context)
+        public UsersRepository(TgBotDbContext context)
         {
             _context = context;
         }

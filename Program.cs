@@ -35,7 +35,7 @@ class Program
 
     static async Task Main()
     {
-        _botClient = new TelegramBotClient("7190916687:AAG4L9eYwyj8bLJtXajo6uTP-k-MuIkRdIs");
+        _botClient = new TelegramBotClient("7451248242:AAEtWuvnh-dQgiTOiZV6prGs8EiBxrt2i8A");
         _botMenu = new BotMenu();
         usersRep = new UsersRepository(_context = new TgBotDbContext());
         choseKBJUDrink = new Dictionary<KBJUttkRepository, List<string>>();
@@ -62,7 +62,7 @@ class Program
         var me = await _botClient.GetMeAsync();
 
             // оповещение пользователей о новой обнове. 
-        usersRep.BotUpdateInfoMessage(_botClient);
+        //usersRep.BotUpdateInfoMessage(_botClient);
 
 
         Console.WriteLine($"{me.FirstName} запущен!");

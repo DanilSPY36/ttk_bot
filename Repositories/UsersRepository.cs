@@ -42,7 +42,7 @@ namespace ttk_bot.Repositories
         public async Task<bool> accessCheck(string name, string? firstName, string? lastName, long? chatId, long? tgUserId, int? spotId, int? roleId)
         {
             usersList = await _context.Users.AsNoTracking().ToListAsync();
-            var lastUserId = await _context.Users.MaxAsync(id => id.Id);
+            var lastUserId = await _context.Users.MaxAsync(id => id.id);
 
             // проходим по списку пользователей.
             foreach (var user in usersList)
@@ -60,13 +60,12 @@ namespace ttk_bot.Repositories
 
         public async Task BotUpdateInfoMessage(ITelegramBotClient _botClient)
         {
-            string message = "Алоха 🌴. С вами на волнах обновленный бот (1.3.2)\n\n" +
+            string message = "Алоха 🌴. С вами на волнах обновленный бот (1.3.3)\n\n" +
                              "Список изменений:\n" +
                              "1) Исправленны ошибки в логике меню.\n" +
-                             "2) Реализованна логика отображения ттк и кбжу локальных напитков. Не беспокойся, твои локальные напитки отбражаются исключительно у сотрудников твоего спота\n" +
+                             "2) Реализованна логика отображения фотографий продукции поставщиков.\n" +
                              "3) Исправили некоторые ошибки в ифнормации продуктов поставщиков.\n" +
-                             "4) Исправили выдачу доступа.\n" +
-                             "5) Исправили вывод отсутствующей информации\n\n" +
+                             "4) Оптимизация внутренних запросов" +
                              "Для корректного использования рекомендуется, отчистить историю прееписки со мной. Или обновить кнопки прописав команду /start\n" +
                              "Если обнаружили ошибки пишите ему @DanilSPY\n" +
                              "Vibe use and high waves🏄‍♂️🏄‍♂️🏄‍♂️";

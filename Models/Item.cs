@@ -48,4 +48,6 @@ public partial class Item
     public int CategoryId { get; set; }
 
     public string? PhotoPath { get; set; }
+
+    public bool? IsArchive { get; set; }
 }

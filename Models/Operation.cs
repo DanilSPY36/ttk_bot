@@ -14,4 +14,6 @@ public partial class Operation
     public long Timestamp { get; set; }
 
     public int Id { get; set; }
+
+    public bool? IsFake { get; set; }
 }

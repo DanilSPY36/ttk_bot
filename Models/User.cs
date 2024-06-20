@@ -11,7 +11,7 @@ namespace ttk_bot.Models;
 public partial class User
 {
     [Key]
-    public int Id { get; set; }
+    public int id { get; set; }
 
     /// <summary>
     /// tg name
@@ -34,9 +34,9 @@ public partial class User
 
     public int? RoleId { get; set; }
 
-    public User(int Id, string name, string? firstName, string? lastName, long? chatId, long? tgUserId, int? spotId, int? roleId)
+    public User(int id, string name, string? firstName, string? lastName, long? chatId, long? tgUserId, int? spotId, int? roleId)
     {
-        this.Id = Id;
+        this.id = id;
         Name = name;
         FirstName = firstName;
         LastName = lastName;

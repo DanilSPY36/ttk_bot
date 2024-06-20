@@ -520,7 +520,7 @@ namespace ttk_bot
                 new InlineKeyboardButton("AccessTrue")
                     {
                         Text = "Дать доступ",
-                        CallbackData = $"Access_true||{user.Id}"
+                        CallbackData = $"Access_true||{user.id}"
                     }
 
             });
@@ -529,14 +529,14 @@ namespace ttk_bot
                 new InlineKeyboardButton("AccessFalse")
                     {
                         Text = "Запретить",
-                        CallbackData = $"Access_false||{user.Id}"
+                        CallbackData = $"Access_false||{user.id}"
                     }
             });
             buttonRows.Add(new List<InlineKeyboardButton> {
                 new InlineKeyboardButton("Remove")
                     {
                         Text = "Удалить с базы",
-                        CallbackData = $"RemoveUserFromDb||{user.Id}"
+                        CallbackData = $"RemoveUserFromDb||{user.id}"
                     },
 
             });

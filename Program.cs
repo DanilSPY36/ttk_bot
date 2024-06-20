@@ -35,7 +35,7 @@ class Program
 
     static async Task Main()
     {
-        _botClient = new TelegramBotClient("7451248242:AAEtWuvnh-dQgiTOiZV6prGs8EiBxrt2i8A");
+        _botClient = new TelegramBotClient("7451248242:AAEL-I9cbNrF6u2k5ELQ47SP-jFH3as5-jg");
         _botMenu = new BotMenu();
         usersRep = new UsersRepository(_context = new TgBotDbContext());
         choseKBJUDrink = new Dictionary<KBJUttkRepository, List<string>>();
@@ -94,6 +94,16 @@ class Program
                                         "Vibe use and high waves🏄‍♂️🏄‍♂️🏄‍♂️", replyMarkup: _botMenu.StartMenu(),protectContent: true);
                                     Console.WriteLine($"{user.Username} Send: {message.Text}");
                                     break;
+                            case "/command1":
+                                {
+                                    await botClient.SendTextMessageAsync(chatInfo.Id, "Алоха 🌴, я твой личный ттк-бот, читай микрогайд: \n\n" +
+                                        "Зерно - ты сможешь найти всю информацию о моносортах и блендах\n\n" +
+                                        "Поставщики - вся выпечка, кбжу, составы, сроки,  условия хранения и аллергены\n\n" +
+                                        "ТТК - все технические карты основного меню, так же у каждой карточки напитка есть КБЖУ\n\n" +
+                                        "Если есть вопросы, предложения или нашли что-то неладное, обращайтесь к нему @DanilSPY\n\n" +
+                                        "Vibe use and high waves🏄‍♂️🏄‍♂️🏄‍♂️", replyMarkup: _botMenu.StartMenu(), protectContent: true);
+                                    break;
+                                }
                                 default:
                                     break;
                             }
@@ -235,7 +245,34 @@ class Program
                 }
             case "item":
                 {
-                    userStateController = new UserState(chat.Id, 2, callbackQuery.Message.MessageId,
+                    try
+                    {
+                        userStateController = new UserState(chat.Id, 2, callbackQuery.Message.MessageId,
+                        new InlineKeyboardMarkup(new[]
+                                            {
+                                                new InlineKeyboardButton("Back")
+                                                {
+                                                    Text = "Назад",
+                                                    CallbackData = $"BackPhoto||{2}"
+                                                }
+                                            }),
+                         $"{_botMenu.itemsRep.ToString(choseIdMenuButton)}");
+                        await botClient.AnswerCallbackQueryAsync(callbackQuery.Id);
+                        
+
+                        // photo
+                        var photoPath = _context.Items.FirstOrDefault(p => p.Id == choseIdMenuButton);
+                        Console.WriteLine($"Photo Path: {photoPath.PhotoPath}");
+                        using (FileStream stream = new FileStream(photoPath.PhotoPath, FileMode.Open, FileAccess.Read))
+                        {
+                            InputFileStream inputOnlineFile = new InputFileStream(stream);
+                            await botClient.SendPhotoAsync(chatId: chat.Id, photo: inputOnlineFile, protectContent: true);
+                            await botClient.SendTextMessageAsync(chatId: chat.Id, text: $"{userStateController.TextMessage}", replyMarkup: userStateController.menuInlineBtns, protectContent: true);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        userStateController = new UserState(chat.Id, 2, callbackQuery.Message.MessageId,
                         new InlineKeyboardMarkup(new[]
                                             {
                                                 new InlineKeyboardButton("Back")
@@ -245,16 +282,21 @@ class Program
                                                 }
                                             }),
                          $"{_botMenu.itemsRep.ToString(choseIdMenuButton)}");
-                    await botClient.AnswerCallbackQueryAsync(callbackQuery.Id);
-                    await _botClient.EditMessageTextAsync(
-                                        chatId: chat.Id,
-                                        messageId: callbackQuery.Message.MessageId,
-                                        text: userStateController.TextMessage,
-                                        replyMarkup: userStateController.menuInlineBtns);
-                    //Console.WriteLine($"ChatId = {userStateController.userChatId} || messageId = {userStateController.messageIndex} || Вложенность меню = {userStateController.userMenuIndex}");
-                    userStateControllers.Add(userStateController);
+                        await botClient.AnswerCallbackQueryAsync(callbackQuery.Id);
+                        await _botClient.EditMessageTextAsync(
+                                            chatId: chat.Id,
+                                            messageId: callbackQuery.Message.MessageId,
+                                            text: userStateController.TextMessage,
+                                            replyMarkup: userStateController.menuInlineBtns);
+                    }
+                    finally
+                    {
+                        userStateControllers.Add(userStateController);
+                        await operationRep.addOperation(callbackQuery.Message.Date, user.Id, 1, choseIdMenuButton);
+                    }
                     
-                    await operationRep.addOperation(callbackQuery.Message.Date, user.Id, 2, choseIdMenuButton);
+                    
+                    
 
                     break;
                 }
@@ -581,7 +623,7 @@ class Program
             case "Access_true":
                 {
                     
-                    var userTemp = _context.Users.FirstOrDefault(x => x.Id == choseIdMenuButton);
+                    var userTemp = _context.Users.FirstOrDefault(x => x.id == choseIdMenuButton);
                     userTemp.IsAccess = true;
                     try
                     {

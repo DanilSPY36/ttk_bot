@@ -30,4 +30,6 @@ public partial class DrinksTtk
     public string? Prep { get; set; }
 
     public string? PhotoPath { get; set; }
+
+    public bool? IsArchive { get; set; }
 }

@@ -25,7 +25,7 @@ namespace ttk_bot.Repositories
             {
                 //var postgresTimestamp = date.GetDateTimeFormats(,);
                 var operation = new Operation();
-                operation.UserId = userContext.Id;
+                operation.UserId = userContext.id;
                 operation.BranchId = branchId;
                 operation.ProductId = productId;
                 //time.AddHours(3);

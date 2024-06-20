@@ -146,6 +146,7 @@ public partial class TgBotDbContext : DbContext
             entity.Property(e => e.Ingridients)
                 .HasColumnType("character varying")
                 .HasColumnName("ingridients");
+            entity.Property(e => e.IsArchive).HasColumnName("is_archive");
             entity.Property(e => e.Name)
                 .HasColumnType("character varying")
                 .HasColumnName("name");
@@ -190,6 +191,7 @@ public partial class TgBotDbContext : DbContext
                 .HasColumnName("expiration_date");
             entity.Property(e => e.Fats).HasColumnName("fats");
             entity.Property(e => e.GlutenFree).HasColumnName("gluten_free");
+            entity.Property(e => e.IsArchive).HasColumnName("is_archive");
             entity.Property(e => e.Name)
                 .HasColumnType("character varying")
                 .HasColumnName("name");
@@ -244,6 +246,7 @@ public partial class TgBotDbContext : DbContext
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.BranchId).HasColumnName("branch_id");
+            entity.Property(e => e.IsFake).HasColumnName("is_fake");
             entity.Property(e => e.ProductId).HasColumnName("product_id");
             entity.Property(e => e.Timestamp).HasColumnName("timestamp");
             entity.Property(e => e.UserId).HasColumnName("user_id");
@@ -385,11 +388,11 @@ public partial class TgBotDbContext : DbContext
 
         modelBuilder.Entity<User>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("users_pk");
+            entity.HasKey(e => e.id).HasName("users_pk");
 
             entity.ToTable("users", "user_prod");
 
-            entity.Property(e => e.Id)
+            entity.Property(e => e.id)
                 .ValueGeneratedNever()
                 .HasColumnName("id");
             entity.Property(e => e.ChatId).HasColumnName("chat_id");

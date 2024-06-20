@@ -7,16 +7,12 @@
       "RelativeMoniker": "D:0:0:{A6ABEA30-0D16-4039-9D97-1BCD82C7CF76}|ttk_bot.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A6ABEA30-0D16-4039-9D97-1BCD82C7CF76}|ttk_bot.csproj|p:\\visual studio 2022\\sours\\repos\\job_projects\\ttk_bot\\repositories\\usersrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A6ABEA30-0D16-4039-9D97-1BCD82C7CF76}|ttk_bot.csproj|solutionrelative:repositories\\usersrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{A6ABEA30-0D16-4039-9D97-1BCD82C7CF76}|ttk_bot.csproj|p:\\visual studio 2022\\sours\\repos\\job_projects\\ttk_bot\\models\\kbjuttk.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A6ABEA30-0D16-4039-9D97-1BCD82C7CF76}|ttk_bot.csproj|solutionrelative:models\\kbjuttk.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A6ABEA30-0D16-4039-9D97-1BCD82C7CF76}|ttk_bot.csproj|p:\\visual studio 2022\\sours\\repos\\job_projects\\ttk_bot\\botmenu.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A6ABEA30-0D16-4039-9D97-1BCD82C7CF76}|ttk_bot.csproj|solutionrelative:botmenu.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A6ABEA30-0D16-4039-9D97-1BCD82C7CF76}|ttk_bot.csproj|p:\\visual studio 2022\\sours\\repos\\job_projects\\ttk_bot\\repositories\\operationrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A6ABEA30-0D16-4039-9D97-1BCD82C7CF76}|ttk_bot.csproj|solutionrelative:repositories\\operationrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{A6ABEA30-0D16-4039-9D97-1BCD82C7CF76}|ttk_bot.csproj|p:\\visual studio 2022\\sours\\repos\\job_projects\\ttk_bot\\models\\item.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A6ABEA30-0D16-4039-9D97-1BCD82C7CF76}|ttk_bot.csproj|solutionrelative:models\\item.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -26,7 +22,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 7,
+          "SelectedChildIndex": 6,
           "Children": [
             {
               "$type": "Bookmark",
@@ -46,41 +42,28 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "OperationRepository.cs",
-              "DocumentMoniker": "P:\\Visual Studio 2022\\sours\\repos\\Job_projects\\ttk_bot\\Repositories\\OperationRepository.cs",
-              "RelativeDocumentMoniker": "Repositories\\OperationRepository.cs",
-              "ToolTip": "P:\\Visual Studio 2022\\sours\\repos\\Job_projects\\ttk_bot\\Repositories\\OperationRepository.cs",
-              "RelativeToolTip": "Repositories\\OperationRepository.cs",
-              "ViewState": "AQIAAAYAAAAAAAAAAAAAABgAAAANAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-06-07T13:14:31.907Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "UsersRepository.cs",
-              "DocumentMoniker": "P:\\Visual Studio 2022\\sours\\repos\\Job_projects\\ttk_bot\\Repositories\\UsersRepository.cs",
-              "RelativeDocumentMoniker": "Repositories\\UsersRepository.cs",
-              "ToolTip": "P:\\Visual Studio 2022\\sours\\repos\\Job_projects\\ttk_bot\\Repositories\\UsersRepository.cs",
-              "RelativeToolTip": "Repositories\\UsersRepository.cs",
-              "ViewState": "AQIAABsAAAAAAAAAAAAowD4AAABKAAAA",
+              "Title": "KbjuTtk.cs",
+              "DocumentMoniker": "P:\\Visual Studio 2022\\sours\\repos\\Job_projects\\ttk_bot\\Models\\KbjuTtk.cs",
+              "RelativeDocumentMoniker": "Models\\KbjuTtk.cs",
+              "ToolTip": "P:\\Visual Studio 2022\\sours\\repos\\Job_projects\\ttk_bot\\Models\\KbjuTtk.cs",
+              "RelativeToolTip": "Models\\KbjuTtk.cs",
+              "ViewState": "AQIAAAkAAAAAAAAAAAA5wBAAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-06-07T13:06:36.856Z",
+              "WhenOpened": "2024-06-20T09:53:38.821Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 2,
-              "Title": "BotMenu.cs",
-              "DocumentMoniker": "P:\\Visual Studio 2022\\sours\\repos\\Job_projects\\ttk_bot\\BotMenu.cs",
-              "RelativeDocumentMoniker": "BotMenu.cs",
-              "ToolTip": "P:\\Visual Studio 2022\\sours\\repos\\Job_projects\\ttk_bot\\BotMenu.cs",
-              "RelativeToolTip": "BotMenu.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAK4AAAAAAAAA",
+              "Title": "Item.cs",
+              "DocumentMoniker": "P:\\Visual Studio 2022\\sours\\repos\\Job_projects\\ttk_bot\\Models\\Item.cs",
+              "RelativeDocumentMoniker": "Models\\Item.cs",
+              "ToolTip": "P:\\Visual Studio 2022\\sours\\repos\\Job_projects\\ttk_bot\\Models\\Item.cs",
+              "RelativeToolTip": "Models\\Item.cs",
+              "ViewState": "AQIAABcAAAAAAAAAAAAAwAAAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-06-07T08:33:52.909Z",
+              "WhenOpened": "2024-06-20T09:53:35.856Z",
               "EditorCaption": ""
             },
             {
@@ -91,7 +74,7 @@
               "RelativeDocumentMoniker": "Program.cs",
               "ToolTip": "P:\\Visual Studio 2022\\sours\\repos\\Job_projects\\ttk_bot\\Program.cs",
               "RelativeToolTip": "Program.cs",
-              "ViewState": "AQIAAE4AAAAAAAAAAAAowE8AAAAsAAAA",
+              "ViewState": "AQIAACUAAAAAAAAAAAAgwDYAAAAnAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-05-24T08:31:38.811Z",
               "EditorCaption": ""

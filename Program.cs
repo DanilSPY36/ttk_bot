@@ -14,6 +14,7 @@ using Telegram.Bot.Types.ReplyMarkups;
 using ttk_bot;
 using ttk_bot.Models;
 using ttk_bot.Repositories;
+using ttk_bot.SearchLogic;
 
 
 class Program
@@ -35,9 +36,11 @@ class Program
     //ожидание сообщения разработчика об обновлении
     private static bool _waitingForUpdateMessage = false;
 
+    // ожидание сообщения от юзера с конкретным id
+    private static Dictionary<long, bool> _waitingSearchUpdateMessage;
     static async Task Main()
     {
-        _botClient = new TelegramBotClient("7451248242:AAEL-I9cbNrF6u2k5ELQ47SP-jFH3as5-jg");
+        _botClient = new TelegramBotClient("7190916687:AAFz0oeb2mMppoBGFmOjx6znff062zHxzc0");
         _botMenu = new BotMenu();
         usersRep = new UsersRepository(_context = new TgBotDbContext());
         choseKBJUDrink = new Dictionary<KBJUttkRepository, List<string>>();
@@ -45,7 +48,7 @@ class Program
         userStateControllers = new List<UserState> { };
 
         operationRep = new OperationRepository(_context = new TgBotDbContext());
-
+        _waitingSearchUpdateMessage = new Dictionary<long, bool>();
         _receiverOptions = new ReceiverOptions
         {
             
@@ -63,8 +66,7 @@ class Program
         _botClient.StartReceiving(UpdateHandler, ErrorHandler, _receiverOptions, cts.Token);
         var me = await _botClient.GetMeAsync();
 
-            // оповещение пользователей о новой обнове. 
-        //usersRep.BotUpdateInfoMessage(_botClient);
+           
 
 
         Console.WriteLine($"{me.FirstName} запущен!");
@@ -84,12 +86,10 @@ class Program
 
                     if (await usersRep.accessCheck(user.Username, user.FirstName, user.LastName, chatInfo.Id, user.Id))
                         {
-                            // отправка текста сообщения отсальным пользователям если это сообщение написал я или давид  
-                            if (_waitingForUpdateMessage && (user.Id == 465890927 || user.Id == 841506985))
-                            {
-                                usersRep.BotUpdateInfoMessage(_botClient, message.Text);
-                                _waitingForUpdateMessage = false;
-                            }
+                        // отправка текста сообщения отсальным пользователям если это сообщение написал я или давид  
+                        await UpdateMessageFromDeveloper(message);
+                        // отправка запроса боту на поиск items, ttk
+                        await UpdateSearchMessageFromUsers(message);
                         Console.WriteLine($"{user.Username} написал сообщение: {message.Text} || messageId = {message.MessageId}\n");
                             switch (message.Text)
                             {
@@ -117,6 +117,30 @@ class Program
                                     _waitingForUpdateMessage = true;
                                     break;
                                 }
+                            case "/GetChangedData465890927":
+                                {
+                                    // Принудительное обнаружение изменений
+                                    _botMenu.UpdateDataInDbContext();
+                                    break;
+                                }
+                            case "/searchttk": // поиск items или ttk
+                                {
+                                    await botClient.SendTextMessageAsync(chatInfo.Id, "Напиши, название напитка", replyMarkup: _botMenu.StartMenu(), protectContent: true);
+                                    _waitingSearchUpdateMessage.Add(chatInfo.Id, true);
+                                    break;
+                                }
+                            case "/searchproduct":
+                                {
+                                    await botClient.SendTextMessageAsync(chatInfo.Id, "Напиши, название продукта", replyMarkup: _botMenu.StartMenu(), protectContent: true);
+                                    _waitingSearchUpdateMessage.Add(chatInfo.Id, true);
+                                    break;
+                                }
+                            case "/faq": // частозадоваемые вопросы
+                                {
+                                    
+                                    break;
+                                }
+
                                 default:
                                     break;
                             }
@@ -659,7 +683,6 @@ class Program
                 return;
         }
     }
-
     private static Task ErrorHandler(ITelegramBotClient botClient, Exception error, CancellationToken cancellationToken)
     {
         var ErrorMessage = error switch
@@ -671,5 +694,24 @@ class Program
 
         Console.WriteLine(ErrorMessage);
         return Task.CompletedTask;
+    }
+
+    private static async Task UpdateMessageFromDeveloper(Message message)
+    {
+        var user = message.From;
+        if (_waitingForUpdateMessage && (user.Id == 465890927 || user.Id == 841506985))
+        {
+            usersRep.BotUpdateInfoMessage(_botClient, message.Text);
+            _waitingForUpdateMessage = false;
+        }
+    }
+    private static async Task UpdateSearchMessageFromUsers(Message message) 
+    {   
+        var user = message.From;
+        var userUpdate = _waitingSearchUpdateMessage.FirstOrDefault(x => x.Key == user.Id);
+        if (userUpdate.Key == user.Id && userUpdate.Value)
+        {
+
+        }
     }
 }

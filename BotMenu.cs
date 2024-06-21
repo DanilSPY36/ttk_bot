@@ -59,7 +59,24 @@ namespace ttk_bot
             DrinkVolumeChecker();
             KBJUController();
         }
+        public async Task UpdateDataInDbContext()
+        {
+            _context.ChangeTracker.Clear();
 
+            itemsRep = new ItemsRepository(_context);
+            shippersRep = new ShippersRepository(_context);
+            TtkRep = new ttkRepository(_context);
+            drinkCategoriesRep = new TtkCategoriesRepository(_context);
+            volumesRep = new VolumesRepository(_context);
+            KBJUttkRep = new KBJUttkRepository(_context);
+            sortedkBJUttkRepositories = new List<KBJUttkRepository>();
+            singleOriginRep = new SingleOriginRepository(_context);
+
+            DrinkVolumeChecker();
+            KBJUController();
+            // Сохраняем изменения
+            await _context.SaveChangesAsync();
+        }
         public ReplyKeyboardMarkup StartMenu()
         {
             var buttonRows = new List<KeyboardButton[]>()

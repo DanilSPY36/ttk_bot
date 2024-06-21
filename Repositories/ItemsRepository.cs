@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ttk_bot.Models;
+using ttk_bot.SearchLogic;
 
 namespace ttk_bot.Repositories
 {

@@ -430,4 +430,5 @@ public partial class TgBotDbContext : DbContext
     }
 
     partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
+    
 }

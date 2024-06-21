@@ -32,10 +32,12 @@ class Program
     //статистика
     private static OperationRepository operationRep;
 
+    //ожидание сообщения разработчика об обновлении
+    private static bool _waitingForUpdateMessage = false;
 
     static async Task Main()
     {
-        _botClient = new TelegramBotClient("7190916687:AAFz0oeb2mMppoBGFmOjx6znff062zHxzc0");
+        _botClient = new TelegramBotClient("7451248242:AAEL-I9cbNrF6u2k5ELQ47SP-jFH3as5-jg");
         _botMenu = new BotMenu();
         usersRep = new UsersRepository(_context = new TgBotDbContext());
         choseKBJUDrink = new Dictionary<KBJUttkRepository, List<string>>();
@@ -62,7 +64,7 @@ class Program
         var me = await _botClient.GetMeAsync();
 
             // оповещение пользователей о новой обнове. 
-        usersRep.BotUpdateInfoMessage(_botClient);
+        //usersRep.BotUpdateInfoMessage(_botClient);
 
 
         Console.WriteLine($"{me.FirstName} запущен!");
@@ -71,18 +73,24 @@ class Program
     private static async Task UpdateHandler(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
     {
         
-            switch (update.Type)
+        switch (update.Type)
             {
                 case UpdateType.Message:
                     {
                     var message = update.Message;
                         var user = message.From;
                         var chatInfo = message.Chat;
-                        
-                        
-                    if (await usersRep.accessCheck(user.Username, user.FirstName, user.LastName, chatInfo.Id, user.Id, 123, 5))
+                    
+
+                    if (await usersRep.accessCheck(user.Username, user.FirstName, user.LastName, chatInfo.Id, user.Id))
                         {
-                            Console.WriteLine($"{user.Username} написал сообщение: {message.Text} || messageId = {message.MessageId}\n");
+                            // отправка текста сообщения отсальным пользователям если это сообщение написал я или давид  
+                            if (_waitingForUpdateMessage && (user.Id == 465890927 || user.Id == 841506985))
+                            {
+                                usersRep.BotUpdateInfoMessage(_botClient, message.Text);
+                                _waitingForUpdateMessage = false;
+                            }
+                        Console.WriteLine($"{user.Username} написал сообщение: {message.Text} || messageId = {message.MessageId}\n");
                             switch (message.Text)
                             {
                                 case "/start":
@@ -94,14 +102,19 @@ class Program
                                         "Vibe use and high waves🏄‍♂️🏄‍♂️🏄‍♂️", replyMarkup: _botMenu.StartMenu(),protectContent: true);
                                     Console.WriteLine($"{user.Username} Send: {message.Text}");
                                     break;
-                            case "/command1":
+                            case "/UpdateBot465890927":
                                 {
-                                    await botClient.SendTextMessageAsync(chatInfo.Id, "Алоха 🌴, я твой личный ттк-бот, читай микрогайд: \n\n" +
-                                        "Зерно - ты сможешь найти всю информацию о моносортах и блендах\n\n" +
-                                        "Поставщики - вся выпечка, кбжу, составы, сроки,  условия хранения и аллергены\n\n" +
-                                        "ТТК - все технические карты основного меню, так же у каждой карточки напитка есть КБЖУ\n\n" +
-                                        "Если есть вопросы, предложения или нашли что-то неладное, обращайтесь к нему @DanilSPY\n\n" +
-                                        "Vibe use and high waves🏄‍♂️🏄‍♂️🏄‍♂️", replyMarkup: _botMenu.StartMenu(), protectContent: true);
+                                    await botClient.SendTextMessageAsync(chatInfo.Id, "Напиши текст с обновлением:\n" +
+                                        "Алоха 🌴. С вами на волнах обновленный бот (1.3.3)\n\n" +
+                                        "Список изменений:\n" +
+                                        "1)\n" +
+                                        "2)\n" +
+                                        "3)\n" +
+                                        "4)\n" +
+                                        "Для корректного использования рекомендуется, отчистить историю переписки со мной. Или обновить кнопки прописав команду /start\n" +
+                                        "Если обнаружили ошибки пишите ему @DanilSPY\n" +
+                                        "Vibe use and high waves🏄‍♂️🏄‍♂️🏄‍♂️", replyMarkup: _botMenu.StartMenu(), protectContent: false);
+                                    _waitingForUpdateMessage = true;
                                     break;
                                 }
                                 default:
@@ -125,7 +138,7 @@ class Program
                     {
                     var user = update.CallbackQuery.From;
                     var chatInfo = update.CallbackQuery;
-                        if (await usersRep.accessCheck(user.Username, user.FirstName, user.LastName, chatInfo.From.Id, user.Id, 123, 5))
+                        if (await usersRep.accessCheck(user.Username, user.FirstName, user.LastName, chatInfo.From.Id, user.Id))
                         {
                             CallBackQueryMenu(botClient, update);
                         }
@@ -623,7 +636,7 @@ class Program
             case "Access_true":
                 {
                     
-                    var userTemp = _context.Users.FirstOrDefault(x => x.id == choseIdMenuButton);
+                    var userTemp = _context.Users.FirstOrDefault(x => x.Id == choseIdMenuButton);
                     userTemp.IsAccess = true;
                     try
                     {

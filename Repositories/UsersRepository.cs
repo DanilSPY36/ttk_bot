@@ -28,21 +28,28 @@ namespace ttk_bot.Repositories
             _context = context;
         }
 
+
         public async Task<List<User>> Get()
         {
             return await _context.Users.AsNoTracking().ToListAsync();
         }
-        private async Task newUserDbAdd(int id, string name, string? firstName, string? lastName, long? chatId, long? tgUserId, int? spotId, int? roleId)
+        private async Task newUserDbAdd(int id, string name, string? firstName, string? lastName, long? chatId, long? tgUserId)
         {
-            var newUser = new User(id, name, firstName, lastName, chatId, tgUserId, spotId,  roleId);
+            var newUser = new User();
+            newUser.Id = id;
+            newUser.Name = name;
+            newUser.FirstName = firstName;
+            newUser.LastName = lastName;
+            newUser.ChatId = chatId;
+            newUser.TgUserId = tgUserId;
             usersList.Add(newUser);
             _context.Users.Add(newUser);
             _context.SaveChanges();
         }
-        public async Task<bool> accessCheck(string name, string? firstName, string? lastName, long? chatId, long? tgUserId, int? spotId, int? roleId)
+        public async Task<bool> accessCheck(string name, string? firstName, string? lastName, long? chatId, long? tgUserId)
         {
             usersList = await _context.Users.AsNoTracking().ToListAsync();
-            var lastUserId = await _context.Users.MaxAsync(id => id.id);
+            var lastUserId = await _context.Users.MaxAsync(id => id.Id);
 
             // проходим по списку пользователей.
             foreach (var user in usersList)
@@ -50,25 +57,17 @@ namespace ttk_bot.Repositories
                 // tckb нашли возвращаем его доступ 
                 if (user.TgUserId == tgUserId)
                 {
-                    return user.IsAccess;
+                    return (bool)user.IsAccess;
                 }
             }
             // если не нашли то добавляем нового в дб и в лист с доступом 0
-            await newUserDbAdd(lastUserId  + 1, name, firstName, lastName, chatId, tgUserId, spotId, roleId);
+            await newUserDbAdd(lastUserId  + 1, name, firstName, lastName, chatId, tgUserId);
             return false;
         }
 
-        public async Task BotUpdateInfoMessage(ITelegramBotClient _botClient)
+        public async Task BotUpdateInfoMessage(ITelegramBotClient _botClient, string message)
         {
-            string message = "Алоха 🌴. С вами на волнах обновленный бот (1.3.3)\n\n" +
-                             "Список изменений:\n" +
-                             "1) Исправленны ошибки в логике меню.\n" +
-                             "2) Реализованна логика отображения фотографий продукции поставщиков.\n" +
-                             "3) Исправили некоторые ошибки в ифнормации продуктов поставщиков.\n" +
-                             "4) Оптимизация внутренних запросов" +
-                             "Для корректного использования рекомендуется, отчистить историю прееписки со мной. Или обновить кнопки прописав команду /start\n" +
-                             "Если обнаружили ошибки пишите ему @DanilSPY\n" +
-                             "Vibe use and high waves🏄‍♂️🏄‍♂️🏄‍♂️";
+            
             var tempUsers = await Get();
             var replyMark = new InlineKeyboardMarkup(new[]
                                             {

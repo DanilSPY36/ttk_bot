@@ -388,11 +388,11 @@ public partial class TgBotDbContext : DbContext
 
         modelBuilder.Entity<User>(entity =>
         {
-            entity.HasKey(e => e.id).HasName("users_pk");
+            entity.HasKey(e => e.Id).HasName("users_pk");
 
             entity.ToTable("users", "user_prod");
 
-            entity.Property(e => e.id)
+            entity.Property(e => e.Id)
                 .ValueGeneratedNever()
                 .HasColumnName("id");
             entity.Property(e => e.ChatId).HasColumnName("chat_id");

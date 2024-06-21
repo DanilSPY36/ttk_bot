@@ -43,7 +43,7 @@ namespace ttk_bot.Repositories
             List<string> volumes = new List<string>() { "0.2", "0.3", "0.4", " " };
             if (matchedItem != null)
             {
-                return $"{matchedItem.Name} {volumes[matchedItem.VolumeId - 1]} {matchedItem.Variety}\n" +
+                return $"{matchedItem.Name} {volumes[(int)matchedItem.VolumeId - 1]} {matchedItem.Variety}\n" +
                        $"Кофеин: " +
                        $"{matchedItem.Caffeine:F1}\n" +
                        $"Калории: " +
@@ -68,7 +68,7 @@ namespace ttk_bot.Repositories
             List<string> volumes = new List<string>() { "0.2", "0.3", "0.4", " " };
             if (matchedItem != null)
             {
-                return $"{matchedItem.Name} {volumes[matchedItem.VolumeId - 1]}\n" +
+                return $"{matchedItem.Name} {volumes[(int)matchedItem.VolumeId - 1]}\n" +
                        $"Молоко {matchedItem.Variety:F1}\n" +
                        $"Кофеин: " +
                        $"{matchedItem.Caffeine:F1}\n" +

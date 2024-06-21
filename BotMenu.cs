@@ -114,31 +114,21 @@ namespace ttk_bot
 
             // Группировка напитков по названию и по объему
             var groupedByNameDrinks = kbjuTtks.GroupBy(x => new { x.Name, x.VolumeId, x.TtkId });
-            
-            List<string> volumes = new List<string>() { "0.2", "0,3", "0,4", " " };
 
-            /*foreach (var item in groupedByNameDrinks)
-            {
-                Console.WriteLine($"name: {item.Key.Name}              \t\t volume: {item.Key.VolumeId}\t ttkId: {item.Key.TtkId}");
-            }*/
+            List<string> volumes = new List<string>() { "0.2", "0,3", "0,4", " " };
 
 
             foreach (var item in groupedByNameDrinks) // работает
             {
-                //Console.WriteLine($"Name: {item.Key.VolumeId}  Volums: {item.Key.Name}");
-                // добавили все сгруппированные напитки по имени и объему
-                var temp = new KBJUttkRepository(item.Key.Name, item.Key.VolumeId, item.Key.TtkId);
+                var temp = new KBJUttkRepository(item.Key.Name, (int)item.Key.VolumeId, item.Key.TtkId);
                 sortedkBJUttkRepositories.Add(temp);
-                foreach (var sorted in sortedkBJUttkRepositories)  
+                foreach (var sorted in sortedkBJUttkRepositories)
                 {
                     var drinksFromDb = kbjuTtks.FindAll(x => x.Name == sorted.name && x.VolumeId == sorted.volume_id && x.TtkId == sorted.ttk_id);
                     temp.kbjuTtks = new List<KbjuTtk>(drinksFromDb);
                 }
             }
 
-            //var tempOrder = sortedkBJUttkRepositories.OrderBy(x => x.name).ThenBy(y => y.volume_id);
-            //sortedkBJUttkRepositories = tempOrder.ToList();
-            // надо заполнить молоко находим имя и объем 
 
             foreach (var item in sortedkBJUttkRepositories)
             {
@@ -146,32 +136,13 @@ namespace ttk_bot
 
                 foreach (var vareaty in drinksFromDb)
                 {
-                    if(item.name == vareaty.Name && item.volume_id == vareaty.VolumeId) // если имя и объем совпадает то добавляем молоко
+                    if (item.name == vareaty.Name && item.volume_id == vareaty.VolumeId) // если имя и объем совпадает то добавляем молоко
                     {
                         item.variety.Add(vareaty.Variety);
                     }
                 }
             }
-
-            /*foreach (var item in sortedkBJUttkRepositories)
-            {
-                Console.WriteLine("||||||||||||||||||||||||||||||");
-                Console.WriteLine($"Name: {item.name} || KBJUId: {item.id} ||  ttkId: {item.ttk_id} || ");
-                Console.WriteLine($"Volums: {item.volume_id}");
-                Console.WriteLine("Variaty: ");
-                foreach (var va in item.variety)
-                {
-                    Console.WriteLine($"{va}");
-                }
-                foreach (var obj in item.kbjuTtks)
-                {
-                    Console.WriteLine($"{obj.Name} || {obj.Id} || {obj.TtkId} || {obj.VolumeId} || {obj.Variety}");
-                }
-                Console.WriteLine("\n\n ");
-
-            }*/
-
-        } // готовый sortedkBJUttkRepositories сгруппированный по имени и по объемам
+        }
 
         private async Task<KBJUttkRepository> VariatyChecker(string name, int? volume)
         {
@@ -520,7 +491,7 @@ namespace ttk_bot
                 new InlineKeyboardButton("AccessTrue")
                     {
                         Text = "Дать доступ",
-                        CallbackData = $"Access_true||{user.id}"
+                        CallbackData = $"Access_true||{user.Id}"
                     }
 
             });
@@ -529,14 +500,14 @@ namespace ttk_bot
                 new InlineKeyboardButton("AccessFalse")
                     {
                         Text = "Запретить",
-                        CallbackData = $"Access_false||{user.id}"
+                        CallbackData = $"Access_false||{user.Id}"
                     }
             });
             buttonRows.Add(new List<InlineKeyboardButton> {
                 new InlineKeyboardButton("Remove")
                     {
                         Text = "Удалить с базы",
-                        CallbackData = $"RemoveUserFromDb||{user.id}"
+                        CallbackData = $"RemoveUserFromDb||{user.Id}"
                     },
 
             });

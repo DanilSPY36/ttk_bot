@@ -1,21 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Runtime.CompilerServices;
 
 namespace ttk_bot.Models;
 
-/// <summary>
-/// Все пользователи, пользовавшиеся ботом
-/// </summary>
 public partial class User
 {
-    [Key]
-    public int id { get; set; }
-
-    /// <summary>
-    /// tg name
-    /// </summary>
     public string Name { get; set; } = null!;
 
     public string? FirstName { get; set; }
@@ -28,23 +17,11 @@ public partial class User
 
     public bool? IsAdmin { get; set; }
 
-    public bool IsAccess { get; set; }
+    public bool? IsAccess { get; set; }
 
     public int? SpotId { get; set; }
 
     public int? RoleId { get; set; }
 
-    public User(int id, string name, string? firstName, string? lastName, long? chatId, long? tgUserId, int? spotId, int? roleId)
-    {
-        this.id = id;
-        Name = name;
-        FirstName = firstName;
-        LastName = lastName;
-        ChatId = chatId;
-        TgUserId = tgUserId;
-        IsAdmin = false;
-        IsAccess = false;
-        SpotId = spotId;
-        RoleId = roleId;
-    }
+    public int Id { get; set; }
 }

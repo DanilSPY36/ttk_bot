@@ -419,12 +419,7 @@ namespace ttk_bot
             if (drinkFromKBJU == null)
             {
                 Console.WriteLine("такого в кбжу нет");
-                List<string> milkList = new List<string>();
-                var ReturnDict = new Dictionary<KBJUttkRepository, List<string>>
-                    {
-                        { drinkFromKBJU, milkList }
-                    };
-                return ReturnDict;
+                return new Dictionary<KBJUttkRepository, List<string>>();
             }
             else
             {

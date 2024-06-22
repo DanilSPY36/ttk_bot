@@ -40,7 +40,9 @@ class Program
     private static List<SearcherUser> SearcherUserList;
     static async Task Main()
     {
-        _botClient = new TelegramBotClient("7451248242:AAEL-I9cbNrF6u2k5ELQ47SP-jFH3as5-jg");
+        // test key 7451248242:AAEL-I9cbNrF6u2k5ELQ47SP-jFH3as5-jg
+        // release key 7190916687:AAFz0oeb2mMppoBGFmOjx6znff062zHxzc0
+        _botClient = new TelegramBotClient("7190916687:AAFz0oeb2mMppoBGFmOjx6znff062zHxzc0");
         _botMenu = new BotMenu();
         usersRep = new UsersRepository(_context = new TgBotDbContext());
         choseKBJUDrink = new Dictionary<KBJUttkRepository, List<string>>();

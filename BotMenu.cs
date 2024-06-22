@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using Telegram.Bot.Types.ReplyMarkups;
 using ttk_bot.Models;
 using ttk_bot.Repositories;
+using ttk_bot.SearchLogic;
 
 namespace ttk_bot
 {
@@ -528,6 +529,74 @@ namespace ttk_bot
                     },
 
             });
+
+            return buttonRows;
+        }
+
+        public async Task<List<List<InlineKeyboardButton>>> SearcheResult(SearcherUser searcherUser)
+        {
+            List<List<InlineKeyboardButton>> buttonRows = new List<List<InlineKeyboardButton>>();
+            List<string> volumes = new List<string>() { "0.2", "0.3", "0.4", " " };
+            if (searcherUser.idSearchBranch == 1) // поиск ттк
+            {
+                var itemsList = await TtkRep.GetByName(searcherUser.searchMessage);
+                foreach (var item in itemsList)
+                {
+                    var button = new InlineKeyboardButton("List items menu")
+                    {
+                        Text = $"{item.Name} {volumes[item.VolumeId - 1]}",
+                        CallbackData = $"drinkByOneVolume||{item.Id}"
+                    };
+                    buttonRows.Add(new List<InlineKeyboardButton> { button });
+                }
+                buttonRows.Add(new List<InlineKeyboardButton> {
+                new InlineKeyboardButton("RemoveSearch")
+                    {
+                        Text = "Удалить результат поиска",
+                        CallbackData = $"Delete||{2}"
+                    }});
+                searcherUser.isSearch = false;
+            }
+            else if (searcherUser.idSearchBranch == 2) // поиск items 
+            {
+                var itemsList = await itemsRep.GetByName(searcherUser.searchMessage);
+                foreach (var item in itemsList)
+                {
+                    var button = new InlineKeyboardButton("List items menu")
+                    {
+                        Text = $"{item.Name}",
+                        CallbackData = $"item||{item.Id}"
+                    };
+                    buttonRows.Add(new List<InlineKeyboardButton> { button });
+                }
+                buttonRows.Add(new List<InlineKeyboardButton> {
+                new InlineKeyboardButton("RemoveSearch")
+                    {
+                        Text = "Удалить результат поиска",
+                        CallbackData = $"Delete||{2}"
+                    }});
+                searcherUser.isSearch = false;
+            }
+            else // поиск зерна
+            {
+                var itemsList = await singleOriginRep.GetByName(searcherUser.searchMessage);
+                foreach (var item in itemsList)
+                {
+                    var button = new InlineKeyboardButton("List items menu")
+                    {
+                        Text = $"{item.Name}",
+                        CallbackData = $"singleOriginCard||{item.Id}"
+                    };
+                    buttonRows.Add(new List<InlineKeyboardButton> { button });
+                }
+                buttonRows.Add(new List<InlineKeyboardButton> {
+                new InlineKeyboardButton("RemoveSearch")
+                    {
+                        Text = "Удалить результат поиска",
+                        CallbackData = $"Delete||{2}"
+                    }});
+                searcherUser.isSearch = false;
+            }
 
             return buttonRows;
         }

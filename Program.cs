@@ -37,10 +37,10 @@ class Program
     private static bool _waitingForUpdateMessage = false;
 
     // ожидание сообщения от юзера с конкретным id
-    private static Dictionary<long, bool> _waitingSearchUpdateMessage;
+    private static List<SearcherUser> SearcherUserList;
     static async Task Main()
     {
-        _botClient = new TelegramBotClient("7190916687:AAFz0oeb2mMppoBGFmOjx6znff062zHxzc0");
+        _botClient = new TelegramBotClient("7451248242:AAEL-I9cbNrF6u2k5ELQ47SP-jFH3as5-jg");
         _botMenu = new BotMenu();
         usersRep = new UsersRepository(_context = new TgBotDbContext());
         choseKBJUDrink = new Dictionary<KBJUttkRepository, List<string>>();
@@ -48,7 +48,8 @@ class Program
         userStateControllers = new List<UserState> { };
 
         operationRep = new OperationRepository(_context = new TgBotDbContext());
-        _waitingSearchUpdateMessage = new Dictionary<long, bool>();
+        SearcherUserList = new List<SearcherUser>();
+
         _receiverOptions = new ReceiverOptions
         {
             
@@ -89,7 +90,7 @@ class Program
                         // отправка текста сообщения отсальным пользователям если это сообщение написал я или давид  
                         await UpdateMessageFromDeveloper(message);
                         // отправка запроса боту на поиск items, ttk
-                        await UpdateSearchMessageFromUsers(message);
+                        await UpdateSearchMessageFromUsers(update);
                         Console.WriteLine($"{user.Username} написал сообщение: {message.Text} || messageId = {message.MessageId}\n");
                             switch (message.Text)
                             {
@@ -123,16 +124,37 @@ class Program
                                     _botMenu.UpdateDataInDbContext();
                                     break;
                                 }
-                            case "/searchttk": // поиск items или ttk
+                            case "/searchttk": // поиск  ttk
                                 {
-                                    await botClient.SendTextMessageAsync(chatInfo.Id, "Напиши, название напитка", replyMarkup: _botMenu.StartMenu(), protectContent: true);
-                                    _waitingSearchUpdateMessage.Add(chatInfo.Id, true);
+                                    await botClient.SendTextMessageAsync(chatInfo.Id, "Напиши название напитка", replyMarkup: _botMenu.StartMenu(), protectContent: true);
+                                    SearcherUser searcherUser = new SearcherUser();
+                                    searcherUser.idSearchBranch = 1;
+                                    searcherUser.id = chatInfo.Id;
+                                    searcherUser.tgName = user.Username;
+                                    searcherUser.isSearch = true;
+                                    SearcherUserList.Add(searcherUser);
                                     break;
                                 }
-                            case "/searchproduct":
+                            case "/searchproduct": // поиск items
                                 {
-                                    await botClient.SendTextMessageAsync(chatInfo.Id, "Напиши, название продукта", replyMarkup: _botMenu.StartMenu(), protectContent: true);
-                                    _waitingSearchUpdateMessage.Add(chatInfo.Id, true);
+                                    await botClient.SendTextMessageAsync(chatInfo.Id, "Напиши название продукта", replyMarkup: _botMenu.StartMenu(), protectContent: true);
+                                    SearcherUser searcherUser = new SearcherUser();
+                                    searcherUser.idSearchBranch = 2;
+                                    searcherUser.id = chatInfo.Id;
+                                    searcherUser.tgName = user.Username;
+                                    searcherUser.isSearch = true;
+                                    SearcherUserList.Add(searcherUser);
+                                    break;
+                                }
+                            case "/searchbean": // поиск singleOrigin
+                                {
+                                    await botClient.SendTextMessageAsync(chatInfo.Id, "Напиши название зерна (пока что желательно на английском)", replyMarkup: _botMenu.StartMenu(), protectContent: true);
+                                    SearcherUser searcherUser = new SearcherUser();
+                                    searcherUser.idSearchBranch = 3;
+                                    searcherUser.id = chatInfo.Id;
+                                    searcherUser.tgName = user.Username;
+                                    searcherUser.isSearch = true;
+                                    SearcherUserList.Add(searcherUser);
                                     break;
                                 }
                             case "/faq": // частозадоваемые вопросы
@@ -150,11 +172,11 @@ class Program
                         else
                         {
                             
-                            _botClient.SendTextMessageAsync(message.Chat.Id, "У вас нет доступа\n\nНапишите @DanilSPY с какого вы спота с просьбой выдать пропуск", protectContent: true);
+                            await _botClient.SendTextMessageAsync(message.Chat.Id, "У вас нет доступа\n\nНапишите @DanilSPY с какого вы спота с просьбой выдать пропуск", protectContent: true);
 
                             // выдача доступа в нашем приватном чате разрабов. в телеге.
                             var accessNewUser = _context.Users.FirstOrDefault(x => x.ChatId == message.Chat.Id);
-                            _botClient.SendTextMessageAsync(chatId: -4224330568, text:$"Выдать доступ пользователю: @{accessNewUser.Name} ?", replyMarkup: new InlineKeyboardMarkup(await _botMenu.ReturnAccess(accessNewUser)));
+                            await _botClient.SendTextMessageAsync(chatId: -4224330568, text:$"Выдать доступ пользователю: @{accessNewUser.Name} ?", replyMarkup: new InlineKeyboardMarkup(await _botMenu.ReturnAccess(accessNewUser)));
                             return;
                         }
                     }
@@ -164,7 +186,7 @@ class Program
                     var chatInfo = update.CallbackQuery;
                         if (await usersRep.accessCheck(user.Username, user.FirstName, user.LastName, chatInfo.From.Id, user.Id))
                         {
-                            CallBackQueryMenu(botClient, update);
+                            await CallBackQueryMenu(botClient, update);
                         }
                     }
                     return;
@@ -357,12 +379,11 @@ class Program
                 }
             case "drinkByOneVolume":
                 {
-                    try
-                    {
-                        ///
-                        userStateController = new UserState(chat.Id, 2, callbackQuery.Message.MessageId,
-                        new InlineKeyboardMarkup(new[]
-                                            {
+
+
+                    userStateController = new UserState(chat.Id, 2, callbackQuery.Message.MessageId,
+                    new InlineKeyboardMarkup(new[]
+                                        {
                                                 new InlineKeyboardButton("Back")
                                                 {
                                                     Text = "Назад",
@@ -373,24 +394,23 @@ class Program
                                                     Text = "КБЖУ",
                                                     CallbackData = $"KBJUPhoto||{choseIdMenuButton}"
                                                 }
-                                            }),
-                         $"{_botMenu.TtkRep.ToString(choseIdMenuButton)}");
+                                        }),
+                     $"{_botMenu.TtkRep.ToString(choseIdMenuButton)}");
 
-                        // фото 
-                        var photoPath = _context.DrinksTtks.FirstOrDefault(p => p.Id == choseIdMenuButton);
-                        Console.WriteLine($"Photo Path: {photoPath.PhotoPath}");
+                    // фото 
+                    var photoPath = _context.DrinksTtks.FirstOrDefault(p => p.Id == choseIdMenuButton);
+                    Console.WriteLine($"Photo Path: {photoPath.PhotoPath}");
+                    if (photoPath.PhotoPath != null)
+                    {
                         using (FileStream stream = new FileStream(photoPath.PhotoPath, FileMode.Open, FileAccess.Read))
                         {
                             InputFileStream inputOnlineFile = new InputFileStream(stream);
                             await botClient.SendPhotoAsync(chatId: chat.Id, photo: inputOnlineFile, protectContent: true);
                             await botClient.SendTextMessageAsync(chatId: chat.Id, text: $"{userStateController.TextMessage}", replyMarkup: userStateController.menuInlineBtns, protectContent: true);
                         }
-                        
-
                     }
-                    catch (Exception ex)
+                    else
                     {
-                        Console.WriteLine(ex.ToString());
                         if (choseIdMenuButton == 10025) // swell-set
                         {
                             userStateController = new UserState(chat.Id, 2, callbackQuery.Message.MessageId,
@@ -419,21 +439,18 @@ class Program
                                                 }
                                            }), $"{_botMenu.TtkRep.ToString(choseIdMenuButton)}");
                         }
-                        
+
                         await _botClient.EditMessageTextAsync(
                                    chatId: chat.Id,
                                    messageId: callbackQuery.Message.MessageId,
                                    text: $"{userStateController.TextMessage}",
                                    replyMarkup: userStateController.menuInlineBtns);
-                        
+                    }
+                    userStateControllers.Add(userStateController);
+                    await operationRep.addOperation(callbackQuery.Message.Date, user.Id, 1, choseIdMenuButton);
 
-                        throw;
-                    }
-                    finally
-                    {
-                        userStateControllers.Add(userStateController);
-                        await operationRep.addOperation(callbackQuery.Message.Date, user.Id, 1, choseIdMenuButton);
-                    }
+
+
                     break;
                 }
             case "drinkByMultipleVolumes":
@@ -701,17 +718,40 @@ class Program
         var user = message.From;
         if (_waitingForUpdateMessage && (user.Id == 465890927 || user.Id == 841506985))
         {
-            usersRep.BotUpdateInfoMessage(_botClient, message.Text);
+            await usersRep.BotUpdateInfoMessage(_botClient, message.Text);
             _waitingForUpdateMessage = false;
         }
     }
-    private static async Task UpdateSearchMessageFromUsers(Message message) 
-    {   
+    private static async Task UpdateSearchMessageFromUsers(Update update) 
+    {
+        var message = update.Message;
+        //var callbackQuery = update.CallbackQuery;
+        var chatInfo = message.Chat;
         var user = message.From;
-        var userUpdate = _waitingSearchUpdateMessage.FirstOrDefault(x => x.Key == user.Id);
-        if (userUpdate.Key == user.Id && userUpdate.Value)
-        {
 
+        var tempUserSearcher = SearcherUserList.FirstOrDefault(x => x.id == user.Id);
+        
+        if (tempUserSearcher!= null && tempUserSearcher.isSearch)
+        {
+            tempUserSearcher.searchMessage = message.Text;
+            userStateController = new UserState(chatInfo.Id, 1, message.MessageId + 1, new InlineKeyboardMarkup(await _botMenu.SearcheResult(tempUserSearcher)), $"Search result:");
+            if(userStateController.menuInlineBtns.InlineKeyboard.Count() == 1)
+            {
+                await _botClient.SendTextMessageAsync(
+                                    chatId: chatInfo.Id,
+                                    text: $"Sorry, I didn't find anything for this request...",
+                                    replyMarkup: userStateController.menuInlineBtns);
+            }
+            else
+            {
+                userStateControllers.Add(userStateController);
+                await _botClient.SendTextMessageAsync(
+                                        chatId: chatInfo.Id,
+                                        text: $"{userStateController.TextMessage}",
+                                        replyMarkup: userStateController.menuInlineBtns);
+
+            }
+            SearcherUserList.Remove(tempUserSearcher);
         }
     }
 }

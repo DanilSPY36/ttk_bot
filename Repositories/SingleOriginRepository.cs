@@ -1,14 +1,16 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using FuzzySharp;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ttk_bot.IRepos;
 using ttk_bot.Models;
 
 namespace ttk_bot.Repositories
 {
-    public class SingleOriginRepository
+    public class SingleOriginRepository : IRepository<SingleOrigin>
     {
         private readonly TgBotDbContext _context;
 
@@ -39,6 +41,16 @@ namespace ttk_bot.Repositories
                 if (!string.IsNullOrEmpty(matchedItem.Process))
                 {
                     output += $"Обработка: {matchedItem.Process}\n\n";
+                }
+
+                if (!string.IsNullOrEmpty(matchedItem.Station))
+                {
+                    output += $"Станция: {matchedItem.Station}\n\n";
+                }
+
+                if (!string.IsNullOrEmpty(matchedItem.Height))
+                {
+                    output += $"Высота: {matchedItem.Height}\n\n";
                 }
 
                 if (!string.IsNullOrEmpty(matchedItem.Flavor))
@@ -88,6 +100,22 @@ namespace ttk_bot.Repositories
                 return "drink = null";
             }
 
+        }
+
+        public async Task<List<SingleOrigin>> GetByName(string searchTerm)
+        {
+            //var regex = new Regex($"\\b{Regex.Escape(searchTerm)}\\b", RegexOptions.IgnoreCase);
+            var tempList = await _context.SingleOrigins.ToListAsync();
+            var tempFuzzList = new List<SingleOrigin>();
+            foreach (var item in tempList)
+            {
+                if (Fuzz.PartialRatio(item.Name, searchTerm) > 50)
+                {
+                    tempFuzzList.Add(item);
+                }
+            }
+
+            return tempFuzzList;
         }
     }
 }

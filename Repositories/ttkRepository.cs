@@ -1,14 +1,16 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using FuzzySharp;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ttk_bot.IRepos;
 using ttk_bot.Models;
 
 namespace ttk_bot.Repositories
 {
-    public class ttkRepository
+    public class ttkRepository : IRepository<DrinksTtk>
     {
         private readonly TgBotDbContext _context;
         public ttkRepository(TgBotDbContext context) 
@@ -46,7 +48,7 @@ namespace ttk_bot.Repositories
 
                 if (matchedItem.Weight != null)
                 {
-                    output += $"Вес 1 порции: {matchedItem.Weight}\n\n";
+                    output += $"Вес 1 порции: {matchedItem.Weight} \n\n";
                 }
 
                 if (!string.IsNullOrEmpty(matchedItem.Additives))
@@ -61,11 +63,26 @@ namespace ttk_bot.Repositories
                 return "drink = null";
             }
         }
-        public async Task<string>  GetPhoto(int id)
+        public async Task<string> GetPhoto(int id)
         {
             var matchedItem = _context.DrinksTtks.FirstOrDefault(i => i.Id == id);
 
             return $"{matchedItem.PhotoPath}";
+        }
+        public async Task<List<DrinksTtk>> GetByName(string searchTerm)
+        {
+            //var regex = new Regex($"\\b{Regex.Escape(searchTerm)}\\b", RegexOptions.IgnoreCase);
+            var tempList = await _context.DrinksTtks.ToListAsync();
+            var tempFuzzList = new List<DrinksTtk>();
+            foreach (var item in tempList)
+            {
+                if (Fuzz.PartialRatio(item.Name, searchTerm) > 50)
+                {
+                    tempFuzzList.Add(item);
+                }
+            }
+
+            return tempFuzzList;
         }
     }
 }

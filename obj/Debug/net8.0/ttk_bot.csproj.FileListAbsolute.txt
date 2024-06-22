@@ -108,3 +108,4 @@ P:\Visual Studio 2022\sours\repos\Job_projects\ttk_bot\bin\Debug\net8.0\Microsof
 P:\Visual Studio 2022\sours\repos\Job_projects\ttk_bot\bin\Debug\net8.0\Microsoft.Extensions.FileProviders.Physical.dll
 P:\Visual Studio 2022\sours\repos\Job_projects\ttk_bot\bin\Debug\net8.0\Microsoft.Extensions.FileSystemGlobbing.dll
 P:\Visual Studio 2022\sours\repos\Job_projects\ttk_bot\obj\Debug\net8.0\ttk_bot.csproj.Up2Date
+P:\Visual Studio 2022\sours\repos\Job_projects\ttk_bot\bin\Debug\net8.0\FuzzySharp.dll

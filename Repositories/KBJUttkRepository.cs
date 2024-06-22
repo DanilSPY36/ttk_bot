@@ -44,15 +44,15 @@ namespace ttk_bot.Repositories
             if (matchedItem != null)
             {
                 return $"{matchedItem.Name} {volumes[(int)matchedItem.VolumeId - 1]} {matchedItem.Variety}\n" +
-                       $"Кофеин: " +
+                       $"Кофеин, гр: " +
                        $"{matchedItem.Caffeine:F1}\n" +
-                       $"Калории: " +
+                       $"Калории, гр: " +
                        $"{matchedItem.Calories:F1}\n" +
-                       $"Белки: " +
+                       $"Белки, гр: " +
                        $"{matchedItem.Proteins:F1}\n" +
-                       $"Жиры: " +
+                       $"Жиры, гр: " +
                        $"{matchedItem.Fats:F1} \n" +
-                       $"Углеводы: " +
+                       $"Углеводы, гр: " +
                        $"{matchedItem.Carbohydrates:F1}\n" +
                        $"кДж: {matchedItem.Energy:F1} ";
                 
@@ -70,15 +70,15 @@ namespace ttk_bot.Repositories
             {
                 return $"{matchedItem.Name} {volumes[(int)matchedItem.VolumeId - 1]}\n" +
                        $"Молоко {matchedItem.Variety:F1}\n" +
-                       $"Кофеин: " +
+                       $"Кофеин, гр: " +
                        $"{matchedItem.Caffeine:F1}\n" +
-                       $"Калории: " +
+                       $"Калории, гр: " +
                        $"{matchedItem.Calories:F1}\n" +
-                       $"Белки: " +
+                       $"Белки, гр: " +
                        $"{matchedItem.Proteins:F1}\n" +
-                       $"Жиры: " +
+                       $"Жиры, гр: " +
                        $"{matchedItem.Fats:F1} \n" +
-                       $"Углеводы: " +
+                       $"Углеводы, гр: " +
                        $"{matchedItem.Carbohydrates:F1}\n" +
                        $"кДж: {matchedItem.Energy:F1} ";
                 //+$"Описание: \n{matchedItem.Description}";

@@ -15,10 +15,16 @@ using ttk_bot;
 using ttk_bot.Models;
 using ttk_bot.Repositories;
 using ttk_bot.SearchLogic;
-
+using StackExchange.Redis;
+using Newtonsoft.Json;
 
 class Program
 {
+    //redis
+    private static IConnectionMultiplexer _redis;
+    private static IDatabase _dbRedis;
+    private static string? userStateControllersJson;
+
     private static ITelegramBotClient _botClient = null!;
     private static ReceiverOptions _receiverOptions = null!;
     private static TgBotDbContext? _context;
@@ -40,6 +46,10 @@ class Program
     private static List<SearcherUser> SearcherUserList;
     static async Task Main()
     {
+        _redis = ConnectionMultiplexer.Connect("45.141.79.78:6379");
+        AppDomain.CurrentDomain.ProcessExit += OnProcessExit;
+        _dbRedis = _redis.GetDatabase();
+
         // test key 7451248242:AAEL-I9cbNrF6u2k5ELQ47SP-jFH3as5-jg
         // release key 7190916687:AAFz0oeb2mMppoBGFmOjx6znff062zHxzc0
         _botClient = new TelegramBotClient("7451248242:AAEL-I9cbNrF6u2k5ELQ47SP-jFH3as5-jg");
@@ -47,7 +57,23 @@ class Program
         usersRep = new UsersRepository(_context = new TgBotDbContext());
         choseKBJUDrink = new Dictionary<KBJUttkRepository, List<string>>();
         var itemsRep = new ItemsRepository(_context = new TgBotDbContext());
-        userStateControllers = new List<UserState> { };
+
+
+        
+        // Проверка, что ключ "userStateControllers" существует в Redis
+        if (_dbRedis.KeyExists("userStateControllers"))
+        {
+            // Получение JSON-строки из Redis
+            string userStateControllersJson = _dbRedis.StringGet("userStateControllers");
+
+            // Десериализация JSON-строки в список
+            userStateControllers = JsonConvert.DeserializeObject<List<UserState>>(userStateControllersJson);
+        }
+        else
+        {
+            // Инициализация пустого списка, если ключ не найден
+            userStateControllers = new List<UserState>();
+        }
 
         operationRep = new OperationRepository(_context = new TgBotDbContext());
         SearcherUserList = new List<SearcherUser>();
@@ -161,6 +187,24 @@ class Program
                             case "/faq": // частозадоваемые вопросы
                                 {
                                     
+                                    break;
+                                }
+                            case "/redisTest465890927": // сохранение данных в redis 
+                                {
+                                    string userStateControllersJson = JsonConvert.SerializeObject(userStateControllers);
+
+                                    _dbRedis.StringSet("userStateControllers", userStateControllersJson);
+
+                                    Console.WriteLine("Cache data saved to Redis and local cache cleared.");
+                                    break;
+                                }
+                            case "/redisClearCash465890927":
+                                {
+                                    if (_dbRedis.KeyExists("userStateControllers"))
+                                    {
+                                        // Удаление ключа "userStateControllers" и связанных данных из Redis
+                                        _dbRedis.KeyDelete("userStateControllers");
+                                    }
                                     break;
                                 }
 
@@ -773,5 +817,13 @@ class Program
             SearcherUserList.Remove(tempUserSearcher);
         }
     }
+    private static void OnProcessExit(object sender, EventArgs e)
+    {
+        // Сохранение данных кэша в Redis
+        string userStateControllersJson = JsonConvert.SerializeObject(userStateControllers);
 
+        _dbRedis.StringSet("userStateControllers", userStateControllersJson);
+
+        Console.WriteLine("Cache data saved to Redis and local cache cleared.");
+    }
 }

@@ -3,6 +3,10 @@
   "WorkspaceRootPath": "P:\\Visual Studio 2022\\sours\\repos\\Job_projects\\ttk_bot\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{A6ABEA30-0D16-4039-9D97-1BCD82C7CF76}|ttk_bot.csproj|p:\\visual studio 2022\\sours\\repos\\job_projects\\ttk_bot\\models\\tgbotdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A6ABEA30-0D16-4039-9D97-1BCD82C7CF76}|ttk_bot.csproj|solutionrelative:models\\tgbotdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{A6ABEA30-0D16-4039-9D97-1BCD82C7CF76}|ttk_bot.csproj|p:\\visual studio 2022\\sours\\repos\\job_projects\\ttk_bot\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A6ABEA30-0D16-4039-9D97-1BCD82C7CF76}|ttk_bot.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -18,7 +22,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 5,
+          "SelectedChildIndex": 4,
           "Children": [
             {
               "$type": "Bookmark",
@@ -38,7 +42,20 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
+              "Title": "TgBotDbContext.cs",
+              "DocumentMoniker": "P:\\Visual Studio 2022\\sours\\repos\\Job_projects\\ttk_bot\\Models\\TgBotDbContext.cs",
+              "RelativeDocumentMoniker": "Models\\TgBotDbContext.cs",
+              "ToolTip": "P:\\Visual Studio 2022\\sours\\repos\\Job_projects\\ttk_bot\\Models\\TgBotDbContext.cs",
+              "RelativeToolTip": "Models\\TgBotDbContext.cs",
+              "ViewState": "AQIAAAYAAAAAAAAAAAAAABAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-23T19:48:07.188Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
               "Title": "UserState.cs",
               "DocumentMoniker": "P:\\Visual Studio 2022\\sours\\repos\\Job_projects\\ttk_bot\\UserState.cs",
               "RelativeDocumentMoniker": "UserState.cs",
@@ -46,18 +63,17 @@
               "RelativeToolTip": "UserState.cs",
               "ViewState": "AQIAAAYAAAAAAAAAAAAAAB0AAAAwAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-06-23T15:00:18.92Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-06-23T15:00:18.92Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "Program.cs",
               "DocumentMoniker": "P:\\Visual Studio 2022\\sours\\repos\\Job_projects\\ttk_bot\\Program.cs",
               "RelativeDocumentMoniker": "Program.cs",
               "ToolTip": "P:\\Visual Studio 2022\\sours\\repos\\Job_projects\\ttk_bot\\Program.cs",
               "RelativeToolTip": "Program.cs",
-              "ViewState": "AQIAACUAAAAAAAAAAAAAwDYAAAAuAAAA",
+              "ViewState": "AQIAALQAAAAAAAAAAADwv8QAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-05-24T08:31:38.811Z",
               "EditorCaption": ""

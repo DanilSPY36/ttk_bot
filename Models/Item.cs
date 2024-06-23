@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using ttk_bot.SearchLogic;
 
 namespace ttk_bot.Models;
 

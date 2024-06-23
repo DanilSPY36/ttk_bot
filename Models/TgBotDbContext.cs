@@ -33,6 +33,10 @@ public partial class TgBotDbContext : DbContext
 
     public virtual DbSet<Operation> Operations { get; set; }
 
+    public virtual DbSet<ProdQuestion> ProdQuestions { get; set; }
+
+    public virtual DbSet<QuestionCatgoryDim> QuestionCatgoryDims { get; set; }
+
     public virtual DbSet<RolesDim> RolesDims { get; set; }
 
     public virtual DbSet<Shipper> Shippers { get; set; }
@@ -44,6 +48,8 @@ public partial class TgBotDbContext : DbContext
     public virtual DbSet<SpotsDim> SpotsDims { get; set; }
 
     public virtual DbSet<User> Users { get; set; }
+
+    public virtual DbSet<UserQuestion> UserQuestions { get; set; }
 
     public virtual DbSet<VolumesDim> VolumesDims { get; set; }
 
@@ -247,9 +253,42 @@ public partial class TgBotDbContext : DbContext
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.BranchId).HasColumnName("branch_id");
             entity.Property(e => e.IsFake).HasColumnName("is_fake");
+            entity.Property(e => e.IsSearch).HasColumnName("is_search");
             entity.Property(e => e.ProductId).HasColumnName("product_id");
             entity.Property(e => e.Timestamp).HasColumnName("timestamp");
             entity.Property(e => e.UserId).HasColumnName("user_id");
+        });
+
+        modelBuilder.Entity<ProdQuestion>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("prod_questions_pk");
+
+            entity.ToTable("prod_questions", "faq_prod", tb => tb.HasComment("Добавленные вопросы и ответы на них"));
+
+            entity.Property(e => e.Id)
+                .ValueGeneratedNever()
+                .HasColumnName("id");
+            entity.Property(e => e.Answer)
+                .HasColumnType("character varying")
+                .HasColumnName("answer");
+            entity.Property(e => e.CategoryId).HasColumnName("category_id");
+            entity.Property(e => e.Question)
+                .HasColumnType("character varying")
+                .HasColumnName("question");
+        });
+
+        modelBuilder.Entity<QuestionCatgoryDim>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("question_catgory_dim_pk");
+
+            entity.ToTable("question_catgory_dim", "faq_prod", tb => tb.HasComment("Категории вопросов"));
+
+            entity.Property(e => e.Id)
+                .ValueGeneratedNever()
+                .HasColumnName("id");
+            entity.Property(e => e.Category)
+                .HasColumnType("character varying")
+                .HasColumnName("category");
         });
 
         modelBuilder.Entity<RolesDim>(entity =>
@@ -412,6 +451,21 @@ public partial class TgBotDbContext : DbContext
             entity.Property(e => e.TgUserId).HasColumnName("tg_user_id");
         });
 
+        modelBuilder.Entity<UserQuestion>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("user_questions_pk");
+
+            entity.ToTable("user_questions", "faq_prod", tb => tb.HasComment("Запросы от пользователей"));
+
+            entity.Property(e => e.Id)
+                .ValueGeneratedNever()
+                .HasColumnName("id");
+            entity.Property(e => e.Question)
+                .HasColumnType("character varying")
+                .HasColumnName("question");
+            entity.Property(e => e.UserId).HasColumnName("user_id");
+        });
+
         modelBuilder.Entity<VolumesDim>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("volumes_dim_pk");
@@ -430,5 +484,4 @@ public partial class TgBotDbContext : DbContext
     }
 
     partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
-    
 }

@@ -16,4 +16,6 @@ public partial class Operation
     public int Id { get; set; }
 
     public bool? IsFake { get; set; }
+
+    public bool? IsSearch { get; set; }
 }

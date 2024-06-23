@@ -118,6 +118,7 @@ class Program
                         await UpdateMessageFromDeveloper(message);
                         // отправка запроса боту на поиск items, ttk
                         await UpdateSearchMessageFromUsers(update);
+
                         Console.WriteLine($"{user.Username} написал сообщение: {message.Text} || messageId = {message.MessageId}\n");
                             switch (message.Text)
                             {
@@ -281,6 +282,7 @@ class Program
         var chat = callbackQuery.Message.Chat;
         var choseMenuButton = callbackQuery.Data.Split("||");
         int choseIdMenuButton = int.Parse(choseMenuButton[1]);
+        int isSearchMenuButton = int.Parse(choseMenuButton[2]);
         switch (choseMenuButton[0])
         {
             case "Back":
@@ -311,6 +313,7 @@ class Program
                     userStateControllers.Remove(userStateControllers.Last());
                     break;
                 }
+
             case "shipper":
                 {
                     await botClient.AnswerCallbackQueryAsync(callbackQuery.Id);
@@ -333,7 +336,7 @@ class Program
                                                 new InlineKeyboardButton("Back")
                                                 {
                                                     Text = "Назад",
-                                                    CallbackData = $"Back||{1}"
+                                                    CallbackData = $"Back||{1}||{-1}"
                                                 }
                                             }),
                          $"{_botMenu.shippersRep.ToString(choseIdMenuButton)}");
@@ -356,7 +359,7 @@ class Program
                                                 new InlineKeyboardButton("Back")
                                                 {
                                                     Text = "Назад",
-                                                    CallbackData = $"BackPhoto||{2}"
+                                                    CallbackData = $"BackPhoto||{2}||{-1}"
                                                 }
                                             }),
                          $"{_botMenu.itemsRep.ToString(choseIdMenuButton)}");
@@ -381,7 +384,7 @@ class Program
                                                 new InlineKeyboardButton("Back")
                                                 {
                                                     Text = "Назад",
-                                                    CallbackData = $"Back||{2}"
+                                                    CallbackData = $"Back||{2}||{-1}"
                                                 }
                                             }),
                          $"{_botMenu.itemsRep.ToString(choseIdMenuButton)}");
@@ -395,7 +398,7 @@ class Program
                     finally
                     {
                         userStateControllers.Add(userStateController);
-                        await operationRep.addOperation(callbackQuery.Message.Date, user.Id, 1, choseIdMenuButton);
+                        await operationRep.addOperation(callbackQuery.Message.Date, user.Id, 2, choseIdMenuButton, isSearchMenuButton);
                     }
                     
                     
@@ -403,6 +406,7 @@ class Program
 
                     break;
                 }
+
             case "categoryDrinks":
                 {
                     await botClient.AnswerCallbackQueryAsync(callbackQuery.Id);
@@ -431,12 +435,12 @@ class Program
                                                 new InlineKeyboardButton("Back")
                                                 {
                                                     Text = "Назад",
-                                                    CallbackData = $"BackPhoto||{2}"
+                                                    CallbackData = $"BackPhoto||{2}||{-1}"
                                                 },
                                                 new InlineKeyboardButton("KBJU")
                                                 {
                                                     Text = "КБЖУ",
-                                                    CallbackData = $"KBJUPhoto||{choseIdMenuButton}"
+                                                    CallbackData = $"KBJUPhoto||{choseIdMenuButton}||{-1}"
                                                 }
                                         }),
                      $"{_botMenu.TtkRep.ToString(choseIdMenuButton)}");
@@ -463,7 +467,7 @@ class Program
                                                 new InlineKeyboardButton("Back")
                                                 {
                                                     Text = "Назад",
-                                                    CallbackData = $"Back||{2}"
+                                                    CallbackData = $"Back||{2}||{-1}"
                                                 }}), $"{_botMenu.TtkRep.ToString(choseIdMenuButton)}");
                         }
                         else
@@ -474,12 +478,12 @@ class Program
                                                 new InlineKeyboardButton("Back")
                                                 {
                                                     Text = "Назад",
-                                                    CallbackData = $"Back||{2}"
+                                                    CallbackData = $"Back||{2}||{-1}"
                                                 },
                                                 new InlineKeyboardButton("KBJU")
                                                 {
                                                     Text = "КБЖУ",
-                                                    CallbackData = $"KBJU||{choseIdMenuButton}"
+                                                    CallbackData = $"KBJU||{choseIdMenuButton}||{-1}"
                                                 }
                                            }), $"{_botMenu.TtkRep.ToString(choseIdMenuButton)}");
                         }
@@ -491,7 +495,7 @@ class Program
                                    replyMarkup: userStateController.menuInlineBtns);
                     }
                     userStateControllers.Add(userStateController);
-                    await operationRep.addOperation(callbackQuery.Message.Date, user.Id, 1, choseIdMenuButton);
+                    await operationRep.addOperation(callbackQuery.Message.Date, user.Id, 1, choseIdMenuButton, isSearchMenuButton);
 
 
 
@@ -542,7 +546,7 @@ class Program
                                                 new InlineKeyboardButton("Back")
                                                 {
                                                     Text = "Назад",
-                                                    CallbackData = $"Back||{2}"
+                                                    CallbackData = $"Back||{2}||{-1}"
                                                 }
                                             }),
                          $"{_botMenu.singleOriginRep.ToString(choseIdMenuButton)}");
@@ -554,7 +558,7 @@ class Program
                                         replyMarkup: userStateController.menuInlineBtns);
                     //Console.WriteLine($"ChatId = {userStateController.userChatId} || messageId = {userStateController.messageIndex} || Вложенность меню = {userStateController.userMenuIndex}");
                     userStateControllers.Add(userStateController);
-                    await operationRep.addOperation(callbackQuery.Message.Date, user.Id, 3, choseIdMenuButton);
+                    await operationRep.addOperation(callbackQuery.Message.Date, user.Id, 3, choseIdMenuButton, isSearchMenuButton);
                     break;
                 }
 
@@ -571,14 +575,14 @@ class Program
                         var button = new InlineKeyboardButton($"{x}")
                         {
                             Text = x,
-                            CallbackData = $"DrinkVariationPhoto||{index + 1}" // индекс молока крч в одном напитке 
+                            CallbackData = $"DrinkVariationPhoto||{index + 1}||{-1}" // индекс молока крч в одном напитке 
                         };
                         buttonRows.Add(new List<InlineKeyboardButton> { button });
                     }
                     buttonRows.Add(new List<InlineKeyboardButton> {new InlineKeyboardButton("Back")
                     {
                         Text = "Назад",
-                        CallbackData = $"BackPhoto||{2}"
+                        CallbackData = $"BackPhoto||{2}||{-1}"
                     }});
 
 
@@ -597,7 +601,7 @@ class Program
                                                 new InlineKeyboardButton("Back")
                                                 {
                                                     Text = "Назад",
-                                                    CallbackData = $"BackPhoto||{2}"
+                                                    CallbackData = $"BackPhoto||{2}||{-1}"
                                                 }
                                             }));
                     }
@@ -629,7 +633,7 @@ class Program
                                                     new InlineKeyboardButton("Back")
                                                     {
                                                         Text = "Назад",
-                                                        CallbackData = $"Back||{2}"
+                                                        CallbackData = $"Back||{2}||{-1}"
                                                     }
                                                 }));
                     }
@@ -642,14 +646,14 @@ class Program
                             var button = new InlineKeyboardButton($"{x}")
                             {
                                 Text = x,
-                                CallbackData = $"DrinkVariation||{index + 1}" // индекс молока крч в одном напитке 
+                                CallbackData = $"DrinkVariation||{index + 1}||{-1}" // индекс молока крч в одном напитке 
                             };
                             buttonRows.Add(new List<InlineKeyboardButton> { button });
                         }
                         buttonRows.Add(new List<InlineKeyboardButton> {new InlineKeyboardButton("Back")
                         {
                             Text = "Назад",
-                            CallbackData = $"Back||{2}"
+                            CallbackData = $"Back||{2}||{-1}"
                         }});
 
 
@@ -668,7 +672,7 @@ class Program
                                                     new InlineKeyboardButton("Back")
                                                     {
                                                         Text = "Назад",
-                                                        CallbackData = $"Back||{2}"
+                                                        CallbackData = $"Back||{2}||{-1}"
                                                     }
                                                 }));
                         }
@@ -701,7 +705,7 @@ class Program
                                                 new InlineKeyboardButton("Back")
                                                 {
                                                     Text = "Назад",
-                                                    CallbackData = $"BackPhoto||{2}"
+                                                    CallbackData = $"BackPhoto||{2}||{-1}"
                                                 }
                                             }));
                     break;
@@ -720,7 +724,7 @@ class Program
                                                 new InlineKeyboardButton("Back")
                                                 {
                                                     Text = "Назад",
-                                                    CallbackData = $"Back||{2}"
+                                                    CallbackData = $"Back||{2}||{-1}"
                                                 }
                                             }));
                     break;
@@ -729,6 +733,7 @@ class Program
             case "Delete":
                 {
                     await _botClient.DeleteMessageAsync(chat.Id, messageId: callbackQuery.Message.MessageId);
+                    await _botClient.DeleteMessageAsync(chat.Id, messageId: callbackQuery.Message.MessageId - 1);
                     var tempMessage = userStateControllers.Find(x => x.userChatId == chat.Id && x.messageIndex == callbackQuery.Message.MessageId);
                     if(tempMessage != null)
                     {

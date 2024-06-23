@@ -194,12 +194,12 @@ namespace ttk_bot
                 var buttonInfo = new InlineKeyboardButton("shippers menu Info")
                 {
                     Text = $"ℹ",
-                    CallbackData = $"shipInfo||{shipper.Id}"
+                    CallbackData = $"shipInfo||{shipper.Id}||{-1}"
                 };
                 var button = new InlineKeyboardButton("shippers menu")
                 {
                     Text = $"{shipper.Name}",
-                    CallbackData = $"shipper||{shipper.Id}"
+                    CallbackData = $"shipper||{shipper.Id}||{-1}"
                 };
                 buttonRows.Add(new List<InlineKeyboardButton> { buttonInfo, button });
 
@@ -208,7 +208,7 @@ namespace ttk_bot
                 new InlineKeyboardButton("Delete")
                     {
                         Text = "Удалить сообщение",
-                        CallbackData = "Delete||0"
+                        CallbackData = $"Delete||{0}||{-1}"
                     }});
             return buttonRows;
         }
@@ -224,7 +224,7 @@ namespace ttk_bot
                     var button = new InlineKeyboardButton("List items menu")
                     {
                         Text = $"{item.Name}",
-                        CallbackData = $"item||{item.Id}"
+                        CallbackData = $"item||{item.Id}||{-1}"
                     };
                     buttonRows.Add(new List<InlineKeyboardButton> { button });
                 }
@@ -233,7 +233,7 @@ namespace ttk_bot
                 new InlineKeyboardButton("Back")
                     {
                         Text = "Назад",
-                        CallbackData = $"Back||{indexMenu}"
+                        CallbackData = $"Back||{indexMenu}||{-1}"
                     }});
 
 
@@ -252,7 +252,7 @@ namespace ttk_bot
                     var button = new InlineKeyboardButton($"{item.Category}")
                     {
                         Text = item.Category,
-                        CallbackData = $"categoryDrinks||{item.Id}"
+                        CallbackData = $"categoryDrinks||{item.Id}||{-1}"
                     };
 
                     buttonRows.Add(new List<InlineKeyboardButton> { button });
@@ -262,7 +262,7 @@ namespace ttk_bot
                 new InlineKeyboardButton("Del")
                     {
                         Text = "Удалить сообщение",
-                        CallbackData = "Delete||0"
+                        CallbackData = $"Delete||{0}||{-1}"
                     }});
             return buttonRows;
         }
@@ -286,7 +286,7 @@ namespace ttk_bot
                         var button = new InlineKeyboardButton("list ttk menu")
                         {
                             Text = $"{drink.Name} {volumes[drink.VolumeId - 1]}",
-                            CallbackData = $"drinkByOneVolume||{drink.Id}"
+                            CallbackData = $"drinkByOneVolume||{drink.Id}||{-1}"
                         };
                         buttonRows.Add(new List<InlineKeyboardButton> { button });
                     }
@@ -300,7 +300,7 @@ namespace ttk_bot
                         var button = new InlineKeyboardButton("list ttk menu")
                         {
                             Text = $"{drink.Name} {volumes[drink.VolumeId - 1]}",
-                            CallbackData = $"drinkByOneVolume||{drink.Id}"
+                            CallbackData = $"drinkByOneVolume||{drink.Id}||{-1}"
                         };
                         buttonRows.Add(new List<InlineKeyboardButton> { button });
                     }
@@ -317,7 +317,7 @@ namespace ttk_bot
                     var button = new InlineKeyboardButton("list ttk menu")
                     {
                         Text = $"{drink.Name}",
-                        CallbackData = $"drinkByMultipleVolumes||{drink.Id}"
+                        CallbackData = $"drinkByMultipleVolumes||{drink.Id}||{-1}"
                     };
                     buttonRows.Add(new List<InlineKeyboardButton> { button });
                 }
@@ -326,7 +326,7 @@ namespace ttk_bot
             new List<InlineKeyboardButton> { new InlineKeyboardButton("list ttk menu")
                     {
                         Text = $"Назад",
-                        CallbackData = $"Back||{indexMenu}"
+                        CallbackData = $"Back||{indexMenu}||{-1}"
                     }
                 }
             );
@@ -346,7 +346,7 @@ namespace ttk_bot
                     var button = new InlineKeyboardButton("list ttk menu")
                     {
                         Text = $"{drink.Name} {volumes[drink.VolumeId - 1]} ",
-                        CallbackData = $"drinkByOneVolume||{drink.Id}"
+                        CallbackData = $"drinkByOneVolume||{drink.Id}||{-1}"
                     };
                     buttonRows.Add(new List<InlineKeyboardButton> { button });
                 }
@@ -355,7 +355,7 @@ namespace ttk_bot
                 new InlineKeyboardButton("Back")
                     {
                         Text = "Назад",
-                        CallbackData = $"Back||{indexMenu}"
+                        CallbackData = $"Back||{indexMenu}||{-1}"
                     }});
 
 
@@ -376,7 +376,7 @@ namespace ttk_bot
                     var button = new InlineKeyboardButton("list ttk menu")
                     {
                         Text = $"{drink.Name} {volumes[drink.VolumeId - 1]}",
-                        CallbackData = $"KBJUBByOneVolume||{drink.Id}"
+                        CallbackData = $"KBJUBByOneVolume||{drink.Id}||{-1}"
                     };
                     buttonRows.Add(new List<InlineKeyboardButton> { button });
                 }
@@ -392,7 +392,7 @@ namespace ttk_bot
                     var button = new InlineKeyboardButton("list ttk menu")
                     {
                         Text = $"{drink.Name}",
-                        CallbackData = $"KBJUByMultipleVolumes||{drink.Id}"
+                        CallbackData = $"KBJUByMultipleVolumes||{drink.Id}||{-1}"
                     };
                     buttonRows.Add(new List<InlineKeyboardButton> { button });
                 }
@@ -401,7 +401,7 @@ namespace ttk_bot
             new List<InlineKeyboardButton> { new InlineKeyboardButton("list ttk menu")
                     {
                         Text = $"Назад",
-                        CallbackData = $"Back||{indexMenu}"
+                        CallbackData = $"Back||{indexMenu}||{-1}"
                     }
                 }
             );
@@ -454,19 +454,19 @@ namespace ttk_bot
                 new InlineKeyboardButton("Filter")
                 {
                     Text = "Зерно под фильтр",
-                    CallbackData = $"singleOrigin||{1}"
+                    CallbackData = $"singleOrigin||{1}||{-1}"
                 },
                 new InlineKeyboardButton("Espresso")
                 {
                     Text = "Зерно под эспрессо",
-                    CallbackData = $"singleOrigin||{2}"
+                    CallbackData = $"singleOrigin||{2}||{-1}"
                 }
             });
             buttonRows.Add(new List<InlineKeyboardButton> {
                 new InlineKeyboardButton("Del")
                     {
                         Text = "Удалить сообщение",
-                        CallbackData = "Delete||0"
+                        CallbackData = $"Delete||{0}||{-1}"
                     }});
             return buttonRows;
         }
@@ -482,7 +482,7 @@ namespace ttk_bot
                 var button = new InlineKeyboardButton("singleOriginCard Menu ")
                 {
                     Text = $"{item.Name}",
-                    CallbackData = $"singleOriginCard||{item.Id}"
+                    CallbackData = $"singleOriginCard||{item.Id}||{-1}"
                 };
                 buttonRows.Add(new List<InlineKeyboardButton> { button });
             }
@@ -490,7 +490,7 @@ namespace ttk_bot
                 new InlineKeyboardButton("Back")
                     {
                         Text = "Назад",
-                        CallbackData = $"Back||{indexMenu}"
+                        CallbackData = $"Back||{indexMenu}||{-1}"
                     }});
 
 
@@ -540,7 +540,7 @@ namespace ttk_bot
                     var button = new InlineKeyboardButton("List items menu")
                     {
                         Text = $"{item.Name} {volumes[item.VolumeId - 1]}",
-                        CallbackData = $"drinkByOneVolume||{item.Id}"
+                        CallbackData = $"drinkByOneVolume||{item.Id}||{1}"
                     };
                     buttonRows.Add(new List<InlineKeyboardButton> { button });
                 }
@@ -548,7 +548,7 @@ namespace ttk_bot
                 new InlineKeyboardButton("RemoveSearch")
                     {
                         Text = "Удалить результат поиска",
-                        CallbackData = $"Delete||{2}"
+                        CallbackData = $"Delete||{2}||{1}"
                     }});
                 searcherUser.isSearch = false;
             }
@@ -560,7 +560,7 @@ namespace ttk_bot
                     var button = new InlineKeyboardButton("List items menu")
                     {
                         Text = $"{item.Name}",
-                        CallbackData = $"item||{item.Id}"
+                        CallbackData = $"item||{item.Id}||{1}"
                     };
                     buttonRows.Add(new List<InlineKeyboardButton> { button });
                 }
@@ -568,7 +568,7 @@ namespace ttk_bot
                 new InlineKeyboardButton("RemoveSearch")
                     {
                         Text = "Удалить результат поиска",
-                        CallbackData = $"Delete||{2}"
+                        CallbackData = $"Delete||{2}||{1}"
                     }});
                 searcherUser.isSearch = false;
             }
@@ -580,7 +580,7 @@ namespace ttk_bot
                     var button = new InlineKeyboardButton("List items menu")
                     {
                         Text = $"{item.Name}",
-                        CallbackData = $"singleOriginCard||{item.Id}"
+                        CallbackData = $"singleOriginCard||{item.Id}||{1}"
                     };
                     buttonRows.Add(new List<InlineKeyboardButton> { button });
                 }
@@ -588,7 +588,7 @@ namespace ttk_bot
                 new InlineKeyboardButton("RemoveSearch")
                     {
                         Text = "Удалить результат поиска",
-                        CallbackData = $"Delete||{2}"
+                        CallbackData = $"Delete||{2}||{1}"
                     }});
                 searcherUser.isSearch = false;
             }

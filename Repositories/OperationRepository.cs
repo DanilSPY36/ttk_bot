@@ -18,7 +18,7 @@ namespace ttk_bot.Repositories
             _context = context;
         }
 
-        public async Task addOperation(DateTime time, long userId, int branchId, int productId)
+        public async Task addOperation(DateTime time, long userId, int branchId, int productId, int isSearch)
         {
             var userContext = _context.Users.First(x => x.TgUserId == userId);
             try
@@ -28,6 +28,9 @@ namespace ttk_bot.Repositories
                 operation.UserId = userContext.Id;
                 operation.BranchId = branchId;
                 operation.ProductId = productId;
+                if (isSearch == 1) 
+                { operation.IsSearch = true; }
+                else { operation.IsSearch = false; }
                 //time.AddHours(3);
                 operation.Timestamp = (long)(time - new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalSeconds + 10800;
                 

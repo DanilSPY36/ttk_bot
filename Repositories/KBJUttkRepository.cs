@@ -100,10 +100,7 @@ namespace ttk_bot.Repositories
                 list.Add(item.Variety);
             }
 
-            foreach (var item in list)
-            {
-                Console.WriteLine(item + "\n");
-            }
+            
             return list;
 
         }

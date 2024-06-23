@@ -42,7 +42,7 @@ class Program
     {
         // test key 7451248242:AAEL-I9cbNrF6u2k5ELQ47SP-jFH3as5-jg
         // release key 7190916687:AAFz0oeb2mMppoBGFmOjx6znff062zHxzc0
-        _botClient = new TelegramBotClient("7190916687:AAFz0oeb2mMppoBGFmOjx6znff062zHxzc0");
+        _botClient = new TelegramBotClient("7451248242:AAEL-I9cbNrF6u2k5ELQ47SP-jFH3as5-jg");
         _botMenu = new BotMenu();
         usersRep = new UsersRepository(_context = new TgBotDbContext());
         choseKBJUDrink = new Dictionary<KBJUttkRepository, List<string>>();
@@ -69,7 +69,6 @@ class Program
         _botClient.StartReceiving(UpdateHandler, ErrorHandler, _receiverOptions, cts.Token);
         var me = await _botClient.GetMeAsync();
 
-           
 
 
         Console.WriteLine($"{me.FirstName} запущен!");
@@ -242,24 +241,23 @@ class Program
         {
             case "Back":
                 {
-                    var stateTmp = userStateControllers.Last(x => x.userChatId == chat.Id && x.messageIndex == callbackQuery.Message.MessageId && x.userMenuIndex == choseIdMenuButton);
+                    var stateTmp = userStateControllers.LastOrDefault(x => x.userChatId == chat.Id && x.messageIndex == callbackQuery.Message.MessageId && x.userMenuIndex == choseIdMenuButton);
+                    if(stateTmp!= null)
+                    {
+                        userStateControllers.Remove(stateTmp);
+                        stateTmp = userStateControllers.LastOrDefault(x => x.userChatId == chat.Id && x.messageIndex == callbackQuery.Message.MessageId);
 
-                    userStateControllers.Remove(stateTmp);
-                    
-
-                    // надо доставать не последний в списке, а последний в списке с проверкой на юзера 
-
-                    stateTmp = userStateControllers.Last(x => x.userChatId == chat.Id && x.messageIndex == callbackQuery.Message.MessageId);
-
-                    await _botClient.EditMessageTextAsync(
-                                chatId: chat.Id,
-                                messageId: callbackQuery.Message.MessageId,
-                                text: $"{stateTmp.TextMessage}",
-                                replyMarkup: stateTmp.menuInlineBtns
-                            );
-                    //await _botClient.DeleteMessageAsync(chat.Id, messageId: message.MessageId);
-
-                    //Console.WriteLine($"ChatId = {userStateController.userChatId} || messageId = {userStateController.messageIndex} || Вложенность меню = {userStateController.userMenuIndex}");
+                        await _botClient.EditMessageTextAsync(
+                                    chatId: chat.Id,
+                                    messageId: callbackQuery.Message.MessageId,
+                                    text: $"{stateTmp.TextMessage}",
+                                    replyMarkup: stateTmp.menuInlineBtns
+                                );
+                    }
+                    else
+                    {
+                        await _botClient.DeleteMessageAsync(chat.Id, messageId: callbackQuery.Message.MessageId);
+                    }
                     break;
                 }
             case "BackPhoto":
@@ -734,7 +732,6 @@ class Program
         Console.WriteLine(ErrorMessage);
         return Task.CompletedTask;
     }
-
     private static async Task UpdateMessageFromDeveloper(Message message)
     {
         var user = message.From;
@@ -776,4 +773,5 @@ class Program
             SearcherUserList.Remove(tempUserSearcher);
         }
     }
+
 }

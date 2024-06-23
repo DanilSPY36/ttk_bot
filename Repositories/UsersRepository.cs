@@ -39,9 +39,20 @@ namespace ttk_bot.Repositories
             newUser.Id = id;
             newUser.Name = name;
             newUser.FirstName = firstName;
-            newUser.LastName = lastName;
+            if (lastName == null)
+            {
+                newUser.LastName = "-";
+            }
+            else
+            {
+                newUser.LastName = lastName;
+            }
             newUser.ChatId = chatId;
             newUser.TgUserId = tgUserId;
+            newUser.IsAccess = false;
+            newUser.IsAdmin = false;
+            newUser.SpotId = 0;
+            newUser.SpotId = 0;
             usersList.Add(newUser);
             _context.Users.Add(newUser);
             _context.SaveChanges();

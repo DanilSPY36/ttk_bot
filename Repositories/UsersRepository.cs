@@ -90,14 +90,14 @@ namespace ttk_bot.Repositories
                                                 new InlineKeyboardButton("Back")
                                                 {
                                                     Text = "Удалить сообщение",
-                                                    CallbackData = $"Delete||0"
+                                                    CallbackData = $"Delete||0||{-1}"
                                                 } });
 
             //_botClient.SendTextMessageAsync(chatId: 465890927, message, replyMarkup: replyMark, protectContent: true);
 
             foreach (var user in tempUsers) 
             {
-                _botClient.SendTextMessageAsync(chatId: user.ChatId , message, replyMarkup: replyMark, protectContent: true);
+                _botClient.SendTextMessageAsync(chatId: user.ChatId , message, protectContent: true);
             }
         }
 

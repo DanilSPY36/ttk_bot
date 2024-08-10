@@ -261,7 +261,14 @@ class Program
                     var chatInfo = update.CallbackQuery;
                         if (await usersRep.accessCheck(user.Username, user.FirstName, user.LastName, chatInfo.From.Id, user.Id))
                         {
+                        try 
+                        { 
                             await CallBackQueryMenu(botClient, update);
+                        }
+                        catch
+                        {
+
+                        }
                         }
                     }
                     return;

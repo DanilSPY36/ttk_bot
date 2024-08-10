@@ -20,9 +20,12 @@ using Newtonsoft.Json;
 
 class Program
 {
+    private static List<Update>? updateList;
+    private static DateTime _lastCheckTime = DateTime.MinValue;
+    private static readonly TimeSpan _checkInterval = TimeSpan.FromMinutes(2);
     //redis
-    private static IConnectionMultiplexer _redis;
-    private static IDatabase _dbRedis;
+    private static IConnectionMultiplexer? _redis;
+    private static IDatabase? _dbRedis;
     private static string? userStateControllersJson;
 
     private static ITelegramBotClient _botClient = null!;
@@ -31,11 +34,11 @@ class Program
     private static BotMenu _botMenu = null!;
 
     // тест логики меню
-    private static List<UserState> userStateControllers;
-    private static UserState userStateController;
-    private static UsersRepository usersRep;
-    private static Dictionary<KBJUttkRepository, List<string>> choseKBJUDrink;
-
+    private static List<UserState>? userStateControllers;
+    private static UserState? userStateController;
+    private static UsersRepository? usersRep;
+    private static Dictionary<KBJUttkRepository, List<string>>? choseKBJUDrink;
+    public static event EventHandler? ProcessExit;
     //статистика
     private static OperationRepository operationRep;
 
@@ -46,13 +49,14 @@ class Program
     private static List<SearcherUser> SearcherUserList;
     static async Task Main()
     {
+        updateList = new List<Update>();
+        ProcessExit +=  OnProcessExit;
         _redis = ConnectionMultiplexer.Connect("45.141.79.78:6379");
-        AppDomain.CurrentDomain.ProcessExit += OnProcessExit;
         _dbRedis = _redis.GetDatabase();
 
         // test key 7451248242:AAEL-I9cbNrF6u2k5ELQ47SP-jFH3as5-jg
-        // release key 7190916687:AAFz0oeb2mMppoBGFmOjx6znff062zHxzc0
-        _botClient = new TelegramBotClient("7451248242:AAEL-I9cbNrF6u2k5ELQ47SP-jFH3as5-jg");
+        // release key 7472801395:AAFtc8Um1ZdOmm6iCjuKQhqOby_GdwIwZ9M
+        _botClient = new TelegramBotClient("7472801395:AAFtc8Um1ZdOmm6iCjuKQhqOby_GdwIwZ9M");
         _botMenu = new BotMenu();
         usersRep = new UsersRepository(_context = new TgBotDbContext());
         choseKBJUDrink = new Dictionary<KBJUttkRepository, List<string>>();
@@ -61,10 +65,10 @@ class Program
 
         
         // Проверка, что ключ "userStateControllers" существует в Redis
-        if (_dbRedis.KeyExists("userStateControllers"))
+        if (_dbRedis.KeyExists("userStateControllersTest"))
         {
             // Получение JSON-строки из Redis
-            string userStateControllersJson = _dbRedis.StringGet("userStateControllers");
+            string userStateControllersJson = _dbRedis.StringGet("userStateControllersTest");
 
             // Десериализация JSON-строки в список
             userStateControllers = JsonConvert.DeserializeObject<List<UserState>>(userStateControllersJson);
@@ -96,13 +100,30 @@ class Program
         var me = await _botClient.GetMeAsync();
 
 
-
         Console.WriteLine($"{me.FirstName} запущен!");
-        await Task.Delay(-1);
+
+        Console.CancelKeyPress += (s, e) =>
+        {
+            e.Cancel = true;
+            cts.Cancel();
+        };
+        
+        await Task.Delay(Timeout.Infinite, cts.Token);
+        
     }
     private static async Task UpdateHandler(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
     {
-        
+        updateList.Add(update);
+        //if (DateTime.Now - _lastCheckTime >= _checkInterval)
+        //{
+            // Обновляем время последней проверки
+            _lastCheckTime = DateTime.Now;
+
+            // Проверяем и удаляем устаревшие обновления
+            //await DeleteOldMessagesAsync(botClient, cancellationToken);
+        //}
+
+
         switch (update.Type)
             {
                 case UpdateType.Message:
@@ -122,7 +143,7 @@ class Program
                         Console.WriteLine($"{user.Username} написал сообщение: {message.Text} || messageId = {message.MessageId}\n");
                             switch (message.Text)
                             {
-                                case "/start":
+                            case "/start":
                                     await botClient.SendTextMessageAsync(chatInfo.Id, "Алоха 🌴, я твой личный ттк-бот, читай микрогайд: \n\n" +
                                         "Зерно - ты сможешь найти всю информацию о моносортах и блендах\n\n" +
                                         "Поставщики - вся выпечка, кбжу, составы, сроки,  условия хранения и аллергены\n\n" +
@@ -140,7 +161,6 @@ class Program
                                         "2)\n" +
                                         "3)\n" +
                                         "4)\n" +
-                                        "Для корректного использования рекомендуется, отчистить историю переписки со мной. Или обновить кнопки прописав команду /start\n" +
                                         "Если обнаружили ошибки пишите ему @DanilSPY\n" +
                                         "Vibe use and high waves🏄‍♂️🏄‍♂️🏄‍♂️", replyMarkup: _botMenu.StartMenu(), protectContent: false);
                                     _waitingForUpdateMessage = true;
@@ -154,7 +174,7 @@ class Program
                                 }
                             case "/searchttk": // поиск  ttk
                                 {
-                                    await botClient.SendTextMessageAsync(chatInfo.Id, "Напиши название напитка", replyMarkup: _botMenu.StartMenu(), protectContent: true);
+                                    await botClient.SendTextMessageAsync(chatInfo.Id, "Напиши название напитка", protectContent: true);
                                     SearcherUser searcherUser = new SearcherUser();
                                     searcherUser.idSearchBranch = 1;
                                     searcherUser.id = chatInfo.Id;
@@ -165,7 +185,7 @@ class Program
                                 }
                             case "/searchproduct": // поиск items
                                 {
-                                    await botClient.SendTextMessageAsync(chatInfo.Id, "Напиши название продукта", replyMarkup: _botMenu.StartMenu(), protectContent: true);
+                                    await botClient.SendTextMessageAsync(chatInfo.Id, "Напиши название продукта", protectContent: true);
                                     SearcherUser searcherUser = new SearcherUser();
                                     searcherUser.idSearchBranch = 2;
                                     searcherUser.id = chatInfo.Id;
@@ -176,7 +196,7 @@ class Program
                                 }
                             case "/searchbean": // поиск singleOrigin
                                 {
-                                    await botClient.SendTextMessageAsync(chatInfo.Id, "Напиши название зерна (пока что желательно на английском)", replyMarkup: _botMenu.StartMenu(), protectContent: true);
+                                    await botClient.SendTextMessageAsync(chatInfo.Id, "Напиши название зерна (пока что желательно на английском)", protectContent: true);
                                     SearcherUser searcherUser = new SearcherUser();
                                     searcherUser.idSearchBranch = 3;
                                     searcherUser.id = chatInfo.Id;
@@ -187,25 +207,34 @@ class Program
                                 }
                             case "/faq": // частозадоваемые вопросы
                                 {
-                                    
+                                    await botClient.SendTextMessageAsync(chatInfo.Id, "Faq в разработке.", protectContent: true);
                                     break;
                                 }
                             case "/redisTest465890927": // сохранение данных в redis 
                                 {
                                     string userStateControllersJson = JsonConvert.SerializeObject(userStateControllers);
 
-                                    _dbRedis.StringSet("userStateControllers", userStateControllersJson);
+                                    _dbRedis.StringSet("userStateControllersTest", userStateControllersJson);
 
                                     Console.WriteLine("Cache data saved to Redis and local cache cleared.");
                                     break;
                                 }
                             case "/redisClearCash465890927":
                                 {
-                                    if (_dbRedis.KeyExists("userStateControllers"))
+                                    if (_dbRedis.KeyExists("userStateControllersTest"))
                                     {
                                         // Удаление ключа "userStateControllers" и связанных данных из Redis
-                                        _dbRedis.KeyDelete("userStateControllers");
+                                        _dbRedis.KeyDelete("userStateControllersTest");
                                     }
+                                    Console.WriteLine("Cache data deleted from Redis.");
+                                    break;
+                                }
+                            case "/exceptioin":
+                                {
+                                    var exc = new List<int>();
+
+                                    int x = exc[10];
+
                                     break;
                                 }
 
@@ -236,6 +265,7 @@ class Program
                         }
                     }
                     return;
+                
             }
         
     }
@@ -248,19 +278,19 @@ class Program
             case "Поставщики":
                 {
 
-                    userStateController = new UserState(chatId, 0, message.MessageId + 1, new InlineKeyboardMarkup(await _botMenu.ShippersMenuAsync()), "Список поставщиков:");
+                    userStateController = new UserState(chatId, 0, message.MessageId + 1, new InlineKeyboardMarkup(await _botMenu.ShippersMenuAsync()), "Список поставщиков:", message.Date.AddHours(3));
                     await _botClient.SendTextMessageAsync(userStateController.userChatId, userStateController.TextMessage, replyMarkup: userStateController.menuInlineBtns, protectContent: true);
                     break;
                 }
             case "ТТК":
                 {
-                    userStateController = new UserState(chatId, 0, message.MessageId + 1, new InlineKeyboardMarkup(await _botMenu.CategoryDrinksMenuAsync()), "ТТК на напитки:");
+                    userStateController = new UserState(chatId, 0, message.MessageId + 1, new InlineKeyboardMarkup(await _botMenu.CategoryDrinksMenuAsync()), "ТТК на напитки:", message.Date.AddHours(3));
                     await _botClient.SendTextMessageAsync(userStateController.userChatId, userStateController.TextMessage, replyMarkup: userStateController.menuInlineBtns, protectContent: true);
                     break;
                 }
             case "Зерно":
                 {
-                    userStateController = new UserState(chatId, 0, message.MessageId + 1, new InlineKeyboardMarkup(await _botMenu.SingleOriginType()), "Выбери тип зерa: ");
+                    userStateController = new UserState(chatId, 0, message.MessageId + 1, new InlineKeyboardMarkup(await _botMenu.SingleOriginType()), "Выбери тип зерa: ", message.Date.AddHours(3));
                     await _botClient.SendTextMessageAsync(userStateController.userChatId, userStateController.TextMessage, replyMarkup: userStateController.menuInlineBtns, protectContent: true);
                     break;
                 }
@@ -283,6 +313,16 @@ class Program
         var choseMenuButton = callbackQuery.Data.Split("||");
         int choseIdMenuButton = int.Parse(choseMenuButton[1]);
         int isSearchMenuButton = int.Parse(choseMenuButton[2]);
+        int userIdFromDb;
+        if (choseMenuButton.Count() > 3 )
+        {
+            userIdFromDb = int.Parse(choseMenuButton[3]);
+        }
+        else
+        {
+            userIdFromDb = 0;
+        }
+
         switch (choseMenuButton[0])
         {
             case "Back":
@@ -302,16 +342,35 @@ class Program
                     }
                     else
                     {
-                        await _botClient.DeleteMessageAsync(chat.Id, messageId: callbackQuery.Message.MessageId);
+                        try
+                        {
+                            await _botClient.DeleteMessageAsync(chat.Id, messageId: callbackQuery.Message.MessageId);
+                        }
+                        catch (Exception ex)
+                        {
+                            await _botClient.SendTextMessageAsync(chatId: chat.Id, text: $"К сожалению сообщению больше двух дней. Я не могу его удалить");
+                        }
                     }
                     break;
                 }
             case "BackPhoto":
                 {
-                    await _botClient.DeleteMessageAsync(chat.Id, messageId: callbackQuery.Message.MessageId);
-                    await _botClient.DeleteMessageAsync(chat.Id, messageId: callbackQuery.Message.MessageId -1);
-                    userStateControllers.Remove(userStateControllers.Last());
-                    break;
+                    try
+                    {
+                        await _botClient.DeleteMessageAsync(chat.Id, messageId: callbackQuery.Message.MessageId);
+                        await _botClient.DeleteMessageAsync(chat.Id, messageId: callbackQuery.Message.MessageId -1);
+
+                    }
+                    catch (Exception ex)
+                    {
+                        await _botClient.SendTextMessageAsync(chatId: chat.Id, text: $"К сожалению сообщению больше двух дней. Я не могу его удалить");
+                    }
+                    var stateTmp = userStateControllers.LastOrDefault(x => x.userChatId == chat.Id && x.messageIndex == callbackQuery.Message.MessageId - 2 && x.userMenuIndex == choseIdMenuButton);
+                    if (stateTmp != null)
+                    {
+                        userStateControllers.Remove(stateTmp);
+                    }
+                        break;
                 }
 
             case "shipper":
@@ -732,8 +791,16 @@ class Program
 
             case "Delete":
                 {
-                    await _botClient.DeleteMessageAsync(chat.Id, messageId: callbackQuery.Message.MessageId);
-                    await _botClient.DeleteMessageAsync(chat.Id, messageId: callbackQuery.Message.MessageId - 1);
+                    try
+                    {
+                        await _botClient.DeleteMessageAsync(chat.Id, messageId: callbackQuery.Message.MessageId);
+                        await _botClient.DeleteMessageAsync(chat.Id, messageId: callbackQuery.Message.MessageId - 1);
+
+                    }
+                    catch (Exception)
+                    {
+                        await _botClient.SendTextMessageAsync(chatId: chat.Id, text: $"К сожалению сообщению больше двух дней. Я не могу его удалить");
+                    }
                     var tempMessage = userStateControllers.Find(x => x.userChatId == chat.Id && x.messageIndex == callbackQuery.Message.MessageId);
                     if(tempMessage != null)
                     {
@@ -742,27 +809,58 @@ class Program
 
                     break;
                 }
-
+            case "SpotName":
+                {
+                    var userTemp = _context.Users.FirstOrDefault(x => x.Id == userIdFromDb);
+                    if (userTemp != null)
+                    {
+                        userTemp.SpotId = choseIdMenuButton;
+                        try 
+                        {
+                            _context.Users.Update(userTemp);
+                            _context.SaveChanges();
+                        }
+                        catch (Exception) { }
+                        await _botClient.EditMessageTextAsync(
+                                      chatId: -4224330568,
+                                      messageId: callbackQuery.Message.MessageId,
+                                      text: $"@{userTemp.Name} Доступ = {userTemp.IsAccess} Spot = {userTemp.SpotId}");
+                    }
+                    break;
+                }
             case "Access_true":
                 {
                     
                     var userTemp = _context.Users.FirstOrDefault(x => x.Id == choseIdMenuButton);
-                    userTemp.IsAccess = true;
-                    try
+                    
+                    if(userTemp!= null)
                     {
-                        _context.Users.Update(userTemp);
-                        _context.SaveChanges();
+                        userTemp.IsAccess = true;
+                        try
+                        {
+                            _context.Users.Update(userTemp);
+                            _context.SaveChanges();
 
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine($"{ex}");
+                            throw;
+                        }
+                        await _botClient.EditMessageTextAsync(
+                                       chatId: -4224330568,
+                                       messageId: callbackQuery.Message.MessageId,
+                                       text: $"@{userTemp.Name} Доступ = {userTemp.IsAccess}\n с какого спота:", 
+                                       replyMarkup: new InlineKeyboardMarkup( await _botMenu.ReturnUserSpot(userTemp.Id)));
+
+                        await _botClient.SendTextMessageAsync(userTemp.ChatId, "Hello again surfer 🤙🏼\n" +
+                            "press /start for pay respect ✌🏼", protectContent: true);
+                        
+                        
+
+                        //               text: $"@{userTemp.Name} Доступ = {userTemp.IsAccess}");
+                        
                     }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine($"{ex}");
-                        throw;
-                    }
-                    await _botClient.EditMessageTextAsync(
-                                   chatId: -4224330568,
-                                   messageId: callbackQuery.Message.MessageId,
-                                   text: $"@{userTemp.Name} Доступ = {userTemp.IsAccess}");
                     break;
                 }
             default:
@@ -822,12 +920,39 @@ class Program
             SearcherUserList.Remove(tempUserSearcher);
         }
     }
+    private static async Task DeleteOldMessagesAsync(ITelegramBotClient botClient, CancellationToken cancellationToken)
+    {
+
+        try
+        {
+            // Получаем список обновлений
+            //var updates = await botClient.GetUpdatesAsync(offset: 0, limit: 100, timeout: 10, cancellationToken: cancellationToken);
+
+            // Фильтруем устаревшие обновления (например, старше 2 минут)
+            var oldUpdates = updateList?.Where(u => u.Message.Date != null && u.Message.Date < DateTime.Now.AddMinutes(-1));
+
+            // Удаляем устаревшие обновления
+            foreach (var oldUpdate in oldUpdates)
+            {
+                await botClient.DeleteMessageAsync(oldUpdate.CallbackQuery.From.Id, oldUpdate.CallbackQuery.Message.MessageId, cancellationToken);
+            }
+
+            Console.WriteLine($"Deleted {oldUpdates.Count()} old updates.");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error checking and deleting old updates: {ex.Message}");
+        }
+
+
+    }
     private static void OnProcessExit(object sender, EventArgs e)
     {
         // Сохранение данных кэша в Redis
         string userStateControllersJson = JsonConvert.SerializeObject(userStateControllers);
 
-        _dbRedis.StringSet("userStateControllers", userStateControllersJson);
+        _dbRedis.StringSet("userStateControllersTest", userStateControllersJson);
+        
 
         Console.WriteLine("Cache data saved to Redis and local cache cleared.");
     }

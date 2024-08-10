@@ -13,6 +13,16 @@ namespace ttk_bot
         {
             
         }
+        public UserState(long userChatId, int userMenuIndex, int messageIndex, InlineKeyboardMarkup menuInlineBtns, string TextMessage, DateTime date)
+        {
+            this.userChatId = userChatId;
+            this.userMenuIndex = userMenuIndex;
+            this.messageIndex = messageIndex;
+            this.menuInlineBtns = menuInlineBtns;
+            this.TextMessage = TextMessage;
+            this.timeOfMessage = date;
+
+        }
         public UserState(long userChatId, int userMenuIndex, int messageIndex, InlineKeyboardMarkup menuInlineBtns, string TextMessage)
         {
             this.userChatId = userChatId;
@@ -28,6 +38,7 @@ namespace ttk_bot
         public long userChatId { get; set; } = 0;
         public InlineKeyboardMarkup menuInlineBtns { get; set; }
         public string? TextMessage { get; set; }
+        public DateTime? timeOfMessage { get; set; }
         public void RemoveMenu(InlineKeyboardMarkup menuInlineBtns)
         {
             TextMessage = null;

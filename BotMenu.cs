@@ -504,7 +504,7 @@ namespace ttk_bot
                 new InlineKeyboardButton("AccessTrue")
                     {
                         Text = "Дать доступ",
-                        CallbackData = $"Access_true||{user.Id}"
+                        CallbackData = $"Access_true||{user.Id}||{-1}"
                     }
 
             });
@@ -513,20 +513,40 @@ namespace ttk_bot
                 new InlineKeyboardButton("AccessFalse")
                     {
                         Text = "Запретить",
-                        CallbackData = $"Access_false||{user.Id}"
+                        CallbackData = $"Access_false||{user.Id}||{-1}"
                     }
             });
             buttonRows.Add(new List<InlineKeyboardButton> {
                 new InlineKeyboardButton("Remove")
                     {
                         Text = "Удалить с базы",
-                        CallbackData = $"RemoveUserFromDb||{user.Id}"
+                        CallbackData = $"RemoveUserFromDb||{user.Id}||{-1}"
                     },
 
             });
 
             return buttonRows;
         }
+
+        public async Task<List<List<InlineKeyboardButton>>> ReturnUserSpot(int userTgid)
+        {
+            List<List<InlineKeyboardButton>> buttonRows = new List<List<InlineKeyboardButton>>();
+
+            var listSingles = _context.SpotsDims.OrderBy(x => x.SpotName).ToList();
+
+            foreach (var item in listSingles)
+            {
+                var button = new InlineKeyboardButton("SpotName Menu ")
+                {
+                    Text = $"{item.SpotName}",
+                    CallbackData = $"SpotName||{item.Id}||{-1}||{userTgid}"
+                };
+                buttonRows.Add(new List<InlineKeyboardButton> { button });
+            }
+
+            return buttonRows;
+        }
+
 
         public async Task<List<List<InlineKeyboardButton>>> SearcheResult(SearcherUser searcherUser)
         {

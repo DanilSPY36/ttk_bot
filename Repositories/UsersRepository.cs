@@ -33,6 +33,12 @@ namespace ttk_bot.Repositories
         {
             return await _context.Users.AsNoTracking().ToListAsync();
         }
+        public async Task<List<long?>> GetIdUsers()
+        {
+            var users = await _context.Users.AsNoTracking().ToListAsync();
+            var usersId = users.Select(x => x.ChatId).ToList();
+            return usersId;
+        }
         private async Task newUserDbAdd(int id, string name, string? firstName, string? lastName, long? chatId, long? tgUserId)
         {
             var newUser = new User();
@@ -75,7 +81,6 @@ namespace ttk_bot.Repositories
             await newUserDbAdd(lastUserId  + 1, name, firstName, lastName, chatId, tgUserId);
             return false;
         }
-
         public async Task BotUpdateInfoMessage(ITelegramBotClient _botClient, string message)
         {
             

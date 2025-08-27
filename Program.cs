@@ -22,7 +22,7 @@ class Program
 
     static async Task Main()
     {
-        _botClient = new TelegramBotClient("7190916687:AAG4L9eYwyj8bLJtXajo6uTP-k-MuIkRdIs");
+        _botClient = new TelegramBotClient("7190916687:AAG4L9eYwyj8bLJtXajo6uTP-k-KLksjoA");
         _botMenu = new BotMenu();
         var usersRep = new UsersRepository(_context = new TgBotContext());
         var itemsRep = new ItemsRepository(_context = new TgBotContext());
